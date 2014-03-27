@@ -1,0 +1,41 @@
+# ---------------------------------------
+# BNF grammar for LTL-FO+
+# ---------------------------------------
+
+# Main expression
+<φ>            := <and> | <or> | <implies> | <not> |
+                  <F> | <G> | <X> | <U> |
+                  <exists> | <forall> |
+                  <atom>;
+
+# Boolean connectives
+<and>          := ( <φ> ) ∧ ( <φ> );
+<or>           := ( <φ> ) ∨ ( <φ> );
+<implies>      := ( <φ> ) → ( <φ> );
+<not>          := ¬ ( <φ> );
+
+# Temporal operators
+<F>            := F ( <φ> );
+<G>            := G ( <φ> );
+<X>            := X ( <φ> );
+<U>            := ( <φ> ) U ( <φ> );
+
+# First-order quantifiers
+<exists>       := ∃ <var> ∈ <π> : ( <φ> );
+<forall>       := ∀ <var> ∈ <π> : ( <φ> );
+
+# Atomic expressions
+<atom>         := <var_or_const> = <var_or_const> | 
+                  <var_or_const> gt <var_or_const> | 
+                  <var_or_const> lt <var_or_const>;
+
+<var_or_const> := <var> | <const>;
+
+# Constants are delimited by quotes
+<const>        := ^"[\w\d]+";
+
+# Variables have digits and letters
+<var>          := ^[\w\d]+;
+
+# Paths start with a slash
+<π>            := ^/[\w/]+;

@@ -16,7 +16,7 @@ public class BnfRuleTest
   @Test
   public void ruleWithNonTerminalAndTokens()
   {
-    String rule = "<S> := (<S>);";
+    String rule = "<S> := ( <S> );";
     BnfRule brule = null;
     try
     {

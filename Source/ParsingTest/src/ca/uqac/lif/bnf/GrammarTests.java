@@ -80,12 +80,12 @@ public class GrammarTests
   {
     String expression = "G (exists x in a/b/c : (x lt y))";
     ParseNode node = parseIt("data/Grammar-2.bnf", "<phi>", expression);
-    /*int size = node.getSize();
-    int expected_size = 19;
+    int size = node.getSize();
+    int expected_size = 21;
     if (size != expected_size)
     {
       fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
-    }*/
+    }
   }
   
   private ParseNode parseIt(String grammar_filename, String start_symbol, String expression)

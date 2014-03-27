@@ -47,10 +47,10 @@ public class GraphvizVisitor implements ParseNodeVisitor
     String shape = "oval";
     String color = "white";
     String fillcolor = "blue";
-    String label = node.getValue();
+    String label = escape(node.getValue());
     if (label == null)
     {
-      label = node.getToken();
+      label = escape(node.getToken());
       shape = "rect";
       fillcolor = "white";
       color = "black";
@@ -70,6 +70,20 @@ public class GraphvizVisitor implements ParseNodeVisitor
     StringBuilder out = new StringBuilder();
     out.append("digraph G {\n").append(m_output).append("};");
     return out.toString();
+  }
+  
+  private static String escape(String input)
+  {
+    if (input == null)
+    {
+      return null;
+    }
+    if (input.contains("\""))
+    {
+      System.out.println("f");
+    }
+    String out = input.replaceAll("\\\"", "&quot;");
+    return out;
   }
 
 }
