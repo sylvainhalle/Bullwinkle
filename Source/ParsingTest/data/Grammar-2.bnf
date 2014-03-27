@@ -1,0 +1,22 @@
+# ---------------------------------------
+# BNF grammar for LTL-FO+
+# ---------------------------------------
+
+<phi>          := # Boolean connectives
+                  ( <phi> ) and ( <phi> ) | ( <phi> ) or ( <phi> ) | not ( <phi> ) |
+		          # Temporal operators
+                  F ( <phi> ) | G ( <phi> ) | X ( <pĥi> ) | ( <phi> ) U ( <phi> ) |
+                  # First-order quantifiers
+                  exists <var> in <path> : ( <phi> ) | forall <var> in <path> : ( <phi> ) |
+                  # Atoms
+                  <atom>;
+
+<atom>         := <var> = <var> | <var> gt <var> | <var> lt <var>;
+
+<var_or_const> := <var> | <const>;
+
+<const>        := ^[\w\d]+;
+
+<var>          := ^[\w\d]+;
+
+<path>         := ^[\w/]+;

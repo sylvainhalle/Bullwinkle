@@ -1,0 +1,14 @@
+# ---------------------------------------------
+# Example of a simple BNF grammar for arithmetic expressions
+# ---------------------------------------------
+
+<exp> := <add> | <sub> | <mul> | <div> | - <exp> | <num>;
+<add> := <num> + <num> | <num> + ( <exp> ) | ( <exp> ) + <num>  | ( <exp> + <exp> );
+<sub> := <num> - <num> | ( <exp> - <exp> );
+<mul> := <num> × <num> | ( <exp> × <exp> );
+<div> := <num> ÷ <num> | ( <exp> ÷ <exp> );
+
+# This last declaration defines the non-terminal symbol num as any
+# sequence of symbols matching the regular expression enclosed between
+# the ^ and $ characters.
+<num> := ^[0-9]+;
