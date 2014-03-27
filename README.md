@@ -50,7 +50,7 @@ dynamically at runtime, without requiring any compiling.
 Here is the parse tree returned for the second expression in the previous
 example:
 
-![Parse tree](Simple-Math.svg)
+![Parse tree](Simple-Math.svg?raw=true)
 
 Defining a grammar
 ------------------
