@@ -22,7 +22,7 @@ Consider for example the following simple grammar, taken from the file
     <sub> := <num> - <num> | ( <exp> - <exp> );
     <mul> := <num> × <num> | ( <exp> × <exp> );
     <div> := <num> ÷ <num> | ( <exp> ÷ <exp> );
-    <num> := ^[0-9]+$;
+    <num> := ^[0-9]+;
 
 Here is a simple Java program that reads characters strings and tries to parse
 them against this grammar (a complete working program can be found in the file
@@ -52,8 +52,83 @@ example:
 
 ![Parse tree](Simple-Math.svg)
 
+Defining a grammar
+------------------
+
 The grammar must be [LL(k)](http://en.wikipedia.org/wiki/LL_parser). Roughly,
 this means that it must not contain a production rules of the form
-<S> := <S> something. Trying to parse such a rule by recursive descent causes
+`<S> := <S> something`. Trying to parse such a rule by recursive descent causes
 an infinite recursion (which will throw a ParseException when the maximum
 recursion depth is reached).
+
+Defining a grammar can be done in two ways.
+
+### Parsing a string
+
+The first way is by parsing a character string (taken from a file or created
+directly) that contains the grammar declaration. This format uses a fairly
+intuitive syntax, as the example above has shown.
+   
+- Non-terminal symbols are enclosed in `<` and `>` and their names must not
+  contain spaces.
+- Rules are defined with `:=` and cases are separated by the pipe character.
+- A rule can span multiple lines (any whitespace character after the first one
+  is ignored, as in e.g. HTML) and must end by a semicolon.
+- Terminal symbols are defined by typing them directly in a rule, or through
+  regular expressions and begin with the `^` (hat) character. The example above
+  shows both cases: the `+` symbol is typed directly into the rules, while the
+  terminal symbol `<num>` is defined with a regex. If a space needs to be used
+  in the regular expression, it must be declared by using the regex sequence
+  `\s`, and *not* by putting a space. Caveat emptor: a few corner cases are not
+  covered at the moment, such as a regex that would contain a semicolon.
+- The left-hand side symbol of the first rule found is assumed to be the start
+  symbol. This can be overridden by calling method `setStartSymbol()` on an
+  instance of the parser.
+- Whitespace acts as a token separator, so there is no need to declare terminal
+  tokens separately. This means that the rule `<num> + <num>` matches any string
+  with a number, the symbol +, and another number, separated by any number of
+  spaces, including none. This also means that writing `1+2` defines a *single*
+  token that matches only the string "1+2". When declaring rules, tokens *must*
+  be separated by a space. Writing `(<exp>)` is illegal and will throw an
+  exception; one must write `( <exp> )` (note the spaces). However, since
+  whitespace is ignored when parsing, this rule would still match the string
+  "(1+1)".
+
+### Building the rules manually
+
+A second way of defining a grammar consists of assembling rules by creating
+instances of objects programmatically. Roughly:
+
+- A `BnfRule` contains a left-hand side that must be a `NonTerminalToken`, and
+  a right-hand side containing multiple cases that are added through method
+  `addAlternative()`.
+- Each case is itself a `TokenString`, formed of multiple `TerminalToken`s and
+  `NonTerminalToken`s which can be `add`ed. Terminal tokens include
+  `NumberTerminalToken`, `StringTerminalToken` and `RegexTerminalToken`.
+- `BnfRule`s are `add`ed to an instance of the `BnfParser`.
+
+Using the parse tree
+--------------------
+
+Once a grammar has been loaded into an instance of `BnfParser`, the `parse()`
+method is used to parse a given string and produce a parse tree (or null if the
+string does not parse). This parse tree can then be explored in two ways:
+
+1. In a manner similar to the DOM, by calling the `getChildren()` method of an
+   instance of a `ParseNode` to get the list of its children (and so on,
+   recursively);
+2. Through the [Visitor design
+   pattern](http://en.wikipedia.org/wiki/Visitor_pattern). In that case, one
+   creates a class that implements the `ParseNodeVisitor` interface, and passes
+   this visitor to the `ParseNode`'s `acceptPostfix()` or `acceptPrefix()`
+   method, depending on the desired mode of traversal. The sample code shows an
+   example of a visitor (class `GraphvizVisitor`), which produces a DOT file
+   from the contents of the parse tree.
+
+About the author
+----------------
+
+FlyParse was written (quickly) by Sylvain Hallé, assistant professor at
+Université du Québec à Chicoutimi, Canada. It arose from the need to experiment
+with various grammars without requiring compilation, as with classical parser
+generators.
