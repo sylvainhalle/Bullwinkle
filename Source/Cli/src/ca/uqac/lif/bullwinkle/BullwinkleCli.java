@@ -87,7 +87,7 @@ public class BullwinkleCli
       System.err.println("(C) 2014 Sylvain Hallé et al., Université du Québec à Chicoutimi");
       System.err.println("This program comes with ABSOLUTELY NO WARRANTY.");
       System.err.println("This is a free software, and you are welcome to redistribute it");
-      System.err.println("under certain conditions. See the file COPYING for details.\n");
+      System.err.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
       System.exit(ERR_OK);
     }
     if (c_line.hasOption("h"))
