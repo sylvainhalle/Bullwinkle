@@ -15,16 +15,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
-import ca.uqac.lif.bnf.BnfParser;
-import ca.uqac.lif.bnf.BnfParser.InvalidGrammarException;
-import ca.uqac.lif.bnf.BnfRule;
+
+import ca.uqac.lif.bullwinkle.BnfParser;
+import ca.uqac.lif.bullwinkle.BnfRule;
+import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.util.FileReadWrite;
 
 

@@ -1,7 +1,8 @@
 import java.io.File;
 
-import ca.uqac.lif.bnf.BnfParser;
-import ca.uqac.lif.bnf.ParseNode;
+import ca.uqac.lif.bullwinkle.BnfParser;
+import ca.uqac.lif.bullwinkle.ParseNode;
+import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
 
 /*
   Copyright 2014 Sylvain Hallé
@@ -33,7 +34,7 @@ public class ShowParseTree
       ParseNode node = parser.parse(expression);
       GraphvizVisitor visitor = new GraphvizVisitor();
       node.prefixAccept(visitor);
-      System.out.println(visitor.toDot());
+      System.out.println(visitor.toOutputString());
     }
     catch (Exception e)
     {

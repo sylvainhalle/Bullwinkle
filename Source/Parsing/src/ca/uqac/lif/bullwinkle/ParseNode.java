@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 
 import java.util.LinkedList;
 import java.util.List;

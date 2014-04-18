@@ -15,32 +15,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle.output;
 
-public class NumberTerminalToken extends TerminalToken
+import ca.uqac.lif.bullwinkle.ParseNodeVisitor;
+
+public interface OutputFormatVisitor extends ParseNodeVisitor
 {
-  public NumberTerminalToken(String label)
-  {
-    super(label);
-  }
-
-  @Override
-  public boolean matches(final Token tok)
-  {
-    if (tok == null)
-    {
-      return false;
-    }
-    String val = tok.getName();
-    try
-    {
-      // Try to parse token into a number
-      Float.parseFloat(val);
-    }
-    catch (NumberFormatException e)
-    {
-      return false;
-    }
-    return true;
-  }
+  public String toOutputString();
 }

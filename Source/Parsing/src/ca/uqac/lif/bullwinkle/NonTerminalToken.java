@@ -15,28 +15,24 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-import java.io.File;
+package ca.uqac.lif.bullwinkle;
 
-import ca.uqac.lif.bullwinkle.BnfParser;
-import ca.uqac.lif.bullwinkle.ParseNode;
-import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
-
-public class SimpleExample
+public class NonTerminalToken extends Token
 {
-  public static void main(String[] args)
+  NonTerminalToken(String s)
   {
-    try
-    {
-      BnfParser parser = new BnfParser(new File("examples/Simple-Math.bnf"));
-      ParseNode node2 = parser.parse("(10 + (3 - 4))");
-      GraphvizVisitor visitor = new GraphvizVisitor();
-      node2.prefixAccept(visitor);
-      System.out.println(visitor.toOutputString());
-    }
-    catch (Exception e)
-    {
-      System.err.println("Some error occurred");
-      e.printStackTrace();
-    }
+    super(s);
+  }
+  
+  @Override
+  public boolean matches(final Token tok)
+  {
+    return false;
+  }
+  
+  @Override
+  public int match(final String s)
+  {
+    return 0;
   }
 }

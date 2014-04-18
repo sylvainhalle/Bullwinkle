@@ -1,4 +1,4 @@
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 
 public abstract class Token
 {

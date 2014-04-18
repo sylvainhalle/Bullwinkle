@@ -15,24 +15,34 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 
-public class NonTerminalToken extends Token
+public class EpsilonTerminalToken extends TerminalToken
 {
-  NonTerminalToken(String s)
+  public EpsilonTerminalToken()
   {
-    super(s);
+    super("ε");
   }
-  
+
   @Override
-  public boolean matches(final Token tok)
+  public boolean matches(Token tok)
   {
+    if (tok instanceof EpsilonTerminalToken)
+    {
+      return true;
+    }
     return false;
   }
-  
+
   @Override
-  public int match(final String s)
+  public int match(String s)
   {
     return 0;
+  }
+  
+  @Override
+  public String toString()
+  {
+    return getName();
   }
 }

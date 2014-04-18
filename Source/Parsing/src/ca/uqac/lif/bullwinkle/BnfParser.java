@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
-import ca.uqac.lif.bnf.BnfRule.InvalidRuleException;
+import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
 import ca.uqac.lif.util.EmptyException;
 import ca.uqac.lif.util.FileReadWrite;
 import ca.uqac.lif.util.MutableString;

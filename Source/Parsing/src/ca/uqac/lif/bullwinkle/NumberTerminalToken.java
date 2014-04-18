@@ -15,52 +15,32 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-package ca.uqac.lif.bnf;
+package ca.uqac.lif.bullwinkle;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class RegexTerminalToken extends TerminalToken
+public class NumberTerminalToken extends TerminalToken
 {
-  public RegexTerminalToken(final String label)
+  public NumberTerminalToken(String label)
   {
     super(label);
-  }
-
-  private Pattern m_pattern;
-  
-  @Override
-  public void setName(final String s)
-  {
-    super.setName(s);
-    m_pattern = Pattern.compile(s);
   }
 
   @Override
   public boolean matches(final Token tok)
   {
-    String contents = tok.getName();
-    Matcher matcher = m_pattern.matcher(contents);
-    return matcher.matches();
-  }
-
-  @Override
-  public int match(final String s)
-  {
-    Matcher matcher = m_pattern.matcher(s);
-    if (matcher.find())
+    if (tok == null)
     {
-      return matcher.end();
+      return false;
     }
-    return -1;
+    String val = tok.getName();
+    try
+    {
+      // Try to parse token into a number
+      Float.parseFloat(val);
+    }
+    catch (NumberFormatException e)
+    {
+      return false;
+    }
+    return true;
   }
-  
-  @Override
-  public String toString()
-  {
-    StringBuilder out = new StringBuilder();
-    out.append(getName());
-    return out.toString();
-  }
-
 }
