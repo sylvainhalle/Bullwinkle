@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfRule;
 import ca.uqac.lif.bullwinkle.TerminalToken;
 import ca.uqac.lif.bullwinkle.TokenString;

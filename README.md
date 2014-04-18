@@ -1,21 +1,30 @@
-FlyParse: an on-the-fly parser
+Bullwinkle: an on-the-fly parser
 ==============================
 
-FlyParse is a parser for LL(k) languages that operates through recursive descent
+Bullwinkle is a parser for LL(k) languages that operates through recursive descent
 with backtracking.
 
 [Parser generators](http://en.wikipedia.org/wiki/Parser_generator) such as
 ANTLR, Yacc or Bison take a grammar as input and produce code for a parser
 specific to that grammar, which must then be compiled to be used. On the
-contrary, FlyParse reads the definition of the grammar (expressed in
+contrary, Bullwinkle reads the definition of the grammar (expressed in
 [Backus-Naur Form](http://en.wikipedia.org/wiki/Backus-Naur_form) (BNF)) at
 runtime and can readily parse strings on the spot.
+
+Table of Contents
+-----------------
+
+- [An example](#example)
+- [Defining a grammar](#grammar)
+- [Using the parse tree](#tree)
+- [Command-line usage](#cli)
+- [About the author](#about)
 
 An example
 ----------
 
 Consider for example the following simple grammar, taken from the file
-`Examples/Simple-Math.bnf` in the FlyParse archive:
+`Examples/Simple-Math.bnf` in the Bullwinkle archive:
 
     <exp> := <add> | <sub> | <mul> | <div> | - <exp> | <num>;
     <add> := <num> + <num> | ( <exp> + <exp> );
@@ -125,10 +134,70 @@ string does not parse). This parse tree can then be explored in two ways:
    example of a visitor (class `GraphvizVisitor`), which produces a DOT file
    from the contents of the parse tree.
 
+Command-line usage
+------------------
+
+The project comes with `BullwinkleParser.jar`, a file that can be used either
+as a library inside a Java program (as described above), or as a stand-alone
+command-line application. In that case, the application reads the grammar
+definition from a file, a string to parse either from the standard input or
+from another file, and writes to the standard output the resulting parse
+tree. This tree can then be read by another application. At the moment, three
+output formats are supported.
+
+### XML
+
+In the XML format, non-terminal symbols are converted into tags, and terminal
+tokens are surrounded by the `<token>` element. In the
+above example, the expression `3 + 4` becomes the following XML structure:
+
+    <parsetree>
+      <exp>
+        <add>
+          <num>
+            <token>
+              3
+            </token>
+          </num>
+          <token>
+            +
+          </token>
+          <num>
+            <token>
+              4
+            </token>
+          </num>
+        </add>
+      </exp>
+    </parsetree>
+
+### Indented text
+
+Indented text merely outputs terminal and non-terminal tokens, indenting
+any subtree by one space, as follows:
+
+    exp
+     add
+      num
+       token
+        3
+      token
+       +
+      token
+      num
+       token
+        4
+
+### DOT
+
+The DOT format produces a text file suitable for use with the
+[Graphviz](http://www.graphviz.org) package. The picture shown earlier was
+produced in this way.
+
 About the author
 ----------------
 
-FlyParse was written (quickly) by Sylvain Hallé, assistant professor at
+Bullwinkle was written (quickly) by Sylvain Hallé, assistant professor at
 Université du Québec à Chicoutimi, Canada. It arose from the need to experiment
 with various grammars without requiring compilation, as with classical parser
 generators.

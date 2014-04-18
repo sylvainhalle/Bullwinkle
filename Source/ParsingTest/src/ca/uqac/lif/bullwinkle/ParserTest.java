@@ -24,7 +24,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
-import ca.uqac.lif.bullwinkle.BnfRule;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.util.FileReadWrite;
 
