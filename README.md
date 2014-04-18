@@ -11,16 +11,17 @@ contrary, Bullwinkle reads the definition of the grammar (expressed in
 [Backus-Naur Form](http://en.wikipedia.org/wiki/Backus-Naur_form) (BNF)) at
 runtime and can readily parse strings on the spot.
 
-Table of Contents
+Table of Contents                                                    {#toc}
 -----------------
 
 - [An example](#example)
+- [Compiling and installing Bullwinkle](#install)
 - [Defining a grammar](#grammar)
 - [Using the parse tree](#tree)
 - [Command-line usage](#cli)
 - [About the author](#about)
 
-An example
+An example                                                       {#example}
 ----------
 
 Consider for example the following simple grammar, taken from the file
@@ -48,27 +49,64 @@ them against this grammar (a complete working program can be found in the file
       System.err.println("Some error occurred");
     }
 
-The first instruction loads the grammar definition and instantiates an object
-`parser` for that grammar. Calls to method `parse()` give this parser a
-character string, and return an object of class `ParseNode` which points to the
-head of the corresponding parse tree (or null if the input string does not
-follow the grammar). These instructions are enclosed in a try/catch block to
-catch potential exceptions thrown during this process. The whole process is done
-dynamically at runtime, without requiring any compiling.
+The first instruction loads the grammar definition and instantiates an
+object `parser` for that grammar. Calls to method `parse()` give this parser
+a character string, and return an object of class `ParseNode` which points
+to the head of the corresponding parse tree (or null if the input string
+does not follow the grammar). These instructions are enclosed in a try/catch
+block to catch potential exceptions thrown during this process. The whole
+process is done dynamically at runtime, without requiring any compiling.
 
 Here is the parse tree returned for the second expression in the previous
 example:
 
 ![Parse tree](Simple-Math.svg?raw=true)
 
-Defining a grammar
+Compiling and Installing Bullwinkle                              {#install}
+-----------------------------------
+
+First make sure you have the following installed:
+
+- The Java Development Kit (JDK) to compile. BeepBeep was developed and
+  tested on version 6 of the JDK, but it is probably safe to use any
+  later version. Moreover, it most probably compiles on the JDK 5, although
+  this was not tested.
+- [Ant](http://ant.apache.org) to automate the compilation and build process
+- The [Apache Commons CLI](http://commons.apache.org/proper/commons-cli/)
+  to handle command-line parameters *(tested with version 1.2)*
+
+This last library should be put in Java's extension folder. This location
+varies according to the operating system you use:
+
+- Solaris™ Operating System: `/usr/jdk/packages/lib/ext`
+- Linux: `/usr/java/packages/lib/ext`
+- Microsoft Windows: `%SystemRoot%\Sun\Java\lib\ext`
+
+Do **not** create subfolders there (i.e. put the archive directly in that
+folder).
+
+Download the sources for Bullwinkle from
+[GitHub](http://github.com/sylvainhalle/Bullwinkle) or clone the repository
+using Git:
+
+    git clone git@github.com:sylvainhalle/Bullwinkle.git
+
+Compile the sources by simply typing:
+
+    ant
+
+This will produce a file called `BeepBeep.jar` in the `dist` subfolder.
+This file is runnable and stand-alone, so it can be moved around to the
+location of your choice.
+
+Defining a grammar                                               {#grammar}
 ------------------
 
-The grammar must be [LL(k)](http://en.wikipedia.org/wiki/LL_parser). Roughly,
-this means that it must not contain a production rules of the form
-`<S> := <S> something`. Trying to parse such a rule by recursive descent causes
-an infinite recursion (which will throw a ParseException when the maximum
-recursion depth is reached).
+The grammar must be [LL(k)](http://en.wikipedia.org/wiki/LL_parser).
+Roughly, this means that it must not contain a production rules of the form
+`<S> := <S> something`. Trying to parse such a rule by recursive descent
+causes an infinite recursion (which will throw a ParseException when the
+maximum recursion depth is reached).
 
 Defining a grammar can be done in two ways.
 
@@ -116,7 +154,7 @@ instances of objects programmatically. Roughly:
   `NumberTerminalToken`, `StringTerminalToken` and `RegexTerminalToken`.
 - `BnfRule`s are `add`ed to an instance of the `BnfParser`.
 
-Using the parse tree
+Using the parse tree                                                {#tree}
 --------------------
 
 Once a grammar has been loaded into an instance of `BnfParser`, the `parse()`
@@ -134,22 +172,39 @@ string does not parse). This parse tree can then be explored in two ways:
    example of a visitor (class `GraphvizVisitor`), which produces a DOT file
    from the contents of the parse tree.
 
-Command-line usage
+Command-line usage                                                   {#cli}
 ------------------
 
-The project comes with `BullwinkleParser.jar`, a file that can be used either
-as a library inside a Java program (as described above), or as a stand-alone
-command-line application. In that case, the application reads the grammar
-definition from a file, a string to parse either from the standard input or
-from another file, and writes to the standard output the resulting parse
-tree. This tree can then be read by another application. At the moment, three
-output formats are supported.
+The project comes with `BullwinkleParser.jar`, a file that can be used
+either as a library inside a Java program (as described above), or as a
+stand-alone command-line application. In that case, the application reads
+the grammar definition from a file, a string to parse either from the
+standard input or from another file, and writes to the standard output the
+resulting parse tree. This tree can then be read by another application.
+
+Command-line usage is as follows:
+
+    java -jar BullwinkleParser.jar [options] grammar [file]
+
+where `grammar` is the path to a file describing the grammar to use, and
+`file` is an optional filename containing the string to be parsed. If no
+file is given, the string will be read from the standard input.
+
+Options are:
+
+`-f x`, `--format x`
+:  Output with format x. Supported values are `xml`, `txt` and `dot`. See
+   below for a description of these formats.
+`-v x`
+:  Set verbosity to level x (0 = no messages are printed).
+
+At the moment, three output formats are supported.
 
 ### XML
 
-In the XML format, non-terminal symbols are converted into tags, and terminal
-tokens are surrounded by the `<token>` element. In the
-above example, the expression `3 + 4` becomes the following XML structure:
+In the XML format, non-terminal symbols are converted into tags, and
+terminal tokens are surrounded by the `<token>` element. In the above
+example, the expression `3 + 4` becomes the following XML structure:
 
     <parsetree>
       <exp>
@@ -194,10 +249,10 @@ The DOT format produces a text file suitable for use with the
 [Graphviz](http://www.graphviz.org) package. The picture shown earlier was
 produced in this way.
 
-About the author
+About the author                                                   {#about}
 ----------------
 
-Bullwinkle was written (quickly) by Sylvain Hallé, assistant professor at
-Université du Québec à Chicoutimi, Canada. It arose from the need to experiment
-with various grammars without requiring compilation, as with classical parser
+Bullwinkle was written by Sylvain Hallé, assistant professor at Université
+du Québec à Chicoutimi, Canada. It arose from the need to experiment with
+various grammars without requiring compilation, as with classical parser
 generators.
