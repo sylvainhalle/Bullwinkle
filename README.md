@@ -95,9 +95,9 @@ Compile the sources by simply typing:
 
     ant
 
-This will produce a file called `BeepBeep.jar` in the `dist` subfolder.
-This file is runnable and stand-alone, so it can be moved around to the
-location of your choice.
+This will produce a file called `BullwinkleParser.jar` in the folder. This
+file is runnable and stand-alone, or can be used as a library, so it can be
+moved around to the location of your choice.
 
 Defining a grammar                                               {#grammar}
 ------------------
