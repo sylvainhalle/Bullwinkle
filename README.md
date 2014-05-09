@@ -60,7 +60,7 @@ process is done dynamically at runtime, without requiring any compiling.
 Here is the parse tree returned for the second expression in the previous
 example:
 
-![Parse tree](Simple-Math.svg?raw=true)
+![Parse tree](Simple-Math.png?raw=true)
 
 Compiling and Installing Bullwinkle                              {#install}
 -----------------------------------
