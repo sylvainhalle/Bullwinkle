@@ -1,15 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project Cli">
-    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
-    <!--ANT 1.7 is required                                        -->
-    <target name="create_run_jar">
-        <jar destfile="BullwinkleParser.jar" filesetmanifest="mergewithoutmain">
-            <manifest>
-                <attribute name="Main-Class" value="ca.uqac.lif.bullwinkle.BullwinkleCli"/>
-                <attribute name="Class-Path" value="."/>
-            </manifest>
-            <fileset dir="Source/Cli/bin"/>
-            <fileset dir="Source/Parsing/bin"/>
-        </jar>
-    </target>
+<project name="Bullwinkle" default="dist" basedir=".">
+
+  <description>Build file for Bullwinkle</description>
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Nothing else to do -->
+  </target>
+  
+  <target name="compile" depends="init" description="Compile the source">
+    <!-- Compile the java code for each project -->
+    <javac
+      srcdir="Source/Parsing/src"
+      destdir="Source/Parsing/bin"
+      includeantruntime="false" />
+    <javac
+      srcdir="Source/Cli/src"
+      destdir="Source/Cli/bin"
+      classpath="Source/Parsing/bin"
+      includeantruntime="false" />
+  </target>
+  
+  <target name="create_run_jar" depends="compile" description="Create the runnable JAR">
+      <jar destfile="BullwinkleParser.jar" filesetmanifest="mergewithoutmain">
+	  <manifest>
+	      <attribute name="Main-Class" value="ca.uqac.lif.bullwinkle.BullwinkleCli"/>
+	      <attribute name="Class-Path" value="."/>
+	  </manifest>
+	  <fileset dir="Source/Cli/bin"/>
+	  <fileset dir="Source/Parsing/bin"/>
+      </jar>
+  </target>
+  
+  <target name="dist" depends="create_run_jar" description="Create distribution">
+    <!-- Do nothing -->
+  </target>
+
 </project>
