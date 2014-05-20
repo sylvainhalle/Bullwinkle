@@ -21,6 +21,7 @@ package ca.uqac.lif.util;
  * A fully static class, this contains helper methods for working with strings.
  *
  * @author Joseph Lenton
+ * @author Sylvain Hallé
  */
 public final class StringUtil
 {
@@ -32,9 +33,9 @@ public final class StringUtil
   private StringUtil() { }
 
   /**
-   * Concatonates all the strings given together into one long string.
+   * Concatenates all the strings given together into one long string.
    * @param strings An array of strings, cannot be null and cannot contain null.
-   * @return A string made by concatonating all the elements of strings together.
+   * @return A string made by concatenating all the elements of strings together.
    */
   public static String stringConcat(String ... strings)
   {
@@ -52,6 +53,13 @@ public final class StringUtil
     }
 
     return concatString.toString();
+  }
+  
+  public static String replaceNoBreakSpaces(String s)
+  {
+	  // TODO: take into account strings that may contain non-breaking spaces
+	  // (0xC2 0xA0) instead of normal spaces (0x20)
+	  return s;
   }
 
   /**
