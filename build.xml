@@ -48,6 +48,7 @@
 	  </manifest>
 	  <fileset dir="Source/Cli/bin"/>
 	  <fileset dir="Source/Parsing/bin"/>
+	  <fileset dir="Source/Parsing/src"/>
 	  <fileset dir="doc"/>
       </jar>
   </target>
