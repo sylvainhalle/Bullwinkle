@@ -7,6 +7,10 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Nothing else to do -->
+    <mkdir dir="doc"/>
+    <mkdir dir="Source/Parsing/bin"/>
+    <mkdir dir="Source/ParsingTest/bin"/>
+    <mkdir dir="Source/Cli/bin"/>
   </target>
   
   <target name="compile" depends="init" description="Compile the source">
@@ -22,6 +26,20 @@
       includeantruntime="false" />
   </target>
   
+  <javadoc packagenames="ca.uqac.lif.bullwinkle.*"
+           sourcepath="Source/Parsing/src"
+           excludepackagenames=""
+           defaultexcludes="yes"
+           destdir="doc"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="Bullwinkle Documentation">
+    <doctitle><![CDATA[<h1>Bullwinkle Documentation</h1>]]></doctitle>
+    <bottom><![CDATA[<i>Copyright &#169; 2014 Sylvain Hall&eacute;. All Rights Reserved.</i>]]></bottom>
+    <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+  </javadoc>
+  
   <target name="create_run_jar" depends="compile" description="Create the runnable JAR">
       <jar destfile="BullwinkleParser.jar" filesetmanifest="mergewithoutmain">
 	  <manifest>
@@ -30,6 +48,7 @@
 	  </manifest>
 	  <fileset dir="Source/Cli/bin"/>
 	  <fileset dir="Source/Parsing/bin"/>
+	  <fileset dir="doc"/>
       </jar>
   </target>
   
