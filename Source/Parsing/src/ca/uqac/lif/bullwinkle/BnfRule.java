@@ -83,6 +83,11 @@ public class BnfRule
           Token to_add = new RegexTerminalToken(trimmed_word);
           alternative_to_add.add(to_add);
         }
+        else if (trimmed_word.compareTo("ε") == 0)
+        {
+          Token to_add = new EpsilonTerminalToken();
+          alternative_to_add.add(to_add);
+        }
         else
         {
           if (trimmed_word.isEmpty())

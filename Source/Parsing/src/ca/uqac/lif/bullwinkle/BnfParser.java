@@ -37,6 +37,8 @@ public class BnfParser
   
   private static final String s_CRLF = System.getProperty("line.separator");
   
+  private boolean m_debugMode = false;
+  
   public static int s_maxRecursionSteps = 50;
   
   public BnfParser()
@@ -59,6 +61,11 @@ public class BnfParser
     {
       s_maxRecursionSteps = steps;
     }
+  }
+  
+  public void setDebugMode(boolean b)
+  {
+    m_debugMode = b;
   }
   
   @Override
@@ -164,8 +171,11 @@ public class BnfParser
     ParseNode out_node = null;
     MutableString n_input = new MutableString(input);
     boolean wrong_symbol = true;
+    boolean read_epsilon = false;
+    log("Considering input " + input + " with rule " + rule, level);
     for (TokenString alt : rule.getAlternatives())
     {
+      log("Alternative " + alt, level);
       out_node = new ParseNode();
       NonTerminalToken left_hand_side = rule.getLeftHandSide();
       out_node.setToken(left_hand_side.toString());
@@ -182,9 +192,21 @@ public class BnfParser
         {
           if (n_input.isEmpty())
           {
-            // Rule expects a token, string has no more: NO MATCH
-            wrong_symbol = true;
-            break;
+            if (alt_tok instanceof EpsilonTerminalToken)
+            {
+              // Rule expects the empty string, and that's what we have
+              ParseNode child = new ParseNode();
+              child.setToken("");
+              out_node.addChild(child);       
+              read_epsilon = true;
+              break;
+            }
+            else
+            {
+              // Rule expects a token, string has no more: NO MATCH
+              wrong_symbol = true;
+              break;
+            }
           }
           int match_prefix_size = alt_tok.match(n_input.toString());
           if (match_prefix_size > 0)
@@ -199,7 +221,8 @@ public class BnfParser
             // Rule expects a token, token in string does not match: NO MATCH
             wrong_symbol = true;
             out_node = null;
-            break;            
+            log("FAILED parsing with case " + new_alt, level);
+            break;
           }
         }
         else
@@ -219,27 +242,30 @@ public class BnfParser
             // Parsing failed
             wrong_symbol = true;
             out_node = null;
+            log("FAILED parsing input " + input + " with rule " + rule, level);
             break;
           }
           out_node.addChild(child);
         }
       }
-      if (!wrong_symbol || n_input.isEmpty())
+      if (!wrong_symbol)
       {
         // We succeeded in parsing the complete string: done
         break;
       }
     }
     int chars_consumed = input.length() - n_input.length();
-    if (chars_consumed == 0)
+    if (chars_consumed == 0 && !read_epsilon)
     {
-      // We did not consume anything: fail
+      // We did not consume anything, and the symbol was not epsilon: fail
+      log("FAILED: did not consumed anything of " + input + " with rule " + rule, level);
       return null;
     }
     input.truncateSubstring(chars_consumed);
     if (level == 0 && !input.isEmpty())
     {
       // The top-level rule must parse the complete string
+      log("FAILED: The top-level rule must parse the complete string", level);
       return null;
     }
 
@@ -311,6 +337,18 @@ public class BnfParser
       out.addAll(rule.getTerminalTokens());
     }
     return out;
+  }
+  
+  private void log(String message, int level)
+  {
+    StringBuilder out = new StringBuilder();
+    if (m_debugMode)
+    {
+      for (int i = 0; i < level; i++)
+        out.append("  ");
+      out.append(message);
+      System.err.println(out);
+    }
   }
   
   public static class InvalidGrammarException extends EmptyException

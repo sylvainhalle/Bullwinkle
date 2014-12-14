@@ -1,9 +1,10 @@
-<tablename>   := ^[a-z]*;
-<criterion>   := ^[a-z]*;
-<selection>   := SELECT <criterion> FROM <S> ;
-<whereclause> := WHERE <condition> ;
 <S>           := <group> | <selection> | <whereclause> | <tablename> ;
 <group>       := ( <S> ) ;
+<selection>   := SELECT <criterion> FROM <S> ;
+<whereclause> := WHERE <condition> ;
+<tablename>   := ^[a-z]*;
+<criterion>   := ^[a-z]*;
+
 
 
 # SELECT abcd FROM (SELECT * FROM trace WHERE 1=0)
