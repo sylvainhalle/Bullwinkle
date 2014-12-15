@@ -172,7 +172,7 @@ public class BnfParser
     MutableString n_input = new MutableString(input);
     boolean wrong_symbol = true;
     boolean read_epsilon = false;
-    log("Considering input " + input + " with rule " + rule, level);
+    log("Considering input '" + input + "' with rule " + rule, level);
     for (TokenString alt : rule.getAlternatives())
     {
       log("Alternative " + alt, level);
@@ -190,23 +190,20 @@ public class BnfParser
         Token alt_tok = alt_it.next();
         if (alt_tok instanceof TerminalToken)
         {
+          if (alt_tok instanceof EpsilonTerminalToken)
+          {
+            // Epsilon always works
+            ParseNode child = new ParseNode();
+            child.setToken("");
+            out_node.addChild(child);       
+            read_epsilon = true;
+            break;
+          }
           if (n_input.isEmpty())
           {
-            if (alt_tok instanceof EpsilonTerminalToken)
-            {
-              // Rule expects the empty string, and that's what we have
-              ParseNode child = new ParseNode();
-              child.setToken("");
-              out_node.addChild(child);       
-              read_epsilon = true;
-              break;
-            }
-            else
-            {
-              // Rule expects a token, string has no more: NO MATCH
-              wrong_symbol = true;
-              break;
-            }
+            // Rule expects a token, string has no more: NO MATCH
+            wrong_symbol = true;
+            break;
           }
           int match_prefix_size = alt_tok.match(n_input.toString());
           if (match_prefix_size > 0)

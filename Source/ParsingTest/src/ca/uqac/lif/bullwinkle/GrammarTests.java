@@ -41,7 +41,7 @@ public class GrammarTests
   public void parseGrammar0()
   {
     String expression = "SELECT a FROM t";
-    ParseNode node = parseIt("data/Grammar-0.bnf", "<S>", expression);
+    ParseNode node = parseIt("data/Grammar-0.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 9;
     if (size != expected_size)
@@ -54,7 +54,7 @@ public class GrammarTests
   public void parseGrammar1()
   {
     String expression = "SELECT a FROM t";
-    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression);
+    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 9;
     if (size != expected_size)
@@ -67,7 +67,7 @@ public class GrammarTests
   public void parseGrammar2a()
   {
     String expression = "SELECT a FROM (t)";
-    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression);
+    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 13;
     if (size != expected_size)
@@ -80,7 +80,7 @@ public class GrammarTests
   public void parseGrammar2b()
   {
     String expression = "SELECT a FROM (SELECT b FROM t)";
-    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression);
+    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 19;
     if (size != expected_size)
@@ -93,7 +93,7 @@ public class GrammarTests
   public void parseGrammarLtlFo1()
   {
     String expression = "G (∃ x ∈ /a/b/c : (x lt y))";
-    ParseNode node = parseIt("data/Grammar-2.bnf", "<phi>", expression);
+    ParseNode node = parseIt("data/Grammar-2.bnf", "<phi>", expression, false);
     int size = node.getSize();
     int expected_size = 23;
     if (size != expected_size)
@@ -103,10 +103,10 @@ public class GrammarTests
   }
   
   @Test
-  public void parseGrammarWithEpsilon()
+  public void parseGrammarWithEpsilon1()
   {
     String expression = "hello hello";
-    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression);
+    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 6;
     if (size != expected_size)
@@ -115,9 +115,22 @@ public class GrammarTests
     }	  
   }
   
-  private ParseNode parseIt(String grammar_filename, String start_symbol, String expression)
+  @Test
+  public void parseGrammarWithEpsilon2()
   {
-    BnfParser parser = readGrammar(grammar_filename, start_symbol);
+    String expression = "hello hello foo";
+    ParseNode node = parseIt("data/Grammar-4.bnf", "<S>", expression, false);
+    int size = node.getSize();
+    int expected_size = 9;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }     
+  }
+  
+  private ParseNode parseIt(String grammar_filename, String start_symbol, String expression, boolean debug_mode)
+  {
+    BnfParser parser = readGrammar(grammar_filename, start_symbol, debug_mode);
     ParseNode node = shouldParseAndNotNull(expression, parser);
     return node;
   }
@@ -153,9 +166,10 @@ public class GrammarTests
     return node;
   }
 
-  private BnfParser readGrammar(final String filename, final String start_rule)
+  private BnfParser readGrammar(final String filename, final String start_rule, boolean debug_mode)
   {
     BnfParser parser = new BnfParser();
+    parser.setDebugMode(debug_mode);
     try
     {
       String grammar = FileReadWrite.readFile(filename);
