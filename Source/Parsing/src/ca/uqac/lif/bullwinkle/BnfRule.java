@@ -17,9 +17,12 @@
 */
 package ca.uqac.lif.bullwinkle;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import ca.uqac.lif.util.EmptyException;
@@ -95,6 +98,7 @@ public class BnfRule
             throw new InvalidRuleException("Trying to create an empty terminal token"); 
           }
           // This is a literal token
+          trimmed_word = unescapeString(trimmed_word);
           alternative_to_add.add(new TerminalToken(trimmed_word));
         }
       }
@@ -121,6 +125,32 @@ public class BnfRule
   NonTerminalToken getLeftHandSide()
   {
     return m_leftHandSide;
+  }
+  
+  /**
+   * Interprets UTF-8 escaped characters and converts them back into
+   * a UTF-8 string. The solution used here (going through a
+   * {@link Property} object) can be found on
+   * <a href="http://stackoverflow.com/a/24046962">StackOverflow</a>.
+   * It has the advantage of not relying on (yet another) external
+   * library (as the accepted solution does) just for using a single
+   * method. 
+   * @param s The input string
+   * @return The converted (unescaped) string
+   */
+  protected static String unescapeString(String s)
+  {
+    Properties p = new Properties();
+    try
+    {
+      p.load(new StringReader("key=" + s));
+    }
+    catch (IOException e)
+    {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return p.getProperty("key");
   }
   
   @Override

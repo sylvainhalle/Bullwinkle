@@ -141,6 +141,20 @@ intuitive syntax, as the example above has shown.
   whitespace is ignored when parsing, this rule would still match the string
   "(1+1)".
 
+Some symbols or sequences of symbols, such as `:=`, `|`, `<`, `>` and `;`,
+have a special meaning and cannot be used directly inside terminal symbols
+(note that this limitation applies only when parsing a grammar from a text
+file). However, these symbols can be included by *escaping* them, i.e.
+replacing them with their UTF-8 hex code.
+
+- `|` can be replaced by `\u007c`
+- `<` can be replaced by `\u003c`
+- `<` can be replaced by `\u003e`
+- `;` can be replaced by `\u003b`
+- `:=` can be replaced by `\u003a\u003d`
+
+The characters should appear as is (i.e. unescaped) in the string to parse.
+
 ### Building the rules manually
 
 A second way of defining a grammar consists of assembling rules by creating

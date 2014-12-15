@@ -128,6 +128,19 @@ public class GrammarTests
     }     
   }
   
+  @Test
+  public void parseGrammarWithEntity1()
+  {
+    String expression = "a|a";
+    ParseNode node = parseIt("data/Grammar-5.bnf", "<S>", expression, false);
+    int size = node.getSize();
+    int expected_size = 2;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }     
+  }
+  
   private ParseNode parseIt(String grammar_filename, String start_symbol, String expression, boolean debug_mode)
   {
     BnfParser parser = readGrammar(grammar_filename, start_symbol, debug_mode);
