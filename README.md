@@ -67,7 +67,7 @@ Compiling and Installing Bullwinkle                              {#install}
 
 First make sure you have the following installed:
 
-- The Java Development Kit (JDK) to compile. BeepBeep was developed and
+- The Java Development Kit (JDK) to compile. Bullwinkle was developed and
   tested on version 6 of the JDK, but it is probably safe to use any
   later version. Moreover, it most probably compiles on the JDK 5, although
   this was not tested.
@@ -98,6 +98,12 @@ Compile the sources by simply typing:
 This will produce a file called `BullwinkleParser.jar` in the folder. This
 file is runnable and stand-alone, or can be used as a library, so it can be
 moved around to the location of your choice.
+
+In addition, the script generates in the `doc` folder the Javadoc
+documentation for using Bullwinkle. This documentation is also embedded in
+the JAR file. To show documentation in Eclipse, right-click on the jar,
+click "Properties", then fill the Javadoc location (which is the JAR
+itself).
 
 Defining a grammar                                               {#grammar}
 ------------------

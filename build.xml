@@ -26,21 +26,23 @@
       includeantruntime="false" />
   </target>
   
-  <javadoc packagenames="ca.uqac.lif.bullwinkle.*"
-           sourcepath="Source/Parsing/src"
-           excludepackagenames=""
-           defaultexcludes="yes"
-           destdir="doc"
-           author="true"
-           version="true"
-           use="true"
-           windowtitle="Bullwinkle Documentation">
-    <doctitle><![CDATA[<h1>Bullwinkle Documentation</h1>]]></doctitle>
-    <bottom><![CDATA[<i>Copyright &#169; 2014 Sylvain Hall&eacute;. All Rights Reserved.</i>]]></bottom>
-    <link href="http://docs.oracle.com/javase/7/docs/api/"/>
-  </javadoc>
+  <target name="javadoc" depends="init" description="Generate the documentation">
+    <javadoc packagenames="ca.uqac.lif.bullwinkle.*"
+             sourcepath="Source/Parsing/src"
+             excludepackagenames=""
+             defaultexcludes="yes"
+             destdir="doc"
+             author="true"
+             version="true"
+             use="true"
+             windowtitle="Bullwinkle Documentation">
+      <doctitle><![CDATA[<h1>Bullwinkle Documentation</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2014-2015 Sylvain Hall&eacute;. All Rights Reserved.</i>]]></bottom>
+      <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+    </javadoc>
+  </target>
   
-  <target name="create_run_jar" depends="compile" description="Create the runnable JAR">
+  <target name="create_run_jar" depends="compile,javadoc" description="Create the runnable JAR">
       <jar destfile="BullwinkleParser.jar" filesetmanifest="mergewithoutmain">
 	  <manifest>
 	      <attribute name="Main-Class" value="ca.uqac.lif.bullwinkle.BullwinkleCli"/>
