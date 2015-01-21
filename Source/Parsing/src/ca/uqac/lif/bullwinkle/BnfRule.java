@@ -50,59 +50,67 @@ public class BnfRule
     assert(lr.length == 2);
     String lhs = lr[0].trim();
     out.setLeftHandSide(new NonTerminalToken(lhs));
-    String[] alternatives = lr[1].split("\\s+\\|\\s+");
-    if (alternatives.length == 0)
+    if (lr[1].startsWith("^"))
     {
-      throw new InvalidRuleException("Right-hand side of BNF rule is empty");
-    }
-    assert(alternatives.length > 0);
-    for (String alt : alternatives)
-    {
+      // This is a regex line
+      String regex = lr[1];
+      // Remove semicolon
       TokenString alternative_to_add = new TokenString();
-      String[] words = alt.split(" ");
-      if (words.length == 0)
-      {
-        throw new InvalidRuleException("Alternative of BNF rule is empty");
-      }
-      assert(words.length > 0);
-      for (String word : words)
-      {
-        String trimmed_word = word.trim();
-        if (trimmed_word.contains("<") && !trimmed_word.startsWith("<"))
-        {
-          throw new InvalidRuleException("The expression '" + 
-              trimmed_word + "' contains tokens that are not separated by spaces");
-        }
-        if (trimmed_word.startsWith("<"))
-        {
-          // This is a non-terminal symbol
-          //trimmed_word = trimmed_word.substring(1, trimmed_word.length() - 1);
-          Token to_add = new NonTerminalToken(trimmed_word);
-          alternative_to_add.add(to_add);
-        }
-        else if (trimmed_word.startsWith("^"))
-        {
-          // This is a regex symbol
-          Token to_add = new RegexTerminalToken(trimmed_word);
-          alternative_to_add.add(to_add);
-        }
-        else if (trimmed_word.compareTo("ε") == 0)
-        {
-          Token to_add = new EpsilonTerminalToken();
-          alternative_to_add.add(to_add);
-        }
-        else
-        {
-          if (trimmed_word.isEmpty())
-          {
-            throw new InvalidRuleException("Trying to create an empty terminal token"); 
-          }
-          // This is a literal token
-          trimmed_word = unescapeString(trimmed_word);
-          alternative_to_add.add(new TerminalToken(trimmed_word));
-        }
-      }
+      Token to_add = new RegexTerminalToken(regex);
+      alternative_to_add.add(to_add);
       out.addAlternative(alternative_to_add);
+    }
+    else
+    {
+      // Anything but a regex line
+      String[] alternatives = lr[1].split("\\s+\\|\\s+");
+      if (alternatives.length == 0)
+      {
+        throw new InvalidRuleException("Right-hand side of BNF rule is empty");
+      }
+      assert(alternatives.length > 0);
+      for (String alt : alternatives)
+      {
+        TokenString alternative_to_add = new TokenString();
+        String[] words = alt.split(" ");
+        if (words.length == 0)
+        {
+          throw new InvalidRuleException("Alternative of BNF rule is empty");
+        }
+        assert(words.length > 0);
+        for (String word : words)
+        {
+          String trimmed_word = word.trim();
+          if (trimmed_word.contains("<") && !trimmed_word.startsWith("<"))
+          {
+            throw new InvalidRuleException("The expression '" + 
+                trimmed_word + "' contains tokens that are not separated by spaces");
+          }
+          if (trimmed_word.startsWith("<"))
+          {
+            // This is a non-terminal symbol
+            //trimmed_word = trimmed_word.substring(1, trimmed_word.length() - 1);
+            Token to_add = new NonTerminalToken(trimmed_word);
+            alternative_to_add.add(to_add);
+          }
+          else if (trimmed_word.compareTo("ε") == 0)
+          {
+            Token to_add = new EpsilonTerminalToken();
+            alternative_to_add.add(to_add);
+          }
+          else
+          {
+            if (trimmed_word.isEmpty())
+            {
+              throw new InvalidRuleException("Trying to create an empty terminal token"); 
+            }
+            // This is a literal token
+            trimmed_word = unescapeString(trimmed_word);
+            alternative_to_add.add(new TerminalToken(trimmed_word));
+          }
+        }
+        out.addAlternative(alternative_to_add);
+      }
     }
     return out;
   }

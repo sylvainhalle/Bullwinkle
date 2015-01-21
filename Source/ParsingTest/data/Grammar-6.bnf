@@ -1,1 +1,1 @@
-<S>           := ^A\s(.*)\sis\sa\stype\sof\s(.*);
+<S>           := ^A (.*) is a type of (.*);
