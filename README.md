@@ -130,10 +130,13 @@ intuitive syntax, as the example above has shown.
 - Terminal symbols are defined by typing them directly in a rule, or through
   regular expressions and begin with the `^` (hat) character. The example above
   shows both cases: the `+` symbol is typed directly into the rules, while the
-  terminal symbol `<num>` is defined with a regex. If a space needs to be used
-  in the regular expression, it must be declared by using the regex sequence
-  `\s`, and *not* by putting a space. Caveat emptor: a few corner cases are not
-  covered at the moment, such as a regex that would contain a semicolon.
+  terminal symbol `<num>` is defined with a regex. **Look out:**
+  - If a space needs to be used in the regular expression, it must be
+    declared by using the regex sequence `\s`, and *not* by putting a space.
+  - Beware not to put an extra space before the ending semicolon, or that
+    space will count as part of the regex
+  - Caveat emptor: a few corner cases are not covered at the moment, such as
+    a regex that would contain a semicolon.
 - The left-hand side symbol of the first rule found is assumed to be the start
   symbol. This can be overridden by calling method `setStartSymbol()` on an
   instance of the parser.
