@@ -34,6 +34,12 @@ public class ParseNode
     m_children = new LinkedList<ParseNode>();
   }
   
+  ParseNode(String token)
+  {
+    this();
+    setToken(token);
+  }
+  
   public List<ParseNode> getChildren()
   {
     LinkedList<ParseNode> nodes = new LinkedList<ParseNode>();

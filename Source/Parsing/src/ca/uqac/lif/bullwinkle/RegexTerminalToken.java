@@ -17,6 +17,8 @@
 */
 package ca.uqac.lif.bullwinkle;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,6 +63,28 @@ public class RegexTerminalToken extends TerminalToken
     StringBuilder out = new StringBuilder();
     out.append(getName());
     return out.toString();
+  }
+  
+  /**
+   * Returns the content of each capture block in the regex,
+   * matched against the input string 
+   * @param s The input string
+   * @return A list of strings, each of which is the content
+   * of a capture block
+   */
+  public List<String> getCaptureBlocks(final String s)
+  {
+    List<String> out = new LinkedList<String>();
+    Matcher matcher = m_pattern.matcher(s);
+    if (matcher.find())
+    {
+      for (int i = 1; i <= matcher.groupCount(); i++)
+      {
+        String group_match = matcher.group(i);
+        out.add(group_match);
+      }
+    }
+    return out;
   }
 
 }

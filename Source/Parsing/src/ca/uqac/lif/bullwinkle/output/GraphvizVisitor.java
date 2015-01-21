@@ -19,6 +19,7 @@ package ca.uqac.lif.bullwinkle.output;
 
 import java.util.Stack;
 
+import ca.uqac.lif.bullwinkle.CaptureBlockParseNode;
 import ca.uqac.lif.bullwinkle.ParseNode;
 
 public class GraphvizVisitor implements OutputFormatVisitor
@@ -46,6 +47,11 @@ public class GraphvizVisitor implements OutputFormatVisitor
       m_output.append(parent).append(" -> ").append(cur_node).append(";\n");
     }
     String shape = "oval";
+    if (node instanceof CaptureBlockParseNode)
+    {
+      // Special treatment for regex capture blocks
+      shape = "rectangle";
+    }
     String color = "white";
     String fillcolor = "blue";
     String label = escape(node.getValue());

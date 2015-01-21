@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
@@ -166,6 +167,7 @@ public class BnfParser
     if (level > s_maxRecursionSteps)
     {
       //throw new ParseException("Maximum number of recursion steps reached. If the input string is indeed valid, try increasing the limit.");
+      log("Maximum number of recursion steps reached", level);
       return null;
     }
     ParseNode out_node = null;
@@ -210,6 +212,11 @@ public class BnfParser
           {
             ParseNode child = new ParseNode();
             MutableString input_tok = n_input.truncateSubstring(0, match_prefix_size);
+            if (alt_tok instanceof RegexTerminalToken)
+            {
+              // In the case of a regex, create children with each capture block
+              child = appendRegexChildren(child, (RegexTerminalToken) alt_tok, input_tok);
+            }
             child.setToken(input_tok.toString());
             out_node.addChild(child);
           }
@@ -346,6 +353,26 @@ public class BnfParser
       out.append(message);
       System.err.println(out);
     }
+  }
+  
+  /**
+   * In the case where the parsing matches a regex terminal node, creates
+   * children to the parse node representing the contents of each capture
+   * block in the regex, if any.
+   * @param node The parse node
+   * @param tok The terminal token that matches the string
+   * @param s The string that was matched
+   * @return The input node, to which children may have been appended 
+   */
+  protected static ParseNode appendRegexChildren(ParseNode node, RegexTerminalToken tok, MutableString s)
+  {
+    List<String> blocks = tok.getCaptureBlocks(s.toString());
+    for (String block : blocks)
+    {
+      ParseNode pn = new CaptureBlockParseNode(block);
+      node.addChild(pn);
+    }
+    return node;
   }
   
   public static class InvalidGrammarException extends EmptyException
