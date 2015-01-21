@@ -4,6 +4,12 @@ public abstract class Token
 {
   private String m_name;
   
+  /**
+   * Whether the matching is sensitive to case. This is a program-wide
+   * value
+   */
+  protected static boolean s_caseSensitive = true;
+  
   Token()
   {
     this("");
@@ -13,6 +19,11 @@ public abstract class Token
   {
     super();
     setName(name);
+  }
+  
+  public static void setCaseSensitive(boolean b)
+  {
+    s_caseSensitive = b;
   }
   
   public String getName()

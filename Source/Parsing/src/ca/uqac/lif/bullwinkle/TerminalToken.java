@@ -31,11 +31,11 @@ public class TerminalToken extends Token
     {
       return false;
     }
-    if (getName().compareTo(tok.getName()) == 0)
+    if (s_caseSensitive)
     {
-      return true;
+      return getName().compareTo(tok.getName()) == 0;
     }
-    return false;
+    return getName().compareToIgnoreCase(tok.getName()) == 0;
   }
 
   @Override

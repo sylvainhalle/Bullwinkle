@@ -56,6 +56,15 @@ public class BnfParser
     setGrammar(contents);
   }
   
+  /**
+   * Whether the matching is sensitive to case. This is a program-wide
+   * value
+   */
+  public static void setCaseSensitive(boolean b)
+  {
+    Token.setCaseSensitive(b);
+  }
+  
   public static void setMaxRecursionSteps(int steps)
   {
     if (steps > 0)
