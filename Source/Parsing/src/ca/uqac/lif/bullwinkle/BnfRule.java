@@ -138,7 +138,7 @@ public class BnfRule
   /**
    * Interprets UTF-8 escaped characters and converts them back into
    * a UTF-8 string. The solution used here (going through a
-   * {@link Property} object) can be found on
+   * <tt>Property</tt> object) can be found on
    * <a href="http://stackoverflow.com/a/24046962">StackOverflow</a>.
    * It has the advantage of not relying on (yet another) external
    * library (as the accepted solution does) just for using a single

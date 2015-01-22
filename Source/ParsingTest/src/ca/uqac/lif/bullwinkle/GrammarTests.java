@@ -129,6 +129,32 @@ public class GrammarTests
   }
   
   @Test
+  public void parseGrammarWithEpsilon3()
+  {
+    String expression = "[ ]";
+    ParseNode node = parseIt("data/Grammar-7.bnf", "<S>", expression, false);
+    int size = node.getSize();
+    int expected_size = 6;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }     
+  }
+  
+  @Test
+  public void parseGrammarWithEpsilon4()
+  {
+    String expression = "[ ]";
+    ParseNode node = parseIt("data/Grammar-8.bnf", "<S>", expression, false);
+    int size = node.getSize();
+    int expected_size = 6;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }     
+  }
+  
+  @Test
   public void parseGrammarWithEntity1()
   {
     String expression = "a|a";
@@ -192,7 +218,7 @@ public class GrammarTests
     return node;
   }
 
-  private BnfParser readGrammar(final String filename, final String start_rule, boolean debug_mode)
+  public static BnfParser readGrammar(final String filename, final String start_rule, boolean debug_mode)
   {
     BnfParser parser = new BnfParser();
     parser.setDebugMode(debug_mode);
