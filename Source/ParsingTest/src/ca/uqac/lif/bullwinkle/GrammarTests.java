@@ -134,7 +134,7 @@ public class GrammarTests
     String expression = "[ ]";
     ParseNode node = parseIt("data/Grammar-7.bnf", "<S>", expression, false);
     int size = node.getSize();
-    int expected_size = 6;
+    int expected_size = 5;
     if (size != expected_size)
     {
       fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
