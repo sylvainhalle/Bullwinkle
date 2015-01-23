@@ -89,6 +89,32 @@ public class BnfParser
     return out.toString();
   }
   
+  public void addCaseToRule(String rule_name, String case_string)
+  {
+    BnfRule rule = getRule(rule_name);
+    if (rule == null)
+    {
+      return;
+    }
+    NonTerminalToken ntok = new NonTerminalToken(case_string);
+    TokenString ts = new TokenString();
+    ts.add(ntok);
+    rule.addAlternative(ts);
+  }
+  
+  protected BnfRule getRule(String rule_name)
+  {
+    for (BnfRule rule : m_rules)
+    {
+      String lhs = rule.getLeftHandSide().getName();
+      if (rule_name.compareTo(lhs) == 0)
+      {
+        return rule;
+      }
+    }
+    return null;
+  }
+  
   public void setGrammar(String grammar) throws InvalidGrammarException
   {
     if (grammar == null)

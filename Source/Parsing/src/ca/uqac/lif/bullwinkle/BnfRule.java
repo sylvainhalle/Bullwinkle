@@ -41,6 +41,9 @@ public class BnfRule
   
   public static BnfRule parseRule(String input) throws BnfRule.InvalidRuleException
   {
+    // TODO: split parsing of LHS and RHS in two methods. Then, use RHS parsing
+    // in BnfParser.addCaseToRule to allow user to add anything to a rule,
+    // not just a NonTerminalToken
     BnfRule out = new BnfRule();
     String[] lr = input.split("\\s*:=\\s*");
     if (lr.length != 2)
