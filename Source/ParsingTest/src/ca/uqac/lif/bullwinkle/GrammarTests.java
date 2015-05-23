@@ -90,6 +90,32 @@ public class GrammarTests
   }
   
   @Test
+  public void parseGrammar3a()
+  {
+    String expression = "(a) & (a)";
+    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, true);
+    int size = node.getSize();
+    int expected_size = 8;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }
+  }
+  
+  @Test
+  public void parseGrammar3b()
+  {
+    String expression = "(a) & (a) & (a)";
+    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, true);
+    int size = node.getSize();
+    int expected_size = 19;
+    if (size != expected_size)
+    {
+      fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
+    }
+  }
+  
+  @Test
   public void parseGrammarLtlFo1()
   {
     String expression = "G (∃ x ∈ /a/b/c : (x lt y))";

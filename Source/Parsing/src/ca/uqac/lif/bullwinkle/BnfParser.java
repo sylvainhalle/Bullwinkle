@@ -19,6 +19,7 @@ package ca.uqac.lif.bullwinkle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,6 +60,7 @@ public class BnfParser
   /**
    * Whether the matching is sensitive to case. This is a program-wide
    * value
+   * @param b True if parsing is case-sensitive, false otherwise
    */
   public static void setCaseSensitive(boolean b)
   {
@@ -117,6 +119,13 @@ public class BnfParser
   
   public void setGrammar(String grammar) throws InvalidGrammarException
   {
+  	List<BnfRule> rules = getRules(grammar);
+  	addRules(rules);
+  }
+  
+  public static List<BnfRule> getRules(String grammar) throws InvalidGrammarException
+  {
+  	List<BnfRule> rules = new LinkedList<BnfRule>();
     if (grammar == null)
     {
       throw new InvalidGrammarException("Null argument given");
@@ -145,7 +154,7 @@ public class BnfParser
           // Remove semi-colon
           current_rule = current_rule.trim();
           BnfRule new_rule = BnfRule.parseRule(current_rule.substring(0, current_rule.length() - 1));
-          m_rules.add(new_rule);
+          rules.add(new_rule);
         }
         catch (InvalidRuleException e)
         {
@@ -158,6 +167,7 @@ public class BnfParser
     {
       throw new InvalidGrammarException("Error parsing rule " + current_rule);
     }
+    return rules;
   }
   
   public ParseNode getParseTree(final String input) throws ParseException
@@ -168,6 +178,11 @@ public class BnfParser
   public void addRule(final BnfRule rule)
   {
     m_rules.add(rule);
+  }
+  
+  public void addRules(final Collection<BnfRule> rules)
+  {
+  	m_rules.addAll(rules);
   }
   
   public void setStartRule(final String tokenName)
@@ -289,11 +304,29 @@ public class BnfParser
       }
       if (!wrong_symbol)
       {
-        // We succeeded in parsing the complete string: done
-        break;
+      	if (!alt_it.hasNext())
+      	{
+      		// We succeeded in parsing the complete string: done
+      		break;
+      	}
+      	else
+      	{
+      		// The rule expects more symbols, but there are none
+      		// left in the input; set wrong_symbol back to true to
+      		// force exploring the next alternative
+      		wrong_symbol = true;
+      		n_input = new MutableString(input);
+      		break;
+      	}
       }
     }
     int chars_consumed = input.length() - n_input.length();
+    if (wrong_symbol)
+    {
+      // We did not consume anything, and the symbol was not epsilon: fail
+      log("FAILED: expected more symbols with rule " + rule, level);
+      return null;    	
+    }
     if (chars_consumed == 0 && !read_epsilon)
     {
       // We did not consume anything, and the symbol was not epsilon: fail
