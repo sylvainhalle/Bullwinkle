@@ -16,10 +16,12 @@
   <target name="compile" depends="init" description="Compile the source">
     <!-- Compile the java code for each project -->
     <javac
+      target="1.6"
       srcdir="Source/Parsing/src"
       destdir="Source/Parsing/bin"
       includeantruntime="false" />
     <javac
+      target="1.6"
       srcdir="Source/Cli/src"
       destdir="Source/Cli/bin"
       classpath="Source/Parsing/bin"
