@@ -18,15 +18,12 @@
 package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
-import ca.uqac.lif.util.FileReadWrite;
-
+import ca.uqac.lif.util.PackageFileReader;
 
 public class ParserTest
 {
@@ -36,7 +33,6 @@ public class ParserTest
   public void setUp() throws Exception
   {
     m_parser = new BnfParser();
-    
   }
 
   @Test
@@ -78,11 +74,11 @@ public class ParserTest
   }
 
   @Test
-  public void simpleValidGrammarFromFile() throws IOException
+  public void simpleValidGrammarFromFile()
   {
     boolean has_error = false;
     BnfParser parser = new BnfParser();
-    String grammar = FileReadWrite.readFile("data/Grammar-1.bnf");
+    String grammar = PackageFileReader.readPackageFile(ParserTest.class, "data/Grammar-1.bnf");
     try
     {
       parser.setGrammar(grammar);

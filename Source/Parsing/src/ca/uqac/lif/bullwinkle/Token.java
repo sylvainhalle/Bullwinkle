@@ -31,9 +31,10 @@ public abstract class Token
     return m_name;
   }
   
-  void setName(final String name)
+  void setName(final /*@Nullable*/ String name)
   {
-    m_name = name;
+  	if (name != null)
+  		m_name = name;
   }
   
   @Override

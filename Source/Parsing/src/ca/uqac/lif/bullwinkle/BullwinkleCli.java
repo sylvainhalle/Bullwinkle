@@ -58,8 +58,7 @@ public class BullwinkleCli
   /**
    * Build string to identify versions
    */
-  protected static final String VERSION_STRING = "1.1.1";
-  protected static final String BUILD_STRING = "20150523";
+  protected static final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
   
   /**
    * @param args
@@ -297,12 +296,12 @@ public class BullwinkleCli
   private static void showHeader()
   {
     System.err.println("Bullwinkle, a LL(k) parser");
-    System.err.println("Version " + VERSION_STRING + ", build " + BUILD_STRING);
+    System.err.println("Version " + VERSION_STRING);
   }
   
   public static String getVersionString()
   {
-  	return VERSION_STRING + " " + BUILD_STRING;
+  	return VERSION_STRING;
   }
 
 }

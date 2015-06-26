@@ -53,7 +53,7 @@ public class TerminalToken extends Token
     return 0;
   }
 
-  public boolean equals(Object o)
+  public boolean equals(/* @Nullable */ Object o)
   {
     if (o == null)
     {

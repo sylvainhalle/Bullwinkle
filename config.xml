@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Configuration file for AntRun.
+  
+  Use this file to override the default properties contained
+  in build.xml. For example, to override the build.jar.filename
+  property (which sets the name of the compiled jar file), add
+  an element
+  
+  <jar>
+    <filename>foo</filename>
+  </jar>
+  
+  inside the <build> element.
+  
+  **Caveat emptor:** in some cases, changing this file and running ant
+  again will result in Ant using a cached version of the old file! Run
+  "ant dummy" to make sure that the correct data is being read. Otherwise
+  you might need to run "ant clean" and start over.
+-->
+<build>
+  <!-- Uncomment any of these if you want to override the build
+       script's default values -->
+
+  <!-- The project's name -->
+  <name>Bullwinkle</name>
+  
+  <!-- The project's version number -->
+  <version>1.1.2</version>
+  
+  <!-- The project's author. Currently this only
+  shows up in the footer of the Javadoc documentation. -->
+  <author>Sylvain Hallé</author>
+  
+  <!-- The project's main class -->
+  <mainclass>ca.uqac.lif.bullwinkle.BullwinkleCli</mainclass>
+  
+  <!-- Output jar -->
+  <jar>
+    <filename>bullwinkle.jar</filename>
+  </jar>
+  
+  <!-- Redefine directories -->
+  <srcdir>Source/Parsing/src</srcdir>
+  <bindir>Source/Parsing/bin</bindir>
+  <test>
+    <srcdir>Source/ParsingTest/src</srcdir>
+    <bindir>Source/ParsingTest/bin</bindir>
+  </test>
+  
+  <!--
+    Write JAR dependencies here.
+  -->
+  <dependencies>
+    <dependency>
+      <!--
+      Apache Commons CLI. Used to parse command-line options.
+      -->
+      <name>Apache Commons CLI</name>
+      <classname>org.apache.commons.cli.GnuParser</classname>
+      <files>
+        <zip>http://archive.apache.org/dist/commons/cli/binaries/commons-cli-1.3.1-bin.zip</zip>
+      </files>
+    </dependency>
+  </dependencies>
+</build>

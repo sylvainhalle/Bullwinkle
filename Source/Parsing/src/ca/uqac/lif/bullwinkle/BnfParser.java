@@ -196,7 +196,7 @@ public class BnfParser
     m_startRule = getRule(token);
   }
   
-  public ParseNode parse(final String input) throws ParseException
+  public /*@NonNull*/ ParseNode parse(final String input) throws ParseException
   {
     MutableString n_input = new MutableString(input);
     if (m_startRule == null)
@@ -212,7 +212,7 @@ public class BnfParser
     return out;
   }
   
-  private ParseNode parse(final BnfRule rule, MutableString input, int level) throws ParseException
+  private /*@Nullable*/ ParseNode parse(final BnfRule rule, MutableString input, int level) throws ParseException
   {
     if (level > s_maxRecursionSteps)
     {
@@ -343,57 +343,17 @@ public class BnfParser
 
     return out_node;
   }
-  
-  public TokenString tokenize(final String s)
+    
+  private BnfRule getRule(/* @NonNull */ final Token tok)
   {
-    TokenString out = new TokenString();
-    Set<TerminalToken> tokens = getTerminalTokens();
-    String in_s = new String(s);
-    boolean change = true;
-    while (!in_s.isEmpty() && change)
-    {
-      change = false;
-      int min_index_of_known_token = in_s.length();
-      in_s = in_s.trim();
-      for (TerminalToken ttok : tokens)
-      {
-        // For each known token, check if it is present at the start of
-        // the current string
-        String to_look = ttok.toString();
-        int index = in_s.indexOf(to_look);
-        min_index_of_known_token = Math.min(index, min_index_of_known_token);
-        if (index != 0)
-        {
-          // No: move on to next token
-          continue;
-        }
-        // Yes: remove it from start of string and add it to the token string
-        change = true;
-        in_s = in_s.substring(to_look.length());
-        TerminalToken to_add = new TerminalToken(to_look);
-        out.add(to_add);
-        break;
-      }
-      if (!change)
-      {
-        // The string does not correspond to the start of any known token
-        // We deduce a new token from the substring up to the first occurrence
-        // of a known token
-        String deduced_token = in_s.substring(0, min_index_of_known_token);
-        TerminalToken to_add = new TerminalToken(deduced_token);
-        out.add(to_add);
-        in_s = in_s.substring(min_index_of_known_token);
-      }
-    }
-    return out;
-  }
-  
-  private BnfRule getRule(final Token tok)
-  {
+  	if (tok == null)
+  	{
+  	  return null;
+  	}
     for (BnfRule rule : m_rules)
     {
       NonTerminalToken lhs = rule.getLeftHandSide();
-      if (lhs.toString().compareTo(tok.toString()) == 0)
+      if (lhs != null && lhs.toString().compareTo(tok.toString()) == 0)
       {
         return rule;
       }

@@ -72,7 +72,7 @@ public class FileReadWrite
    * @return The file's contents, and empty string if the file
    * does not exist
    */
-  public static String readFile(File f) throws IOException
+  public static /* @NonNull */ String readFile(File f) throws IOException
   {
     java.util.Scanner scanner = null;
     StringBuilder out = new StringBuilder();

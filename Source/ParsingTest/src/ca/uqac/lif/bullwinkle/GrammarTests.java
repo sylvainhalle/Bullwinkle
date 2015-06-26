@@ -18,15 +18,12 @@
 package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.ParseNode;
-import ca.uqac.lif.util.FileReadWrite;
-
+import ca.uqac.lif.util.PackageFileReader;
 
 public class GrammarTests
 {
@@ -108,7 +105,7 @@ public class GrammarTests
     String expression = "(a) & (a) & (a)";
     ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, true);
     int size = node.getSize();
-    int expected_size = 19;
+    int expected_size = 13;
     if (size != expected_size)
     {
       fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
@@ -250,16 +247,12 @@ public class GrammarTests
     parser.setDebugMode(debug_mode);
     try
     {
-      String grammar = FileReadWrite.readFile(filename);
+    	String grammar = PackageFileReader.readPackageFile(GrammarTests.class, filename);
       parser.setGrammar(grammar);
     }
     catch (BnfParser.InvalidGrammarException e)
     {
       fail("Error parsing grammar file " + filename + ": " + e);
-    }
-    catch (IOException e)
-    {
-      fail("I/O Exception when reading " + filename + ": " + e);
     }
     parser.setStartRule(start_rule);
     return parser;

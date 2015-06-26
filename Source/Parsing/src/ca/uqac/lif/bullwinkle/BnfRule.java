@@ -123,7 +123,7 @@ public class BnfRule
     m_leftHandSide = t;
   }
   
-  void addAlternative(final TokenString ts)
+  void addAlternative(/* @NonNull */ final TokenString ts)
   {
     m_alternatives.add(ts);
   }
