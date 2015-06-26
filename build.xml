@@ -102,9 +102,12 @@
     <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"
       classpath="${build.libdir}/${xmltask.jarname}"/>
     <!-- Set the extension dir -->
+    <pathconvert property="build.extdir.formatted" pathsep=";">
+      <path location="${java.ext.dirs}"/>
+    </pathconvert>
     <propertyregex property="build.extdir" 
-               input="${java.ext.dirs}" 
-               regexp="[;:]([^;:]+)$" 
+               input="${build.extdir.formatted}" 
+               regexp="[;]([^;]+)$" 
                select="\1"/>
     <echo level="info">Your extension folder is ${build.extdir}</echo>
   </target>
@@ -288,6 +291,7 @@
     <delete dir="${build.libdir}"/>
     <delete dir="${build.bindir}"/>
     <delete dir="${build.docdir}"/>
+    <delete dir="${build.depdir}"/>
     <delete dir="${test.reportdir}"/>
     <delete dir="${coverage.reportdir}"/>
     <delete file="jacoco.exec"/>
