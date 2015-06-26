@@ -102,12 +102,9 @@
     <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask"
       classpath="${build.libdir}/${xmltask.jarname}"/>
     <!-- Set the extension dir -->
-    <pathconvert property="build.extdir.formatted" pathsep=";">
-      <path location="${java.ext.dirs}"/>
-    </pathconvert>
     <propertyregex property="build.extdir" 
-               input="${build.extdir.formatted}" 
-               regexp="[;]([^;]+)$" 
+               input="${java.ext.dirs}" 
+               regexp="[${path.separator}]([^${path.separator}]+)$" 
                select="\1"/>
     <echo level="info">Your extension folder is ${build.extdir}</echo>
   </target>
@@ -297,12 +294,18 @@
     <delete file="jacoco.exec"/>
   </target>
   
+  <!-- Target: show-properties
+       Prints all the properties.
+  -->
+  <target name="show-properties" depends="init" description="Print all properties">
+      <echoproperties/>
+  </target>
   
   <!-- Target: dummy
-       Prints all the properties. This is only to test the build file
+       Do nothing. This is only to test the build file
   -->
   <target name="dummy" description="Do nothing">
-      <echoproperties/>
+      <!-- Do nothing -->
   </target>
   
   <!-- Target: run
