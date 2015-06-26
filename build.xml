@@ -23,7 +23,7 @@
   xmlns:jacoco="antlib:org.jacoco.ant">
   
   <!-- The build script's version number. Do not edit! -->
-  <property name="antrun.version" value="1.1"/>
+  <property name="antrun.version" value="1.1.1"/>
 
   <!-- Load project properties from XML file -->
   <xmlproperty file="config.xml"/>
@@ -180,8 +180,8 @@
              author="true"
              version="true"
              use="true"
-             windowtitle="${build.project.name} Documentation">
-      <doctitle><![CDATA[<h1>]]>${build.project.name}<![CDATA[ Documentation</h1>]]></doctitle>
+             windowtitle="${build.name} Documentation">
+      <doctitle><![CDATA[<h1>]]>${build.name}<![CDATA[ Documentation</h1>]]></doctitle>
       <bottom><![CDATA[<i>Copyright&nbsp;&#169; ]]>${build.author}<![CDATA[. All Rights Reserved.</i>]]></bottom>
       <link href="http://docs.oracle.com/javase/6/docs/api/"/>
     </javadoc>
@@ -253,7 +253,7 @@
       <executiondata>
         <file file="jacoco.exec"/>
       </executiondata>
-      <structure name="${build.project.name}">
+      <structure name="${build.name}">
         <classfiles>
             <fileset dir="${build.bindir}"/>
         </classfiles>

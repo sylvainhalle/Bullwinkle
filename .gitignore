@@ -29,6 +29,7 @@ jacoco.exec
 # ----------------------------------------------------
 
 # Eclipse-specific
+Source/.metadata/
 Source/**/*.pydevproject
 Source/**/.project
 Source/**/.metadata
