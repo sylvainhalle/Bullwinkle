@@ -23,8 +23,8 @@
   xmlns:jacoco="antlib:org.jacoco.ant">
   
   <!-- The build script's version number. Do not edit! -->
-  <property name="antrun.version" value="1.1.1"/>
-
+  <property name="antrun.version" value="1.1.2"/>
+  
   <!-- Load project properties from XML file -->
   <xmlproperty file="config.xml"/>
   
@@ -338,7 +338,7 @@
     description="Install ant-contrib if not present">
     <echo message="ant-contrib is not installed. Downloading..." level="info"/>
     <mkdir dir="${build.libdir}"/>
-    <get src="http://sourceforge.net/projects/ant-contrib/files/ant-contrib/1.0b3/ant-contrib-1.0b3-bin.zip/download" dest="${build.libdir}/ant-contrib-1.0b3-bin.zip"/>
+    <get src="http://sylvainhalle.github.io/AntRun/dependencies/ant-contrib-1.0b3-bin.zip" dest="${build.libdir}/ant-contrib-1.0b3-bin.zip"/>
     <unzip src="${build.libdir}/ant-contrib-1.0b3-bin.zip" dest="${build.libdir}">
       <patternset>
         <include name="**/*.jar"/>
@@ -356,7 +356,7 @@
   </condition>
   <target name="xmltask" if="${xmltask.absent}">
     <mkdir dir="${build.libdir}"/>
-    <get src="http://sourceforge.net/projects/xmltask/files/xmltask/1.16/xmltask.jar/download" dest="${build.libdir}/${xmltask.jarname}"/>
+    <get src="http://sylvainhalle.github.io/AntRun/dependencies/xmltask.jar" dest="${build.libdir}/${xmltask.jarname}"/>
   </target>
   
   <!-- Target: junit
