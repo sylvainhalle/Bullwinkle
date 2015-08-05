@@ -158,6 +158,7 @@
     <mkdir dir="${build.test.bindir}"/>
     <javac
       target="1.6" source="1.6"
+      bootclasspath="${java6.boot.classpath}"
       srcdir="${build.test.srcdir}"
       destdir="${build.test.bindir}"
       includeantruntime="false">

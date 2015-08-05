@@ -307,7 +307,7 @@ public class BnfParser
 				if (!alt_it.hasNext())
 				{
 					// We succeeded in parsing the complete string: done
-					if (level > 0 || n_input.length() == 0)
+					if (level > 0 || (level == 0 && n_input.toString().trim().length() == 0))
 					{
 						break;
 					}

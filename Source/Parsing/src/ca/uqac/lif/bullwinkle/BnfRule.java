@@ -96,8 +96,9 @@ public class BnfRule
             Token to_add = new NonTerminalToken(trimmed_word);
             alternative_to_add.add(to_add);
           }
-          else if (trimmed_word.compareTo("ε") == 0)
+          else if (trimmed_word.compareTo("\uCEB5") == 0 || trimmed_word.compareTo("\u03B5") == 0)
           {
+          	// There are two "lowercase epsilon" code points in Unicode; check for both
             Token to_add = new EpsilonTerminalToken();
             alternative_to_add.add(to_add);
           }

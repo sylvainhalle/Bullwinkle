@@ -77,7 +77,7 @@ public class GrammarTests
   public void parseGrammar2b()
   {
     String expression = "SELECT a FROM (SELECT b FROM t)";
-    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, true);
+    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 19;
     if (size != expected_size)
@@ -121,6 +121,13 @@ public class GrammarTests
   }
   
   @Test
+  public void parseGrammar5()
+  {
+    String expression = "a WHERE";
+    parseItNot("data/Grammar-10.bnf", "<S>", expression, false);
+  }
+  
+  @Test
   public void parseGrammarLtlFo1()
   {
     String expression = "G (∃ x ∈ /a/b/c : (x lt y))";
@@ -137,7 +144,7 @@ public class GrammarTests
   public void parseGrammarWithEpsilon1()
   {
     String expression = "hello hello";
-    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression, false);
+    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression, true);
     int size = node.getSize();
     int expected_size = 6;
     if (size != expected_size)
@@ -218,6 +225,13 @@ public class GrammarTests
     return node;
   }
   
+  private void parseItNot(String grammar_filename, String start_symbol, String expression, boolean debug_mode)
+  {
+    BnfParser parser = readGrammar(grammar_filename, start_symbol, debug_mode);
+    shouldNotParse(expression, parser);
+  }
+
+  
   private ParseNode shouldParseAndNotNull(final String expression, final BnfParser parser)
   {
     ParseNode node = shouldParse(expression, parser);
@@ -247,6 +261,28 @@ public class GrammarTests
       fail("Parsing '" + expression + "' threw exception " + e);
     }
     return node;
+  }
+  
+  /**
+   * Attempts to parse an expression with the given parser, and
+   * expects the parsing not to raise an exception or to return null.
+   * @param expression The expression to parse
+   * @param parser The parser to use
+   */
+  private void shouldNotParse(final String expression, final BnfParser parser)
+  {
+    ParseNode node = null;
+    try
+    {
+      node = parser.parse(expression);      
+    }
+    catch (BnfParser.ParseException e)
+    {
+    }
+    if (node != null)
+    {
+    	fail("The parsing of " + expression + " should have failed");
+    }
   }
 
   public static BnfParser readGrammar(final String filename, final String start_rule, boolean debug_mode)
