@@ -41,6 +41,8 @@ import ca.uqac.lif.bullwinkle.output.IndentedTextVisitor;
 import ca.uqac.lif.bullwinkle.output.OutputFormatVisitor;
 import ca.uqac.lif.bullwinkle.output.XmlVisitor;
 
+// Bullwinkle can work with Commons CLI 1.2
+@SuppressWarnings("deprecation")
 public class BullwinkleCli
 {
 
@@ -99,7 +101,6 @@ public class BullwinkleCli
       output_format = c_line.getOptionValue("f");
     }
     // Get grammar file
-    @SuppressWarnings("unchecked")
     List<String> remaining_args = c_line.getArgList();
     if (remaining_args.isEmpty())
     {

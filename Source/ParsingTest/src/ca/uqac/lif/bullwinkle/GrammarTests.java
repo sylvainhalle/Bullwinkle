@@ -77,7 +77,7 @@ public class GrammarTests
   public void parseGrammar2b()
   {
     String expression = "SELECT a FROM (SELECT b FROM t)";
-    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, false);
+    ParseNode node = parseIt("data/Grammar-1.bnf", "<S>", expression, true);
     int size = node.getSize();
     int expected_size = 19;
     if (size != expected_size)
@@ -90,7 +90,7 @@ public class GrammarTests
   public void parseGrammar3a()
   {
     String expression = "(a) & (a)";
-    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, true);
+    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 8;
     if (size != expected_size)
@@ -103,13 +103,21 @@ public class GrammarTests
   public void parseGrammar3b()
   {
     String expression = "(a) & (a) & (a)";
-    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, true);
+    ParseNode node = parseIt("data/Grammar-9.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 13;
     if (size != expected_size)
     {
       fail("Incorrect parsing of expression '" + expression + "': expected a parse tree of size " + expected_size + ", got " + size);
     }
+  }
+  
+  @Test
+  public void parseGrammar4()
+  {
+    String expression = "a WHERE b";
+    ParseNode node = parseIt("data/Grammar-10.bnf", "<S>", expression, false);
+    assertEquals("Incorrect parse tree size for expression " + expression, 5, node.getSize());
   }
   
   @Test
