@@ -63,7 +63,8 @@ public class BullwinkleCli
   protected static final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
   
   /**
-   * @param args
+   * Main loop
+   * @param args The command-line arguments
    */
   public static void main(String[] args)
   {
@@ -252,6 +253,12 @@ public class BullwinkleCli
         .hasArg()
         .withDescription(
             "Verbose messages with level x")
+            .create();
+    options.addOption(opt);
+    opt = OptionBuilder
+        .withLongOpt("version")
+        .withDescription(
+            "Show version number")
             .create();
     options.addOption(opt);
     return options;

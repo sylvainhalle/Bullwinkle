@@ -1,0 +1,99 @@
+
+# Top production rule
+
+<S> := <processor> | <processor_def> ;
+
+# Types
+
+<number>             := ^\d+;
+<boolean>            := TRUE | FALSE ;
+<var_name>           := ^\$[\w\d]+;
+
+# Built-in processors
+
+<processor>          := <p_freeze> | <p_window> | <p_decimate> | <p_prefix> 
+                        | <p_print> | <userdef_proc> | <eml_expr> | <var_name> ;
+<p_freeze>           := FREEZE <processor> ;
+<p_window>           := ( <processor> ) ON A WINDOW OF <number> ;
+<p_decimate>         := EVERY <number> <number_suffix> OF ( <processor> ) ;
+<number_suffix>      := ST | ND | RD | TH ;
+<p_prefix>           := <number> OF ( <processor> ) ;
+<p_combiner>         := COMBINE ( <processor> ) WITH <c_combine> ;
+<p_print>            := PRINT ( <processor> ) ;
+
+
+# Definition of a new processor
+
+<processor_def>      := LET <proc_pattern> BE ( <processor> ) ;
+<proc_pattern>       := ^.*?(?=when);
+
+# User-defined processors. Rules get dynamically added here
+
+<userdef_proc>       := gnarfnfar ;
+
+<p_stream>               := FILE <stream_string> ;
+<stream_string>          := ^".*?";
+
+
+
+# Primitive types
+
+<eml_boolean>            := true | false ;
+<eml_number>             := ^\d+;
+<eml_string>             := ^".*?";
+<eml_plain_string>       := ^[a-zA-Z]\w*;
+
+# Constant processor
+
+<eml_constant>           := <eml_number> | <eml_boolean> | <eml_string> ;
+
+# Top-level EML symbols
+
+<eml_expr>               := <eml_constant> | <eml_select> | <eml_feeder> 
+                            | <eml_where> ;
+
+# "SELECT" statement
+
+<eml_select>             := SELECT <eml_att_list> FROM <eml_proc_list> ;
+
+# List of named processors
+
+<eml_proc_def_plain>     := ( <eml_expr> ) | <eml_expr> ;
+<eml_proc_def_as>        := ( <eml_expr> ) AS <eml_plain_string>
+                            | <eml_expr> AS <eml_plain_string> ;
+<eml_proc_def>           := <eml_proc_def_as> | <eml_proc_def_plain> ;
+<eml_proc_list>          := <eml_proc_def> , <eml_proc_list> | <eml_proc_def> ;
+
+# List of named attributes
+
+<eml_att_def_plain>      := <eml_att_expr> ;
+<eml_att_def_as>         := <eml_att_expr> AS <eml_plain_string> ;
+<eml_att_def>            := <eml_att_def_as> | <eml_att_def_plain> ;
+<eml_att_list>           := <eml_att_def> , <eml_att_list> | <eml_att_def> ;
+
+# Attribute expressions
+
+<eml_att_expr>           := <eml_att_name> | <eml_att_expr_const> 
+                            | <eml_att_expr_binary> ;
+<eml_att_name>           := <eml_att_name_q> | <eml_att_name_plain>  ;
+<eml_att_name_q>         := <eml_plain_string> . <eml_plain_string> ;
+<eml_att_name_plain>     := <eml_plain_string> ;
+<eml_att_expr_const>     := <eml_att_expr_number> | <eml_att_expr_string> ;
+<eml_att_expr_number>    := <eml_number> ;
+<eml_att_expr_string>    := <eml_string> ;
+
+# Binary operators
+
+<eml_att_expr_binary>    := <eml_addition> | <eml_equality> ;
+<eml_addition>           := ( <eml_att_expr> ) + ( <eml_att_expr> ) ;
+<eml_equality>           := ( <eml_att_expr> ) = ( <eml_att_expr> ) ;
+
+# Tuple feeder
+
+<eml_feeder>             := THE TUPLES OF <p_stream> ;
+
+# "WHERE" statement
+
+<eml_where>              := <processor> WHERE <eml_att_expr> ;
+
+	

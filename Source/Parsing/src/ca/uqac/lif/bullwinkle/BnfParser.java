@@ -175,14 +175,38 @@ public class BnfParser
 		return null;
 	}
 
+	/**
+	 * Adds a rule to the parser. If a rule with the same left-hand side
+	 * already exists in the parser, the case of the rule passed as an argument
+	 * will be added to the cases of the existing rule. 
+	 * @param rule The rule to add
+	 */
 	public void addRule(final BnfRule rule)
 	{
+		NonTerminalToken r_left = rule.getLeftHandSide();
+		for (BnfRule in_rule : m_rules)
+		{
+			NonTerminalToken in_left = in_rule.getLeftHandSide();
+			if (r_left.equals(in_left))
+			{
+				in_rule.addAlternatives(rule.getAlternatives());
+				break;
+			}
+		}
+		// No rule with the same LHS was found
 		m_rules.add(rule);
 	}
 
+	/**
+	 * Adds a collection of rules to the parser 
+	 * @param rules The rules to add
+	 */
 	public void addRules(final Collection<BnfRule> rules)
 	{
-		m_rules.addAll(rules);
+		for (BnfRule rule : rules)
+		{
+			addRule(rule);
+		}
 	}
 
 	public void setStartRule(final String tokenName)
@@ -338,12 +362,12 @@ public class BnfParser
 			return null;
 		}
 		input.truncateSubstring(chars_consumed);
-		/*if (level == 0 && !input.isEmpty())
+		if (level == 0 && !input.isEmpty())
 		{
 			// The top-level rule must parse the complete string
 			log("FAILED: The top-level rule must parse the complete string", level);
 			return null;
-		}*/
+		}
 		return out_node;
 	}
 

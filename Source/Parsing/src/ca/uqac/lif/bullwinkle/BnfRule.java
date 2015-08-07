@@ -19,6 +19,7 @@ package ca.uqac.lif.bullwinkle;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,18 +28,39 @@ import java.util.Set;
 
 import ca.uqac.lif.util.EmptyException;
 
+/**
+ * Implementation of a single rule of a BNF grammar
+ */
 public class BnfRule
 {
+	/**
+	 * A list of token strings that for all the possible cases of that rule
+	 */
   private List<TokenString> m_alternatives;
   
+  /**
+   * The left-hand side of the rule. Since we deal with BNF grammars, this
+   * left-hand side must be a single non-terminal symbol.
+   */
   private NonTerminalToken m_leftHandSide;
   
+  /**
+   * Creates a new empty BNF rule
+   */
   BnfRule()
   {
     super();
     m_alternatives = new LinkedList<TokenString>();
   }
   
+  /**
+   * Creates a BNF rule out of a string
+   * @param input The string that contains a BNF rule. This string must follow
+   *   the syntactical restrictions described in the README
+   * @return A BNF rule if the parsing succeeded
+   * @throws BnfRule.InvalidRuleException Thrown if the parsing could not be
+   *   done correctly
+   */
   public static BnfRule parseRule(String input) throws BnfRule.InvalidRuleException
   {
     // TODO: split parsing of LHS and RHS in two methods. Then, use RHS parsing
@@ -119,21 +141,39 @@ public class BnfRule
     return out;
   }
   
+  /**
+   * Sets the left-hand side of the rule
+   * @param t The non-terminal token that will be used for the
+   *   left-hand side of the rule
+   */
   void setLeftHandSide(final NonTerminalToken t)
   {
     m_leftHandSide = t;
   }
   
+  /**
+   * Adds an alternative to the rule
+   * @param ts The alternative to add
+   */
   void addAlternative(/* @NonNull */ final TokenString ts)
   {
     m_alternatives.add(ts);
   }
   
+  /**
+   * Retrieves the list of all the alternatives that this rule defines
+   * @return A list of alternatives, each of which is a string of tokens
+   *   (either terminal or non-terminal)
+   */
   List<TokenString> getAlternatives()
   {
     return m_alternatives;
   }
   
+  /**
+   * Retrieves the left-hand side symbol of the rule
+   * @return The left-hand side symbol
+   */
   NonTerminalToken getLeftHandSide()
   {
     return m_leftHandSide;
@@ -159,7 +199,7 @@ public class BnfRule
     }
     catch (IOException e)
     {
-      // TODO Auto-generated catch block
+      // Auto-generated catch block
       e.printStackTrace();
     }
     return p.getProperty("key");
@@ -183,13 +223,6 @@ public class BnfRule
     return out.toString();
   }
   
-  public TokenString tokenize(String s)
-  {
-    TokenString out = new TokenString();
-    // TODO
-    return out;
-  }
-  
   public Set<TerminalToken> getTerminalTokens()
   {
     Set<TerminalToken> out = new HashSet<TerminalToken>();
@@ -200,6 +233,18 @@ public class BnfRule
     return out;
   }
   
+  /**
+   * Adds a collection of alternatives to the rule
+   * @param alternatives The alternatives to add
+   */
+  public void addAlternatives(Collection<TokenString> alternatives)
+  {
+  	m_alternatives.addAll(alternatives);
+  }
+  
+  /**
+   * Exception thrown when the parsing of a rule form a string fails
+   */
   public static class InvalidRuleException extends EmptyException
   {
     /**

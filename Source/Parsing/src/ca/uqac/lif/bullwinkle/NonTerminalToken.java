@@ -34,5 +34,5 @@ public class NonTerminalToken extends Token
   public int match(final String s)
   {
     return 0;
-  }
+  }  
 }

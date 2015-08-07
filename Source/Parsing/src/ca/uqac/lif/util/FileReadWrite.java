@@ -34,6 +34,7 @@ public class FileReadWrite
    * if some IOException is thrown.
    * @param filename The filename to write to
    * @param contents The file's contents
+   * @throws IOException If the writing fails
    */
   public static void writeToFile(String filename, String contents)  throws IOException
   {
@@ -59,6 +60,7 @@ public class FileReadWrite
    * @param filename The name (and path) of the file to read
    * @return The file's contents, and empty string if the file
    * does not exist
+   * @throws IOException If the reading fails
    */
   public static String readFile(String filename) throws IOException
   {
@@ -71,6 +73,7 @@ public class FileReadWrite
    * @param f The file to read
    * @return The file's contents, and empty string if the file
    * does not exist
+   * @throws IOException If the reading fails
    */
   public static /* @NonNull */ String readFile(File f) throws IOException
   {

@@ -128,6 +128,20 @@ public class GrammarTests
   }
   
   @Test
+  public void parseGrammar6()
+  {
+    String expression = "SELECT 0 AS att FROM 0 AS";
+    parseItNot("data/Grammar-11.bnf", "<eml_select>", expression, false);
+  }
+  
+  @Test
+  public void parseGrammar7()
+  {
+    String expression = "THE TUPLES OF FILE \"a\" WHERE (a) = (0)";
+    ParseNode node = parseIt("data/Grammar-11.bnf", "<processor>", expression, true);
+  }
+  
+  @Test
   public void parseGrammarLtlFo1()
   {
     String expression = "G (∃ x ∈ /a/b/c : (x lt y))";
@@ -144,7 +158,7 @@ public class GrammarTests
   public void parseGrammarWithEpsilon1()
   {
     String expression = "hello hello";
-    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression, true);
+    ParseNode node = parseIt("data/Grammar-3.bnf", "<S>", expression, false);
     int size = node.getSize();
     int expected_size = 6;
     if (size != expected_size)

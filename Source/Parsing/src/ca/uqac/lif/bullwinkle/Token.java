@@ -49,6 +49,21 @@ public abstract class Token
     return m_name.hashCode();
   }
   
+  @Override
+  public boolean equals(Object o)
+  {
+  	if (o == null || !(o instanceof Token))
+  	{
+  		return false;
+  	}
+  	return equals((Token) o);
+  }
+  
+  protected boolean equals(Token t)
+  {
+  	return t.getName().compareTo(m_name) == 0;
+  }
+  
   public abstract boolean matches(final Token tok);
   
   public abstract int match(final String s);

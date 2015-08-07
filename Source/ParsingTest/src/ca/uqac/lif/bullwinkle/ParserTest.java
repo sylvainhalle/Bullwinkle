@@ -91,7 +91,6 @@ public class ParserTest
     {
       fail("Valid grammar has thrown an exception when parsed.");
     }
-    System.out.println(parser);
   }
 
 }

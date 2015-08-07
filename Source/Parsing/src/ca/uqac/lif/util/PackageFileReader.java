@@ -43,6 +43,7 @@ public class PackageFileReader
    * @param in The input stream to read
    * @return The file's contents, and empty string if the file
    * does not exist
+   * @throws IOException If the reading fails
    */
   public static String readPackageFile(InputStream in) throws IOException
   {
