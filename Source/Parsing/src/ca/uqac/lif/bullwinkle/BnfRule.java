@@ -78,7 +78,7 @@ public class BnfRule
     if (lr[1].startsWith("^"))
     {
       // This is a regex line
-      String regex = lr[1];
+      String regex = unescapeString(lr[1]);
       // Remove semicolon
       TokenString alternative_to_add = new TokenString();
       Token to_add = new RegexTerminalToken(regex);
@@ -165,7 +165,7 @@ public class BnfRule
    * @return A list of alternatives, each of which is a string of tokens
    *   (either terminal or non-terminal)
    */
-  List<TokenString> getAlternatives()
+  public List<TokenString> getAlternatives()
   {
     return m_alternatives;
   }
@@ -192,6 +192,9 @@ public class BnfRule
    */
   protected static String unescapeString(String s)
   {
+  	// We want only the unicode characters to be resolved;
+  	// double all other backslashes
+  	s = s.replaceAll("\\\\([^u])", "\\\\\\\\$1");
     Properties p = new Properties();
     try
     {

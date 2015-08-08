@@ -94,6 +94,7 @@
 
 # "WHERE" statement
 
-<eml_where>              := <processor> WHERE <eml_att_expr> ;
+<eml_where>              := ( <processor> ) WHERE <eml_att_expr> ;
 
-	
+<p_stream>               := FILE <stream_string> ;
+<stream_string>          := ^".*?";

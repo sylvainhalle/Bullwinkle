@@ -137,8 +137,22 @@ public class GrammarTests
   @Test
   public void parseGrammar7()
   {
-    String expression = "THE TUPLES OF FILE \"a\" WHERE (a) = (0)";
-    ParseNode node = parseIt("data/Grammar-11.bnf", "<processor>", expression, true);
+    String expression = "(THE TUPLES OF FILE \"a\") WHERE (a) = (0)";
+    parseIt("data/Grammar-11.bnf", "<processor>", expression, true);
+  }
+  
+  @Test
+  public void parseNumber1()
+  {
+    String expression = "3.5";
+    parseIt("data/Grammar-12.bnf", "<processor>", expression, true);
+  }
+  
+  @Test
+  public void parseNumber2()
+  {
+    String expression = "3";
+    parseIt("data/Grammar-12.bnf", "<processor>", expression, true);
   }
   
   @Test

@@ -86,7 +86,7 @@ public class BullwinkleCli
     }
     if (c_line.hasOption("version"))
     {
-      System.err.println("(C) 2014 Sylvain Hallé et al., Université du Québec à Chicoutimi");
+      System.err.println("(C) 2014-2015 Sylvain Hallé et al., Université du Québec à Chicoutimi");
       System.err.println("This program comes with ABSOLUTELY NO WARRANTY.");
       System.err.println("This is a free software, and you are welcome to redistribute it");
       System.err.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
@@ -303,8 +303,7 @@ public class BullwinkleCli
   
   private static void showHeader()
   {
-    System.err.println("Bullwinkle, a LL(k) parser");
-    System.err.println("Version " + VERSION_STRING);
+    System.err.println("Bullwinkle " + VERSION_STRING + ", a LL(k) parser");
   }
   
   public static String getVersionString()

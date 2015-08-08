@@ -10,7 +10,6 @@ import ca.uqac.lif.bullwinkle.BnfRule;
 import ca.uqac.lif.bullwinkle.TerminalToken;
 import ca.uqac.lif.bullwinkle.TokenString;
 
-
 public class BnfRuleTest
 {
 

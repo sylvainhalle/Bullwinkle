@@ -49,6 +49,18 @@ public class BnfParser
 		m_startRule = null;
 		m_rules = new LinkedList<BnfRule>();
 	}
+	
+	/**
+	 * Creates a new parser by copying the rules from another parser
+	 * @param parser The parser to copy the rules from
+	 */
+	public BnfParser(BnfParser parser)
+	{
+		super();
+		m_rules = new LinkedList<BnfRule>();
+		m_rules.addAll(parser.m_rules);
+		m_startRule = parser.m_startRule;
+	}
 
 	public BnfParser(File f) throws IOException, InvalidGrammarException
 	{
