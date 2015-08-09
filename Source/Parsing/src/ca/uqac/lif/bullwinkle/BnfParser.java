@@ -103,7 +103,7 @@ public class BnfParser
 		return out.toString();
 	}
 
-	public void addCaseToRule(String rule_name, String case_string)
+	public void addCaseToRule(int index, String rule_name, String case_string)
 	{
 		BnfRule rule = getRule(rule_name);
 		if (rule == null)
@@ -113,7 +113,12 @@ public class BnfParser
 		NonTerminalToken ntok = new NonTerminalToken(case_string);
 		TokenString ts = new TokenString();
 		ts.add(ntok);
-		rule.addAlternative(ts);
+		rule.addAlternative(index, ts);
+	}
+	
+	public void addCaseToRule(String rule_name, String case_string)
+	{
+		addCaseToRule(0, rule_name, case_string);
 	}
 
 	protected BnfRule getRule(String rule_name)

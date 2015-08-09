@@ -161,6 +161,16 @@ public class BnfRule
   }
   
   /**
+   * Adds an alternative to the rule, and puts it in a specific position
+   * @param index The position to put the new alternative
+   * @param ts The alternative to add
+   */
+  void addAlternative(int index, /* @NonNull */ final TokenString ts)
+  {
+  	m_alternatives.add(index, ts);
+  }
+  
+  /**
    * Retrieves the list of all the alternatives that this rule defines
    * @return A list of alternatives, each of which is a string of tokens
    *   (either terminal or non-terminal)
