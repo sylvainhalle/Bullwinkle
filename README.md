@@ -74,18 +74,9 @@ First make sure you have the following installed:
   later version. Moreover, it most probably compiles on the JDK 5, although
   this was not tested.
 - [Ant](http://ant.apache.org) to automate the compilation and build process
-- The [Apache Commons CLI](http://commons.apache.org/proper/commons-cli/)
-  to handle command-line parameters *(tested with version 1.2)*
 
-This last library should be put in Java's extension folder. This location
-varies according to the operating system you use:
-
-- Solaris™ Operating System: `/usr/jdk/packages/lib/ext`
-- Linux: `/usr/java/packages/lib/ext`
-- Microsoft Windows: `%SystemRoot%\Sun\Java\lib\ext`
-
-Do **not** create subfolders there (i.e. put the archive directly in that
-folder).
+As of version 1.1.8, Bullwinkle no longer requires any other library (i.e.
+no JAR dependencies).
 
 Download the sources for Bullwinkle from
 [GitHub](http://github.com/sylvainhalle/Bullwinkle) or clone the repository
