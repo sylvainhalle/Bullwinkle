@@ -26,23 +26,14 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.List;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
-
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
 import ca.uqac.lif.bullwinkle.output.IndentedTextVisitor;
 import ca.uqac.lif.bullwinkle.output.OutputFormatVisitor;
 import ca.uqac.lif.bullwinkle.output.XmlVisitor;
+import ca.uqac.lif.util.CliParser;
+import ca.uqac.lif.util.CliParser.ArgumentMap;
 
-// Bullwinkle can work with Commons CLI 1.2
-@SuppressWarnings("deprecation")
 public class BullwinkleCli
 {
 
@@ -73,8 +64,8 @@ public class BullwinkleCli
     String output_format = "xml", grammar_filename = null, filename_to_parse = null;
     
     // Parse command line arguments
-    Options options = setupOptions();
-    CommandLine c_line = setupCommandLine(args, options);
+    CliParser cli_parser = setupOptions();
+    ArgumentMap c_line = setupCommandLine(cli_parser, args);
     assert c_line != null;
     if (c_line.hasOption("verbosity"))
     {
@@ -92,17 +83,17 @@ public class BullwinkleCli
       System.err.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
       System.exit(ERR_OK);
     }
-    if (c_line.hasOption("h"))
+    if (c_line.hasOption("help"))
     {
-      showUsage(options);
+      showUsage(cli_parser);
       System.exit(ERR_OK);
     }
-    if (c_line.hasOption("f"))
+    if (c_line.hasOption("format"))
     {
       output_format = c_line.getOptionValue("f");
     }
     // Get grammar file
-    List<String> remaining_args = c_line.getArgList();
+    List<String> remaining_args = c_line.getOthers();
     if (remaining_args.isEmpty())
     {
       System.err.println("ERROR: no grammar file specified");
@@ -228,50 +219,35 @@ public class BullwinkleCli
    * Sets up the options for the command line parser
    * @return The options
    */
-  @SuppressWarnings("static-access")
-  private static Options setupOptions()
+  private static CliParser setupOptions()
   {
-    Options options = new Options();
-    Option opt;
-    opt = OptionBuilder
-        .withLongOpt("help")
-        .withDescription(
-            "Display command line usage")
-            .create("h");
-    options.addOption(opt);
-    opt = OptionBuilder
-        .withLongOpt("format")
-        .withArgName("x")
-        .hasArg()
-        .withDescription(
-            "Output parse tree in format x (dot, xml, txt or json). Default: xml")
-            .create("f");
-    options.addOption(opt);
-    opt = OptionBuilder
-        .withLongOpt("verbosity")
-        .withArgName("x")
-        .hasArg()
-        .withDescription(
-            "Verbose messages with level x")
-            .create();
-    options.addOption(opt);
-    opt = OptionBuilder
-        .withLongOpt("version")
-        .withDescription(
-            "Show version number")
-            .create();
-    options.addOption(opt);
-    return options;
+  	CliParser cli_parser = new CliParser();
+  	cli_parser.addArgument(new CliParser.Argument()
+  		.withShortName("h")
+  		.withLongName("help")
+  		.withDescription("Display command line usage"));
+  	cli_parser.addArgument(new CliParser.Argument()
+			.withShortName("f")
+			.withLongName("format")
+			.withArgument("x")
+			.withDescription("Output parse tree in format x (dot, xml, txt or json). Default: xml"));
+  	cli_parser.addArgument(new CliParser.Argument()
+			.withLongName("verbosity")
+			.withArgument("x")
+			.withDescription("Verbose messages with level x"));
+  	cli_parser.addArgument(new CliParser.Argument()
+			.withLongName("version")
+			.withDescription("Show version number"));
+    return cli_parser;
   }
 
   /**
-   * Show the benchmark's usage
-   * @param options The options created for the command line parser
+   * Show the command's usage
+   * @param cli_parser The command-line parser
    */
-  private static void showUsage(Options options)
+  private static void showUsage(CliParser cli_parser)
   {
-    HelpFormatter hf = new HelpFormatter();
-    hf.printHelp("java -jar BullwinkleParser.jar [options] grammar [inputfile]", options);
+  	cli_parser.printHelp("java -jar BullwinkleParser.jar [options] grammar [inputfile]", System.err);
   }
 
   /**
@@ -281,24 +257,16 @@ public class BullwinkleCli
    * @param options The command line options to be used by the parser
    * @return The object that parsed the command line parameters
    */
-  private static CommandLine setupCommandLine(String[] args, Options options)
+  private static ArgumentMap setupCommandLine(CliParser cli_parser, String[] cli)
   {
-    CommandLineParser parser = new PosixParser();
-    CommandLine c_line = null;
-    try
-    {
-      // parse the command line arguments
-      c_line = parser.parse(options, args);
-    }
-    catch (ParseException exp)
+    ArgumentMap parsed = cli_parser.parse(cli);
+    if (parsed == null)
     {
       // oops, something went wrong
-      System.err.println("ERROR: " + exp.getMessage() + "\n");
-      //HelpFormatter hf = new HelpFormatter();
-      //hf.printHelp(t_gen.getAppName() + " [options]", options);
-      System.exit(ERR_ARGUMENTS);
+    	System.err.println("Error parsing command-line arguments");
+    	System.exit(ERR_ARGUMENTS);
     }
-    return c_line;
+    return parsed;
   }
   
   private static void showHeader()
