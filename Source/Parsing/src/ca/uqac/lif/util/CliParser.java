@@ -25,6 +25,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A simple command-line parser
+ * @version 1.1
+ * @author Sylvain Hallé
+ *
+ */
 public class CliParser
 {
 	protected Set<Argument> m_arguments;
@@ -151,7 +157,7 @@ public class CliParser
 				// none: error
 				return false;
 			}
-			if (current_argument.m_shortName != null)
+			if (current_argument.m_longName != null)
 			{
 				parsed.put(current_argument.m_longName, current_value);							
 			}
@@ -220,6 +226,19 @@ public class CliParser
 		out.print(output);
 	}
 	
+	/**
+	 * Representation of a command line argument. An argument can have:
+	 * <ul>
+	 * <li>A "short" name, such as <tt>-s</tt>. Short names generally have
+	 *   a single symbol and are prefixed with a single dash</li>
+	 * <li>A "long" name, such as <tt>--server</tt>. Long names have
+	 *   multiple symbols and are prefixed with two dashes</li>
+	 * <li>A description, only used when printing command line usage</li>
+	 * <li>A value, such as <tt>--port 80</tt></li>
+	 * </ul>
+	 * @author Sylvain Hallé
+	 *
+	 */
 	public static class Argument
 	{
 		/**
@@ -312,8 +331,23 @@ public class CliParser
 				return false;
 			}
 			Argument a = (Argument) o;
-			return ((m_shortName == null && a.m_shortName == null) ||
-					m_shortName.compareTo(a.m_shortName) == 0);
+			
+			return ((m_shortName != null && a.m_shortName != null && m_shortName.compareTo(a.m_shortName) == 0) ||
+					(m_longName != null && a.m_longName != null && m_longName.compareTo(a.m_longName) == 0));
+		}
+		
+		@Override
+		public String toString()
+		{
+			if (m_longName != null)
+			{
+				return m_longName;
+			}
+			if (m_shortName != null)
+			{
+				return m_shortName;
+			}
+			return "";
 		}
 	}
 	
