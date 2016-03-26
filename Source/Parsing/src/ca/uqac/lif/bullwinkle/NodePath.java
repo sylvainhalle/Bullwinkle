@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 public class NodePath
 {
-  protected static Pattern s_pattern = Pattern.compile("(.+)(\\[(\\d+)\\]){0,1}");
+  protected static transient Pattern s_pattern = Pattern.compile("(.+)(\\[(\\d+)\\]){0,1}");
   
   public static void main(String[] args)
   {

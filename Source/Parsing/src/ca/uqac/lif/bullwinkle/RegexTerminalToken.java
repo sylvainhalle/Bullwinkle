@@ -24,12 +24,20 @@ import java.util.regex.Pattern;
 
 public class RegexTerminalToken extends TerminalToken
 {
+  /**
+   * The pattern used to perform the matching
+   */
+  private transient Pattern m_pattern;
+  
+  public RegexTerminalToken()
+  {
+    super();
+  }
+  
   public RegexTerminalToken(final String label)
   {
     super(label);
   }
-
-  private Pattern m_pattern;
   
   @Override
   public void setName(final String s)

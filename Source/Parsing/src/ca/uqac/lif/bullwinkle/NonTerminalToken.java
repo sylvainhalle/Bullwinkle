@@ -19,7 +19,12 @@ package ca.uqac.lif.bullwinkle;
 
 public class NonTerminalToken extends Token
 {
-  NonTerminalToken(String s)
+  public NonTerminalToken()
+  {
+    super();
+  }
+  
+  public NonTerminalToken(String s)
   {
     super(s);
   }

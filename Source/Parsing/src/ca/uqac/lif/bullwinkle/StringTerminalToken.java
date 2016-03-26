@@ -2,6 +2,11 @@ package ca.uqac.lif.bullwinkle;
 
 public class StringTerminalToken extends TerminalToken
 {
+  public StringTerminalToken()
+  {
+    super();
+  }
+  
   public StringTerminalToken(String label)
   {
     super(label);

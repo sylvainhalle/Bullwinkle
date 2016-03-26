@@ -2,20 +2,23 @@ package ca.uqac.lif.bullwinkle;
 
 public abstract class Token
 {
+  /**
+   * The token's name
+   */
   private String m_name;
   
   /**
    * Whether the matching is sensitive to case. This is a program-wide
    * value
    */
-  protected static boolean s_caseSensitive = true;
+  protected static transient boolean s_caseSensitive = true;
   
-  Token()
+  public Token()
   {
     this("");
   }
   
-  Token(String name)
+  public Token(String name)
   {
     super();
     setName(name);

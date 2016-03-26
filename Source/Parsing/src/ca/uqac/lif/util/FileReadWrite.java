@@ -17,8 +17,10 @@
 */
 package ca.uqac.lif.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -81,7 +83,7 @@ public class FileReadWrite
     StringBuilder out = new StringBuilder();
     try
     {
-      scanner = new java.util.Scanner(f, "UTF-8");
+      scanner = new java.util.Scanner(new BufferedReader(new FileReader(f)));
       while (scanner.hasNextLine())
       {
         String line = scanner.nextLine();

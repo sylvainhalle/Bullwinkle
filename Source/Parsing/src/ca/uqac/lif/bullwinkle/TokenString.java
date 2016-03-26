@@ -9,7 +9,12 @@ public class TokenString extends LinkedList<Token>
   /**
    * Dummy UID
    */
-  private static final long serialVersionUID = 1L;
+  transient private static final long serialVersionUID = 1L;
+  
+  public TokenString()
+  {
+    super();
+  }
 
   public final TokenString getCopy()
   {

@@ -37,9 +37,9 @@ public class BnfParser
 
 	private BnfRule m_startRule;
 
-	private static final String s_CRLF = System.getProperty("line.separator");
+	private static transient final String s_CRLF = System.getProperty("line.separator");
 
-	private boolean m_debugMode = false;
+	private transient boolean m_debugMode = false;
 
 	public static int s_maxRecursionSteps = 50;
 

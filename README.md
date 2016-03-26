@@ -13,6 +13,9 @@ contrary, Bullwinkle reads the definition of the grammar (expressed in
 [Backus-Naur Form](http://en.wikipedia.org/wiki/Backus-Naur_form) (BNF)) at
 runtime and can readily parse strings on the spot.
 
+Instances of the Bullwinkle parser can be safely serialized with
+[Azrael](https://github.com/sylvainhalle/Azrael).
+
 Table of Contents                                                    {#toc}
 -----------------
 
@@ -88,7 +91,7 @@ Compile the sources by simply typing:
 
     ant
 
-This will produce a file called `BullwinkleParser.jar` in the folder. This
+This will produce a file called `bullwinkle.jar` in the folder. This
 file is runnable and stand-alone, or can be used as a library, so it can be
 moved around to the location of your choice.
 
@@ -191,7 +194,7 @@ string does not parse). This parse tree can then be explored in two ways:
 Command-line usage                                                   {#cli}
 ------------------
 
-The project comes with `BullwinkleParser.jar`, a file that can be used
+The project comes with `bullwinkle.jar`, a file that can be used
 either as a library inside a Java program (as described above), or as a
 stand-alone command-line application. In that case, the application reads
 the grammar definition from a file, a string to parse either from the
@@ -200,7 +203,7 @@ resulting parse tree. This tree can then be read by another application.
 
 Command-line usage is as follows:
 
-    java -jar BullwinkleParser.jar [options] grammar [file]
+    java -jar bullwinkle.jar [options] grammar [file]
 
 where `grammar` is the path to a file describing the grammar to use, and
 `file` is an optional filename containing the string to be parsed. If no
@@ -211,10 +214,11 @@ Options are:
 `-f x`, `--format x`
 :  Output with format x. Supported values are `xml`, `txt` and `dot`. See
    below for a description of these formats.
+ 
 `-v x`
 :  Set verbosity to level x (0 = no messages are printed).
 
-At the moment, three output formats are supported.
+Three output formats are supported directly.
 
 ### XML
 

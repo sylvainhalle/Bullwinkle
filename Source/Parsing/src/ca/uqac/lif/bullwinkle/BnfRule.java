@@ -2,19 +2,19 @@
   Copyright 2014-2016 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
-  
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-*/
+ */
 package ca.uqac.lif.bullwinkle;
 
 import java.io.IOException;
@@ -33,17 +33,17 @@ import ca.uqac.lif.util.EmptyException;
  */
 public class BnfRule
 {
-	/**
-	 * A list of token strings that for all the possible cases of that rule
-	 */
+  /**
+   * A list of token strings that for all the possible cases of that rule
+   */
   private List<TokenString> m_alternatives;
-  
+
   /**
    * The left-hand side of the rule. Since we deal with BNF grammars, this
    * left-hand side must be a single non-terminal symbol.
    */
   private NonTerminalToken m_leftHandSide;
-  
+
   /**
    * Creates a new empty BNF rule
    */
@@ -52,7 +52,7 @@ public class BnfRule
     super();
     m_alternatives = new LinkedList<TokenString>();
   }
-  
+
   /**
    * Creates a BNF rule out of a string
    * @param input The string that contains a BNF rule. This string must follow
@@ -120,7 +120,7 @@ public class BnfRule
           }
           else if (trimmed_word.compareTo("\uCEB5") == 0 || trimmed_word.compareTo("\u03B5") == 0)
           {
-          	// There are two "lowercase epsilon" code points in Unicode; check for both
+            // There are two "lowercase epsilon" code points in Unicode; check for both
             Token to_add = new EpsilonTerminalToken();
             alternative_to_add.add(to_add);
           }
@@ -140,7 +140,7 @@ public class BnfRule
     }
     return out;
   }
-  
+
   /**
    * Sets the left-hand side of the rule
    * @param t The non-terminal token that will be used for the
@@ -150,7 +150,7 @@ public class BnfRule
   {
     m_leftHandSide = t;
   }
-  
+
   /**
    * Adds an alternative to the rule
    * @param ts The alternative to add
@@ -159,7 +159,7 @@ public class BnfRule
   {
     m_alternatives.add(ts);
   }
-  
+
   /**
    * Adds an alternative to the rule, and puts it in a specific position
    * @param index The position to put the new alternative
@@ -167,9 +167,9 @@ public class BnfRule
    */
   void addAlternative(int index, /* @NonNull */ final TokenString ts)
   {
-  	m_alternatives.add(index, ts);
+    m_alternatives.add(index, ts);
   }
-  
+
   /**
    * Retrieves the list of all the alternatives that this rule defines
    * @return A list of alternatives, each of which is a string of tokens
@@ -179,7 +179,7 @@ public class BnfRule
   {
     return m_alternatives;
   }
-  
+
   /**
    * Retrieves the left-hand side symbol of the rule
    * @return The left-hand side symbol
@@ -188,7 +188,7 @@ public class BnfRule
   {
     return m_leftHandSide;
   }
-  
+
   /**
    * Interprets UTF-8 escaped characters and converts them back into
    * a UTF-8 string. The solution used here (going through a
@@ -202,9 +202,9 @@ public class BnfRule
    */
   protected static String unescapeString(String s)
   {
-  	// We want only the unicode characters to be resolved;
-  	// double all other backslashes
-  	s = s.replaceAll("\\\\([^u])", "\\\\\\\\$1");
+    // We want only the unicode characters to be resolved;
+    // double all other backslashes
+    s = s.replaceAll("\\\\([^u])", "\\\\\\\\$1");
     Properties p = new Properties();
     try
     {
@@ -217,7 +217,7 @@ public class BnfRule
     }
     return p.getProperty("key");
   }
-  
+
   @Override
   public String toString()
   {
@@ -235,7 +235,7 @@ public class BnfRule
     }
     return out.toString();
   }
-  
+
   public Set<TerminalToken> getTerminalTokens()
   {
     Set<TerminalToken> out = new HashSet<TerminalToken>();
@@ -245,16 +245,16 @@ public class BnfRule
     }
     return out;
   }
-  
+
   /**
    * Adds a collection of alternatives to the rule
    * @param alternatives The alternatives to add
    */
   public void addAlternatives(Collection<TokenString> alternatives)
   {
-  	m_alternatives.addAll(alternatives);
+    m_alternatives.addAll(alternatives);
   }
-  
+
   /**
    * Exception thrown when the parsing of a rule form a string fails
    */

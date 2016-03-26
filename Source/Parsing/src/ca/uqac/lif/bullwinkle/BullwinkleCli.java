@@ -40,18 +40,18 @@ public class BullwinkleCli
   /**
    * Return codes
    */
-  public static final int ERR_OK = 0;
-  public static final int ERR_PARSE = 2;
-  public static final int ERR_IO = 3;
-  public static final int ERR_ARGUMENTS = 4;
-  public static final int ERR_RUNTIME = 6;
-  public static final int ERR_GRAMMAR = 7;
-  public static final int ERR_INPUT = 9;
+  public static final transient int ERR_OK = 0;
+  public static final transient int ERR_PARSE = 2;
+  public static final transient int ERR_IO = 3;
+  public static final transient int ERR_ARGUMENTS = 4;
+  public static final transient int ERR_RUNTIME = 6;
+  public static final transient int ERR_GRAMMAR = 7;
+  public static final transient int ERR_INPUT = 9;
   
   /**
    * Build string to identify versions
    */
-  protected static final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
+  protected static transient final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
   
   /**
    * Main loop
