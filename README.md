@@ -208,7 +208,7 @@ to contain non-terminal symbols. For example, consider the following grammar:
     <B> := bar | <Z> d;
     <Z> := 0 | 1;
 
-In partial parsing mode, the string `foo &lt;B&gt; c` is accepted by the
+In partial parsing mode, the string `foo <B> c` is accepted by the
 grammar. In this case, one of the leaf nodes of the resulting parse tree
 is not a terminal symbol, but rather the non-terminal symbol &lt;B&gt;.
 
@@ -224,7 +224,7 @@ enabled. Then non-terminal &lt;A&gt; can be expanded, yielding:
     foo <B> c
 
 Again, one can check that this string is still syntactically valid. Non-terminal
-&lt;B&gt; can be expanded to form `foo &lt;Z&gt; d c`, and then `foo 0 d c`.
+&lt;B&gt; can be expanded to form `foo <Z> d c`, and then `foo 0 d c`.
 
 To enable partial parsing, use the method `setPartialParsing()` of class
 `BnfParser`.
