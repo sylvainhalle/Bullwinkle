@@ -19,6 +19,18 @@ package ca.uqac.lif.bullwinkle;
 
 public class NonTerminalToken extends Token
 {
+  /**
+   * The left-hand side symbol used to mark a non-terminal token
+   * in a grammar rule
+   */
+  public static final transient String s_leftSymbol = "<";
+  
+  /**
+   * The right-hand side symbol used to mark a non-terminal token
+   * in a grammar rule
+   */
+  public static final transient String s_rightSymbol = ">";
+  
   public NonTerminalToken()
   {
     super();
@@ -39,5 +51,11 @@ public class NonTerminalToken extends Token
   public int match(final String s)
   {
     return 0;
-  }  
+  }
+  
+  /*@Override
+  public String toString()
+  {
+    return s_leftSymbol + getName() + s_rightSymbol;
+  }*/
 }

@@ -13,8 +13,13 @@ contrary, Bullwinkle reads the definition of the grammar (expressed in
 [Backus-Naur Form](http://en.wikipedia.org/wiki/Backus-Naur_form) (BNF)) at
 runtime and can readily parse strings on the spot.
 
-Instances of the Bullwinkle parser can be safely serialized with
-[Azrael](https://github.com/sylvainhalle/Azrael).
+Other unique features of Bullwinkle include:
+
+- Instances of the Bullwinkle parser can be safely serialized with
+  [Azrael](https://github.com/sylvainhalle/Azrael).
+- Partial parsing, a special mode where input strings can
+  contain non-terminal symbols from the grammar. A string can hence be
+  partially verified for syntactical correctness.
 
 Table of Contents                                                    {#toc}
 -----------------
@@ -23,6 +28,7 @@ Table of Contents                                                    {#toc}
 - [Compiling and installing Bullwinkle](#install)
 - [Defining a grammar](#grammar)
 - [Using the parse tree](#tree)
+- [Partial parsing](#partial)
 - [Command-line usage](#cli)
 - [About the author](#about)
 
@@ -190,6 +196,38 @@ string does not parse). This parse tree can then be explored in two ways:
    method, depending on the desired mode of traversal. The sample code shows an
    example of a visitor (class `GraphvizVisitor`), which produces a DOT file
    from the contents of the parse tree.
+
+Partial parsing                                                  {#partial}
+---------------
+
+Partial parsing is a special mode where the input string is allowed
+to contain non-terminal symbols. For example, consider the following grammar:
+
+    <S> := <A> <B> c;
+    <A> := foo;
+    <B> := bar | <Z> d;
+    <Z> := 0 | 1;
+
+In partial parsing mode, the string `foo &lt;B&gt; c` is accepted by the
+grammar. In this case, one of the leaf nodes of the resulting parse tree
+is not a terminal symbol, but rather the non-terminal symbol &lt;B&gt;.
+
+One particular use of partial parsing is the step-by-step verification of
+partially formed strings. In the previous example, one might create
+a input string by first writing
+
+    <A> <B> c
+
+This string can be checked to be valid by parsing it with partial parsing
+enabled. Then non-terminal &lt;A&gt; can be expanded, yielding:
+
+    foo <B> c
+
+Again, one can check that this string is still syntactically valid. Non-terminal
+&lt;B&gt; can be expanded to form `foo &lt;Z&gt; d c`, and then `foo 0 d c`.
+
+To enable partial parsing, use the method `setPartialParsing()` of class
+`BnfParser`.
 
 Command-line usage                                                   {#cli}
 ------------------
