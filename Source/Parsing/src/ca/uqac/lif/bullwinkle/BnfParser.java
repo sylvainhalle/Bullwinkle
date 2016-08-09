@@ -162,6 +162,19 @@ public class BnfParser
     }
     return null;
   }
+  
+  public List<TokenString> getAlternatives(String rule_name)
+  {
+    for (BnfRule rule : m_rules)
+    {
+      String lhs = rule.getLeftHandSide().getName();
+      if (rule_name.compareTo(lhs) == 0)
+      {
+        return rule.getAlternatives();
+      }
+    }
+    return null;
+  }
 
   public void setGrammar(String grammar) throws InvalidGrammarException
   {
