@@ -254,6 +254,21 @@ public class BnfRule
   {
     m_alternatives.addAll(alternatives);
   }
+  
+  /**
+   * Adds a collection of alternatives to the rule at a specific
+   * position in the list
+   * @param position The position in the rule list where it is to
+   *   be added
+   * @param alternatives The alternatives to add
+   */
+  public void addAlternatives(int position, Collection<TokenString> alternatives)
+  {
+    for (TokenString alt : alternatives)
+    {
+      m_alternatives.add(position, alt);
+    }
+  }
 
   /**
    * Exception thrown when the parsing of a rule form a string fails

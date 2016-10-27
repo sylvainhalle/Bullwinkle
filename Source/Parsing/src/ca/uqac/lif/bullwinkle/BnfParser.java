@@ -222,6 +222,30 @@ public class BnfParser
   }
 
   /**
+   * Adds a rule to the parser at a specific position.
+   * If a rule with the same left-hand side
+   * already exists in the parser, the case of the rule passed as an argument
+   * will be added to the cases of the existing rule.
+   * @param position The position where the alternatives to this rule will be added 
+   * @param rule The rule to add
+   */
+  public void addRule(final int position, final BnfRule rule)
+  {
+    NonTerminalToken r_left = rule.getLeftHandSide();
+    for (BnfRule in_rule : m_rules)
+    {
+      NonTerminalToken in_left = in_rule.getLeftHandSide();
+      if (r_left.equals(in_left))
+      {
+        in_rule.addAlternatives(position, rule.getAlternatives());
+        break;
+      }
+    }
+    // No rule with the same LHS was found
+    m_rules.add(rule);
+  }
+  
+  /**
    * Adds a rule to the parser. If a rule with the same left-hand side
    * already exists in the parser, the case of the rule passed as an argument
    * will be added to the cases of the existing rule. 
