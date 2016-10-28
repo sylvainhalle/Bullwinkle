@@ -369,7 +369,7 @@ public class BnfParser
 
 	/**
 	 * Sets the start rule to be used for the parsing
-	 * @param tokenName The non-terminal to be used. It must
+	 * @param token The non-terminal to be used. It must
 	 *   be defined in the grammar, otherwise a <code>NullPointerException</code>
 	 *   will be thrown when attempting to parse a string.
 	 */
