@@ -1,0 +1,4 @@
+<S>        := <fct> ;
+<fct>      := <ncast> || <constant> ; 
+<constant> := ^[0-9];
+<ncast>    := <constant> FOO | ( <fct> ) FOO ;

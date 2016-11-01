@@ -11,10 +11,38 @@ public class TokenString extends LinkedList<Token>
    */
   transient private static final long serialVersionUID = 1L;
   
+  /**
+   * Whether this case symbol should remain at the end of the
+   * alternatives for a rule
+   */
+  private boolean m_tryLast = false;
+  
+  /**
+   * Creates a new empty token string
+   */
   public TokenString()
   {
     super();
   }
+  
+  /**
+   * Tells whether this element should be tried last when parsing
+   * @return True if it should be tried last
+   */
+  public boolean getTryLast()
+  {
+	  return m_tryLast;
+  }
+
+  /**
+   * Tells whether this element should be tried last when parsing
+   * @param b Set to true if it should be tried last
+   */
+  public void setTryLast(boolean b)
+  {
+	 m_tryLast = b; 
+  }
+  
 
   public final TokenString getCopy()
   {

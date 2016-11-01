@@ -112,6 +112,20 @@ public class GrammarTests
   }
   
   @Test
+  public void parseGrammar8a()
+  {
+    String expression = "0 FOO";
+    parseIt("data/Grammar-14.bnf", "<processor>", expression, false, false);
+  }
+  
+  @Test
+  public void parseGrammar8b()
+  {
+    String expression = "(0) FOO";
+    parseIt("data/Grammar-14.bnf", "<processor>", expression, false, false);
+  }
+  
+  @Test
   public void parseNumber1()
   {
     String expression = "3.5";
