@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
@@ -49,11 +50,6 @@ public class BnfParser
 	 * The start rule to be used for the parsing
 	 */
 	private BnfRule m_startRule;
-
-	/**
-	 * System-dependent carriage return string
-	 */
-	private static transient final String s_CRLF = System.getProperty("line.separator");
 
 	/**
 	 * Whether the parser is set on debug mode
@@ -257,10 +253,11 @@ public class BnfParser
 		{
 			throw new InvalidGrammarException("Null argument given");
 		}
-		String[] lines = grammar.split(s_CRLF);
+		Scanner scanner = new Scanner(grammar);
 		String current_rule = "";
-		for (String line : lines)
+		while (scanner.hasNextLine())
 		{
+			String line = scanner.nextLine();
 			// Remove comments and empty lines
 			int index = line.indexOf("#");
 			if (index >= 0)
@@ -285,11 +282,13 @@ public class BnfParser
 				}
 				catch (InvalidRuleException e)
 				{
+					scanner.close();
 					throw new InvalidGrammarException(e.toString());
 				}
 				current_rule = "";
 			}
 		}
+		scanner.close();
 		if (!current_rule.isEmpty())
 		{
 			throw new InvalidGrammarException("Error parsing rule " + current_rule);
