@@ -17,14 +17,12 @@
  */
 package ca.uqac.lif.bullwinkle;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Scanner;
 
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
@@ -40,23 +38,29 @@ public class BullwinkleCli
 	/**
 	 * Return codes
 	 */
-	public static final transient int ERR_OK = 0;
-	public static final transient int ERR_PARSE = 2;
-	public static final transient int ERR_IO = 3;
-	public static final transient int ERR_ARGUMENTS = 4;
-	public static final transient int ERR_RUNTIME = 6;
-	public static final transient int ERR_GRAMMAR = 7;
-	public static final transient int ERR_INPUT = 9;
+	public static final int ERR_OK = 0;
+	public static final int ERR_PARSE = 2;
+	public static final int ERR_IO = 3;
+	public static final int ERR_ARGUMENTS = 4;
+	public static final int ERR_RUNTIME = 6;
+	public static final int ERR_GRAMMAR = 7;
+	public static final int ERR_INPUT = 9;
 
 	/**
 	 * Build string to identify versions
 	 */
-	protected static transient final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
+	protected static final String VERSION_STRING = BullwinkleCli.class.getPackage().getImplementationVersion();
+
+	private BullwinkleCli()
+	{
+		throw new IllegalAccessError("Main class");
+	}
 
 	/**
 	 * Main loop
 	 * @param args The command-line arguments
 	 */
+	@SuppressWarnings({"squid:S106", "squid:S1166"})
 	public static void main(String[] args)
 	{
 		// Setup parameters
@@ -131,51 +135,37 @@ public class BullwinkleCli
 		assert parser != null;
 
 		// Read input file
-		BufferedReader bis = null;
-		FileInputStream fis = null;
+		Scanner scanner = null;
 		if (filename_to_parse == null)
 		{
 			// Read from stdin
-			bis = new BufferedReader(new InputStreamReader(System.in));
+			scanner = new Scanner(System.in);
 		}
 		else
 		{
 			// Read from file
 			try
 			{
-				fis = new FileInputStream(new File(filename_to_parse));
-				bis = new BufferedReader(new InputStreamReader(fis));
-			}
+				scanner = new Scanner(new File(filename_to_parse));
+			} 
 			catch (FileNotFoundException e)
 			{
-				System.err.println("ERROR: file not found " + filename_to_parse);
+				System.err.println("ERROR reading input\n");
 				System.exit(ERR_IO);
 			}
 		}
-		assert bis != null;
-		String str;
 		StringBuilder input_file = new StringBuilder();
-		try
+		if (scanner == null)
 		{
-			while ((str = bis.readLine()) != null)
-			{
-				input_file.append(str).append("\n");
-			}
-		}
-		catch (IOException e)
-		{
-			try
-			{
-				fis.close();
-				bis.close();
-			} 
-			catch (IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
-			System.err.println("ERROR reading input");
+			System.err.println("ERROR reading input\n");
 			System.exit(ERR_IO);
 		}
+		while (scanner.hasNextLine())
+		{
+			String line = scanner.nextLine();
+			input_file.append(line).append("\n");
+		}
+		scanner.close();
 		String file_contents = input_file.toString();
 
 		// Parse contents of file
@@ -186,30 +176,12 @@ public class BullwinkleCli
 		}
 		catch (ca.uqac.lif.bullwinkle.BnfParser.ParseException e)
 		{
-			try
-			{
-				fis.close();
-				bis.close();
-			} 
-			catch (IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
 			System.err.println("ERROR parsing input\n");
 			e.printStackTrace();
 			System.exit(ERR_PARSE);
 		}
 		if (p_node == null)
 		{
-			try
-			{
-				fis.close();
-				bis.close();
-			} 
-			catch (IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
 			System.err.println("ERROR parsing input\n");
 			System.exit(ERR_PARSE);
 		}
@@ -239,15 +211,6 @@ public class BullwinkleCli
 		}
 		if (out_vis == null)
 		{
-			try
-			{
-				fis.close();
-				bis.close();
-			} 
-			catch (IOException ioe)
-			{
-				ioe.printStackTrace();
-			}
 			System.err.println("ERROR: unknown output format " + output_format);
 			System.exit(ERR_ARGUMENTS);
 		}
@@ -289,6 +252,7 @@ public class BullwinkleCli
 	 * Show the command's usage
 	 * @param cli_parser The command-line parser
 	 */
+	@SuppressWarnings("squid:S106")
 	private static void showUsage(CliParser cli_parser)
 	{
 		cli_parser.printHelp("java -jar BullwinkleParser.jar [options] grammar [inputfile]", System.err);
@@ -306,6 +270,7 @@ public class BullwinkleCli
 		return cli_parser.parse(cli);
 	}
 
+	@SuppressWarnings("squid:S106")
 	private static void showHeader()
 	{
 		System.err.println("Bullwinkle " + VERSION_STRING + ", a LL(k) parser");
