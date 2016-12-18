@@ -11,4 +11,5 @@ addons:
       secure: c11f78b32f6c5a83c760c5b6d6ea388e166b07f7 # encrypted value of your token
 script:
   # other script steps might be done before running the actual SonarQube analysis
+  - ant test
   - sonar-scanner
