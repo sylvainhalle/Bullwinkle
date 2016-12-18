@@ -1,13 +1,9 @@
 language: java
-
+dist: trusty
 install: ant download-deps
-
 notifications:
   # Email notifications are disabled to not annoy anybody.
-  # See http://about.travis-ci.org/docs/user/build-configuration/ to learn more
-  # about configuring notification recipients and more.
-  email: false
-  
+  email: false 
 # Run SonarQube on code
 addons:
   sonarqube:
