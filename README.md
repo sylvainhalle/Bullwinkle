@@ -1,7 +1,7 @@
 Bullwinkle: an on-the-fly parser
 ==============================
 
-[![Build Status](https://semaphoreapp.com/api/v1/projects/8ff372d4-c51a-4c96-8bb7-57505f24e1a6/344318/badge.png)](https://semaphoreapp.com/sylvainhalle/bullwinkle)
+[![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
 
 Bullwinkle is a parser for LL(k) languages that operates through recursive descent
 with backtracking.
