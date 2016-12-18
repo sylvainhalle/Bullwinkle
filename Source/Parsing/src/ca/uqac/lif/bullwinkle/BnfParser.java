@@ -27,6 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
 import ca.uqac.lif.util.EmptyException;
@@ -259,7 +261,7 @@ public class BnfParser
 		{
 			String line = scanner.nextLine();
 			// Remove comments and empty lines
-			int index = line.indexOf("#");
+			int index = line.indexOf('#');
 			if (index >= 0)
 			{
 				line = line.substring(0, index);
@@ -283,7 +285,7 @@ public class BnfParser
 				catch (InvalidRuleException e)
 				{
 					scanner.close();
-					throw new InvalidGrammarException(e.toString());
+					throw new InvalidGrammarException(e);
 				}
 				current_rule = "";
 			}
@@ -395,17 +397,14 @@ public class BnfParser
 			// If no start rule was specified, take first rule of the list as default
 			m_startRule = m_rules.peekFirst();
 		}
-		ParseNode out = parse(m_startRule, n_input, 0);
-		return out;
+		return parse(m_startRule, n_input, 0);
 	}
 
 	private /*@Nullable*/ ParseNode parse(final BnfRule rule, MutableString input, int level) throws ParseException
 	{
 		if (level > s_maxRecursionSteps)
 		{
-			//throw new ParseException("Maximum number of recursion steps reached. If the input string is indeed valid, try increasing the limit.");
-			log("Maximum number of recursion steps reached", level);
-			return null;
+			throw new ParseException("Maximum number of recursion steps reached. If the input string is indeed valid, try increasing the limit.");
 		}
 		ParseNode out_node = null;
 		MutableString n_input = new MutableString(input);
@@ -613,6 +612,11 @@ public class BnfParser
 		public InvalidGrammarException(final String message)
 		{
 			super(message);
+		}
+		
+		public InvalidGrammarException(Throwable t)
+		{
+			super(t);
 		}
 	}
 

@@ -1,6 +1,6 @@
 /*
     LIF utils, a collection of useful classes
-    Copyright (C) 2015 Sylvain Hallé
+    Copyright (C) 2015-2016 Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,54 +19,61 @@ package ca.uqac.lif.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PackageFileReader
 {
-  public static String readPackageFile(Class<?> c, String path)
-  {
-    InputStream in = c.getResourceAsStream(path);
-    String out;
-    try
-    {
-      out = readPackageFile(in);
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace();
-      return null;
-    }
-    return out;
-  }
-  
-  /**
-   * Reads a file and puts its contents in a string
-   * @param in The input stream to read
-   * @return The file's contents, and empty string if the file
-   * does not exist
-   * @throws IOException If the reading fails
-   */
-  public static String readPackageFile(InputStream in) throws IOException
-  {
-    if (in == null)
-    {
-      throw new IOException();
-    }
-    java.util.Scanner scanner = null;
-    StringBuilder out = new StringBuilder();
-    try
-    {
-      scanner = new java.util.Scanner(in, "UTF-8");
-      while (scanner.hasNextLine())
-      {
-        String line = scanner.nextLine();
-        out.append(line).append(System.getProperty("line.separator"));
-      }
-    }
-    finally
-    {
-      if (scanner != null)
-        scanner.close();
-    }
-    return out.toString();
-  }
+	private PackageFileReader()
+	{
+	    throw new IllegalAccessError("Utility class");
+	}
+	
+	public static String readPackageFile(Class<?> c, String path)
+	{
+		InputStream in = c.getResourceAsStream(path);
+		String out;
+		try
+		{
+			out = readPackageFile(in);
+		}
+		catch (IOException e)
+		{
+			Logger.getAnonymousLogger().log(Level.WARNING, "", e);
+			return null;
+		}
+		return out;
+	}
+
+	/**
+	 * Reads a file and puts its contents in a string
+	 * @param in The input stream to read
+	 * @return The file's contents, and empty string if the file
+	 * does not exist
+	 * @throws IOException If the reading fails
+	 */
+	public static String readPackageFile(InputStream in) throws IOException
+	{
+		if (in == null)
+		{
+			throw new IOException();
+		}
+		java.util.Scanner scanner = null;
+		StringBuilder out = new StringBuilder();
+		try
+		{
+			scanner = new java.util.Scanner(in, "UTF-8");
+			while (scanner.hasNextLine())
+			{
+				String line = scanner.nextLine();
+				out.append(line).append(System.getProperty("line.separator"));
+			}
+		}
+		finally
+		{
+			if (scanner != null)
+				scanner.close();
+		}
+		return out.toString();
+	}
 }

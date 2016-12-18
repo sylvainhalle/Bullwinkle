@@ -25,6 +25,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.uqac.lif.util.EmptyException;
 
@@ -72,7 +74,7 @@ public class BnfRule
 		{
 			throw new InvalidRuleException("Cannot find left- and right-hand side of BNF rule");
 		}
-		assert(lr.length == 2);
+		assert lr.length == 2;
 		String lhs = lr[0].trim();
 		out.setLeftHandSide(new NonTerminalToken(lhs));
 		if (lr[1].startsWith("^"))
@@ -116,7 +118,7 @@ public class BnfRule
 			{
 				throw new InvalidRuleException("Alternative of BNF rule is empty");
 			}
-			assert(words.length > 0);
+			assert words.length > 0;
 			for (String word : words)
 			{
 				String trimmed_word = word.trim();
@@ -128,7 +130,6 @@ public class BnfRule
 				if (trimmed_word.startsWith("<"))
 				{
 					// This is a non-terminal symbol
-					//trimmed_word = trimmed_word.substring(1, trimmed_word.length() - 1);
 					Token to_add = new NonTerminalToken(trimmed_word);
 					alternative_to_add.add(to_add);
 				}
@@ -231,16 +232,15 @@ public class BnfRule
 	{
 		// We want only the unicode characters to be resolved;
 		// double all other backslashes
-		s = s.replaceAll("\\\\([^u])", "\\\\\\\\$1");
+		String new_s = s.replaceAll("\\\\([^u])", "\\\\\\\\$1");
 		Properties p = new Properties();
 		try
 		{
-			p.load(new StringReader("key=" + s));
+			p.load(new StringReader("key=" + new_s));
 		}
 		catch (IOException e)
 		{
-			// Auto-generated catch block
-			e.printStackTrace();
+			Logger.getAnonymousLogger().log(Level.WARNING, "", e);
 		}
 		return p.getProperty("key");
 	}
