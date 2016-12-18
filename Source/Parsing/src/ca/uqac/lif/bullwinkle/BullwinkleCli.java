@@ -155,11 +155,7 @@ public class BullwinkleCli
 			}
 		}
 		StringBuilder input_file = new StringBuilder();
-		if (scanner == null)
-		{
-			System.err.println("ERROR reading input\n");
-			System.exit(ERR_IO);
-		}
+		assert scanner != null;
 		while (scanner.hasNextLine())
 		{
 			String line = scanner.nextLine();
