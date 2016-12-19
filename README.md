@@ -2,6 +2,7 @@ Bullwinkle: an on-the-fly parser
 ==============================
 
 [![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
+[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/sylvainhalle:Bullwinkle/coverage.svg?style=flat-square)]()
 
 Bullwinkle is a parser for LL(k) languages that operates through recursive descent
 with backtracking.
