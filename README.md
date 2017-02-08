@@ -308,10 +308,22 @@ The DOT format produces a text file suitable for use with the
 [Graphviz](http://www.graphviz.org) package. The picture shown earlier was
 produced in this way.
 
+Projects that use Bullwinkle                                       {#usage}
+----------------------------
+
+- [BeepBeep 3](https://liflab.github.io/beepbeep-3), an event stream query
+  engine
+- [Cornipickle](https://github.com/liflab/cornipickle), a web testing tool
+- [SealTest](https://liflab.github.io/sealtest), a test sequence generator
+- [SugarSMV](https://github.com/liflab/sugarsmv), a syntactical extension
+  of the NuSMV model checker
+
+
 About the author                                                   {#about}
 ----------------
 
-Bullwinkle was written by Sylvain Hallé, assistant professor at Université
-du Québec à Chicoutimi, Canada. It arose from the need to experiment with
+Bullwinkle was written by [Sylvain Hallé](http://leduotang.ca/sylvain),
+Associate Professor at [Université du Québec à Chicoutimi](http://www.uqac.ca),
+Canada. It arose from the need to experiment with
 various grammars without requiring compilation, as with classical parser
 generators.
