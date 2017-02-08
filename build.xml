@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
     AntRun, a general-purpose Ant build script
-    Copyright (C) 2015  Sylvain Hallé
+    Copyright (C) 2015-2016  Sylvain Hallé
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
   xmlns:jacoco="antlib:org.jacoco.ant">
   
   <!-- The build script's version number. Do not edit! -->
-  <property name="antrun.version" value="1.1.3"/>
+  <property name="antrun.version" value="1.1.6"/>
   
   <!-- Load project properties from XML file -->
   <xmlproperty file="config.xml"/>
@@ -51,7 +51,7 @@
   <property name="build.bindir" value="Source/Core/bin"/>
   
   <!-- The folder where the downloaded dependencies (if any) should go -->
-  <property name="build.depdir" value="deps"/>
+  <property name="build.depdir" value="dep"/>
   
   <!-- The folder with the project's test source files -->
   <property name="build.test.srcdir" value="Source/CoreTest/src"/>
@@ -80,10 +80,13 @@
   <property name="build.jar.filename" value="AntRun.jar"/>
   
   <!-- Generate a jar with the documentation -->
-  <property name="build.jar.withdoc" value="true"/>
+  <property name="build.jar.withdoc" value="false"/>
   
   <!-- Generate a jar with the sources -->
-  <property name="build.jar.withsrc" value="true"/>
+  <property name="build.jar.withsrc" value="false"/>
+  
+  <!-- Generate a jar with the dependencies -->
+  <property name="build.jar.withdeps" value="true"/>
   
   <!-- Base name of the jar to produce (used by the "zip" target) -->
   <basename property="build.jar.basename" file="${build.jar.filename}" suffix=".jar"/>
@@ -112,6 +115,8 @@
                regexp="[${path.separator}]([^${path.separator}]+)$" 
                select="\1"/>
     <echo level="info">Your extension folder is ${build.extdir}</echo>
+    <!-- Create depdir -->
+    <mkdir dir="${build.depdir}"/>
   </target>
   
   <!-- Target: zip
@@ -143,6 +148,9 @@
       includeantruntime="false">
       <classpath>
         <pathelement location="${build.bindir}"/>
+        <fileset dir="${build.depdir}">
+          <include name="*.jar"/>
+        </fileset>
         <pathelement path="${java.class.path}"/>
       </classpath>
     </javac>
@@ -164,6 +172,9 @@
       includeantruntime="false">
       <classpath>
         <pathelement location="${build.bindir}"/>
+        <fileset dir="${build.depdir}">
+          <include name="*.jar"/>
+        </fileset>
         <pathelement path="${java.class.path}"/>
         <pathelement location="${build.libdir}/${junit.jarname}"/>
         <pathelement location="${build.libdir}/${junit.hamcrest}"/>
@@ -187,10 +198,22 @@
              author="true"
              version="true"
              use="true"
+             Encoding="utf8"
+             docencoding="utf8"
+             charset="utf8"
              windowtitle="${build.name} Documentation">
       <doctitle><![CDATA[<h1>]]>${build.name}<![CDATA[ Documentation</h1>]]></doctitle>
       <bottom><![CDATA[<i>Copyright&nbsp;&#169; ]]>${build.author}<![CDATA[. All Rights Reserved.</i>]]></bottom>
       <link href="http://docs.oracle.com/javase/6/docs/api/"/>
+      <classpath>
+        <pathelement location="${build.bindir}"/>
+        <fileset dir="${build.depdir}">
+          <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${java.class.path}"/>
+        <pathelement location="${build.libdir}/${junit.jarname}"/>
+        <pathelement location="${build.libdir}/${junit.hamcrest}"/>
+      </classpath>
     </javadoc>
   </target>
   
@@ -201,7 +224,7 @@
       <tstamp>
          <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
       </tstamp>
-      <jar destfile="${build.jar.filename}" filesetmanifest="mergewithoutmain">
+      <jar destfile="${build.jar.filename}" filesetmanifest="skip">
 	  <manifest>
 	      <attribute name="Main-Class" value="${build.mainclass}"/>
 	      <attribute name="Class-Path" value="."/>
@@ -210,6 +233,9 @@
           <attribute name="Implementation-Version" value="${build.version}"/>
 	  </manifest>
 	  <fileset dir="${build.bindir}"/>
+	  <zipgroupfileset dir="${build.depdir}">
+	    <include name="**/*.jar" if="${build.jar.withdeps}"/>
+	  </zipgroupfileset>
 	  <fileset dir="${build.srcdir}">
 	    <include name="*" if="${build.jar.withsrc}"/>
 	  </fileset>
