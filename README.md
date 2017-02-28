@@ -1,5 +1,5 @@
-Bullwinkle: an on-the-fly parser
-==============================
+Bullwinkle: a runtime parser
+============================
 
 [![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
 [![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/sylvainhalle:Bullwinkle/coverage.svg?style=flat-square)]()
