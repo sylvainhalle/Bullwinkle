@@ -212,7 +212,7 @@ public class BnfRule
 	 * Retrieves the left-hand side symbol of the rule
 	 * @return The left-hand side symbol
 	 */
-	NonTerminalToken getLeftHandSide()
+	public NonTerminalToken getLeftHandSide()
 	{
 		return m_leftHandSide;
 	}

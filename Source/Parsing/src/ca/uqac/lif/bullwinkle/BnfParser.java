@@ -20,6 +20,7 @@ package ca.uqac.lif.bullwinkle;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -294,6 +295,29 @@ public class BnfParser
 			throw new InvalidGrammarException("Error parsing rule " + current_rule);
 		}
 		return rules;
+	}
+	
+	/**
+	 * Returns the list of alternative rules
+	 * @param rule_name The rule you need the alternatives
+	 * @return a list of strings representing the alternatives
+	 */
+	public List<String> getAlternatives(String rule_name)
+	{
+		for (BnfRule rule : m_rules)
+	    {
+	      String lhs = rule.getLeftHandSide().getName();
+	      if (rule_name.compareTo(lhs) == 0)
+	      {
+	    	List<String> alternatives = new ArrayList<String>();
+	        for(TokenString alt : rule.getAlternatives())
+	        {
+	        	alternatives.add(alt.toString());
+	        }
+	        return alternatives;
+	      }
+	    }
+	    return null;
 	}
 
 	/**
