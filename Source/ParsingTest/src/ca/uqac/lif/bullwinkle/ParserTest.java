@@ -18,6 +18,8 @@
 package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,6 +93,30 @@ public class ParserTest
     {
       fail("Valid grammar has thrown an exception when parsed.");
     }
+  }
+  
+  @Test
+  public void getAlternativesTest()
+  {
+    boolean has_error = false;
+    BnfParser parser = new BnfParser();
+    try
+    {
+      parser.setGrammar("<S> := <a> | b;\n<a> := c;");
+    }
+    catch (BnfParser.InvalidGrammarException e)
+    {
+      has_error = true;
+    }
+    if (has_error)
+    {
+      fail("Valid grammar has thrown an exception when parsed.");
+    }
+    
+    List<String> alternatives = parser.getAlternatives("<S>");
+    
+    assertTrue(alternatives.get(0).compareTo("<a>") == 0);
+    assertTrue(alternatives.get(1).compareTo("b") == 0);
   }
 
 }
