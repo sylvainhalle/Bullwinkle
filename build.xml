@@ -23,7 +23,7 @@
   xmlns:jacoco="antlib:org.jacoco.ant">
   
   <!-- The build script's version number. Do not edit! -->
-  <property name="antrun.version" value="1.1.6"/>
+  <property name="antrun.version" value="1.2"/>
   
   <!-- Load project properties from XML file -->
   <xmlproperty file="config.xml"/>
@@ -118,6 +118,16 @@
     <!-- Create depdir -->
     <mkdir dir="${build.depdir}"/>
   </target>
+
+  <!-- Check if a local rt.jar is present. If so, it will override the
+       default rt.jar present in the system. The "compile" task should
+       depend on this. -->
+  <target name="check-rt" depends="init">
+    <available file="rt.jar" property="localrt.present"/>
+    <echo message="Local bootstrap JAR is present"/>
+    <var name="java6.boot.classpath" unset="true"/>
+    <property name="java6.boot.classpath" value="rt.jar"/>
+  </target>
   
   <!-- Target: zip
        Zips the jar
@@ -137,7 +147,7 @@
   <!-- Target: compile
        Compiles the main project
   -->
-  <target name="compile" depends="init" description="Compile the sources">
+  <target name="compile" depends="init,check-rt" description="Compile the sources">
     <mkdir dir="${build.bindir}"/>
     <javac
       target="1.6" source="1.6"
@@ -391,6 +401,14 @@
     <mkdir dir="${build.libdir}"/>
     <get src="http://sylvainhalle.github.io/AntRun/dependencies/xmltask.jar" dest="${build.libdir}/${xmltask.jarname}"/>
   </target>
+
+  <!-- Target: download-rt6
+       Download boot classpath for Java 1.6 and put it in the root folder
+  -->
+  <target name="download-rt6">
+    <get src="http://sylvainhalle.github.io/AntRun/dependencies/1.6.0_45/rt.jar" dest="."/>
+  </target>
+
   
   <!-- Target: junit
        Download jUnit JARs if not present, and puts them in the lib folder
