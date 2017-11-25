@@ -78,13 +78,13 @@ public class BullwinkleCli
 	 * Main loop
 	 * @param args The command-line arguments
 	 */
-
+	@SuppressWarnings("squid:S106")
 	public static void main(String[] args)
 	{
 		System.exit(doMain(args, System.in, System.out, System.err));
 	}
 
-	@SuppressWarnings({"squid:S106", "squid:S1148", "squid:S1166", "squid:S3776"})
+	@SuppressWarnings({"squid:S1148", "squid:S1166", "squid:S3776"})
 	public static int doMain(String[] args, InputStream stdin, PrintStream stdout, PrintStream stderr)
 	{
 		// Setup parameters
