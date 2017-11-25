@@ -138,47 +138,11 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	}
 
 	@Override
-	@SuppressWarnings({"squid:S3878"})
 	public synchronized void visit(ParseNode node) throws VisitException
 	{
-		String token_name = node.getToken();
-		// Is it a non-terminal symbol?
-		if (!token_name.startsWith("<"))
-		{
-			m_stack.push(token_name);
-			return;
-		}
-		// Is there a stack method that handles this non-terminal?
 		try
 		{
-			if (m_methods.containsKey(token_name))
-			{
-				MethodAnnotation ma = m_methods.get(token_name);
-				if (!ma.pop)
-				{
-					ma.m.invoke(this, m_stack);
-					return;
-				}
-				List<Object> argument_list = new LinkedList<Object>();
-				List<ParseNode> children = node.getChildren();
-				for (int i = children.size() - 1; i >= 0; i--)
-				{
-					ParseNode child = children.get(i);
-					Object o = m_stack.pop();
-					if (!ma.clean || child.getToken().startsWith("<"))
-					{
-						argument_list.add(0, o);
-					}
-				}
-				Object[] arguments = argument_list.toArray();
-				// We ignore warning S3878 here; the call to invoke
-				// *requires* the varargs to be put into an array.
-				Object o = ma.m.invoke(this, new Object[]{arguments});
-				if (o != null)
-				{
-					m_stack.push(o);
-				}	
-			}
+			handleNode(node);
 		}
 		catch (SecurityException e)
 		{
@@ -195,6 +159,55 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 		catch (InvocationTargetException e) 
 		{
 			throw new VisitException(e);
+		}
+	}
+
+	/**
+	 * Performs the actual handling of a parse node
+	 * @param node The parse node
+	 * @throws SecurityException May be thrown when attempting to invoke a method
+	 * @throws IllegalAccessException May be thrown when attempting to invoke a method
+	 * @throws IllegalArgumentException May be thrown when attempting to invoke a method
+	 * @throws InvocationTargetException May be thrown when attempting to invoke a method
+	 */
+	@SuppressWarnings({"squid:S3878"})
+	protected void handleNode(ParseNode node) throws SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		String token_name = node.getToken();
+		// Is it a non-terminal symbol?
+		if (!token_name.startsWith("<"))
+		{
+			m_stack.push(token_name);
+			return;
+		}
+		// Is there a stack method that handles this non-terminal?
+		if (m_methods.containsKey(token_name))
+		{
+			MethodAnnotation ma = m_methods.get(token_name);
+			if (!ma.pop)
+			{
+				ma.m.invoke(this, m_stack);
+				return;
+			}
+			List<Object> argument_list = new LinkedList<Object>();
+			List<ParseNode> children = node.getChildren();
+			for (int i = children.size() - 1; i >= 0; i--)
+			{
+				ParseNode child = children.get(i);
+				Object o = m_stack.pop();
+				if (!ma.clean || child.getToken().startsWith("<"))
+				{
+					argument_list.add(0, o);
+				}
+			}
+			Object[] arguments = argument_list.toArray();
+			// We ignore warning S3878 here; the call to invoke
+			// *requires* the varargs to be put into an array.
+			Object o = ma.m.invoke(this, new Object[]{arguments});
+			if (o != null)
+			{
+				m_stack.push(o);
+			}	
 		}
 	}
 
