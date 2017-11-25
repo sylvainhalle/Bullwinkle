@@ -16,14 +16,18 @@
   limitations under the License.
  */
 package ca.uqac.lif.bullwinkle;
+
 import static org.junit.Assert.*;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
+import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.bullwinkle.BnfParser.ParseException;
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
 import ca.uqac.lif.bullwinkle.ParseNode;
@@ -46,7 +50,7 @@ public class GrammarTests
 	}
 
 	@Test
-	public void testAddCase0() throws ParseException, InvalidRuleException
+	public void testAddCaseValid() throws ParseException, InvalidRuleException
 	{
 		String expression = "bar";
 		BnfParser parser = readGrammar("data/Grammar-0.bnf", "<S>", false);
@@ -54,6 +58,62 @@ public class GrammarTests
 		parser.addRule(BnfRule.parseRule("<foo> := bar"));
 		ParseNode node = parser.parse(expression);
 		assertNotNull(node);
+	}
+	
+	@Test
+	public void testAddCaseInvalid() throws ParseException, InvalidRuleException
+	{
+		String expression = "bar";
+		BnfParser parser = readGrammar("data/Grammar-10.bnf", "<S>", false);
+		parser.addCaseToRule("<a>", "<foo>");
+		parser.addRule(BnfRule.parseRule("<a> := bar"));
+		ParseNode node = parser.parse(expression);
+		assertNull(node);
+	}
+	
+	@Test
+	public void testAddRule() throws ParseException, InvalidRuleException
+	{
+		BnfParser parser = readGrammar("data/Grammar-10.bnf", "<S>", false);
+		parser.addRule(0, BnfRule.parseRule("<S> := bar"));
+		ParseNode node = parser.parse("bar");
+		assertNotNull(node);
+	}
+	
+	@Test(expected=InvalidGrammarException.class)
+	public void testNulLRules() throws ParseException, InvalidRuleException, InvalidGrammarException
+	{
+		String s = null;
+		BnfParser.getRules(s);
+	}
+	
+	@Test(expected=InvalidGrammarException.class)
+	public void testInvalid1() throws ParseException, InvalidRuleException, InvalidGrammarException
+	{
+		@SuppressWarnings("unused")
+		BnfParser parser = new BnfParser(GrammarTests.class.getResourceAsStream("data/Grammar-invalid-1.bnf"));
+	}
+	
+	@Test(expected=InvalidGrammarException.class)
+	public void testInvalid2() throws ParseException, InvalidRuleException, InvalidGrammarException
+	{
+		@SuppressWarnings("unused")
+		BnfParser parser = new BnfParser(GrammarTests.class.getResourceAsStream("data/Grammar-invalid-2.bnf"));
+	}
+	
+	@Test(expected=InvalidGrammarException.class)
+	public void testInvalid3() throws ParseException, InvalidRuleException, InvalidGrammarException
+	{
+		@SuppressWarnings("unused")
+		BnfParser parser = new BnfParser(GrammarTests.class.getResourceAsStream("data/Grammar-invalid-3.bnf"));
+	}
+	
+	@Test(expected=ParseException.class)
+	public void testTooMuchRecursion() throws ParseException, InvalidRuleException, InvalidGrammarException
+	{
+		BnfParser parser = new BnfParser(GrammarTests.class.getResourceAsStream("data/Grammar-15.bnf"));
+		parser.setMaxRecursionSteps(2);
+		parser.parse("a a b");
 	}
 
 	@Test
@@ -77,6 +137,14 @@ public class GrammarTests
 		String s = parser.toString();
 		assertNotNull(s);
 		assertTrue(s.length() > 10);
+	}
+	
+	@Test
+	public void testInputStream() throws InvalidGrammarException, ParseException
+	{
+		BnfParser parser = new BnfParser(GrammarTests.class.getResourceAsStream("data/Grammar-0.bnf"));
+		ParseNode node = parser.parse("SELECT a FROM t");
+		assertNotNull(node);
 	}
 
 	@Test
@@ -295,6 +363,17 @@ public class GrammarTests
 		String expression = "foo 0 d c";
 		parseIt("data/Grammar-13.bnf", "<S>", expression, false, true);
 	}
+	
+	@Test
+	public void parseGrammarDebug() throws ParseException
+	{
+		String expression = "a WHERE";
+		BnfParser parser = readGrammar("data/Grammar-10.bnf", "<S>", true);
+		DummyLogger dl = new DummyLogger();
+		parser.setDebugMode(true, dl);
+		parser.parse(expression);
+		assertTrue(dl.hasLogged());
+	}
 
 	private static void checkParseTreeSize(String expression, int expected, int size)
 	{
@@ -388,5 +467,36 @@ public class GrammarTests
 		}
 		parser.setStartRule(start_rule);
 		return parser;
+	}
+	
+	/**
+	 * A dummy logger; just checks that it has been called at least once
+	 */
+	protected static class DummyLogger extends Logger
+	{
+		boolean m_hasLogged = false;
+		
+		protected DummyLogger()
+		{
+			super("ca.uqac.lif.bullwinkle.GrammarTests.DummyLogger", null);
+		}
+		
+		@Override
+		public void log(Level l, String m)
+		{
+			m_hasLogged = true;
+		}
+		
+		@Override
+		public void log(Level l, String m, Object param1)
+		{
+			m_hasLogged = true;
+		}
+		
+		public boolean hasLogged()
+		{
+			return m_hasLogged;
+		}
+		
 	}
 }

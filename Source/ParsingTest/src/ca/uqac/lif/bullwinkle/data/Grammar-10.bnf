@@ -1,2 +1,4 @@
+# Test a comment line
+
 <S> := a | <P> WHERE b ;
 <P> := a ;

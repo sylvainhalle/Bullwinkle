@@ -1,0 +1,4 @@
+# Tokens not separated by spaces
+
+<S>  :=  f<A> ;
+

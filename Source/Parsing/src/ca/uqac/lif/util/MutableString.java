@@ -39,8 +39,7 @@ public class MutableString
 	 */
 	public MutableString()
 	{
-		super();
-		m_string = "";
+		this("");
 	}
 
 	/**
@@ -248,6 +247,22 @@ public class MutableString
 	public boolean is(String s)
 	{
 		return m_string.compareTo(s) == 0;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null || !(o instanceof MutableString))
+		{
+			return false;
+		}
+		return is(((MutableString) o).toString());
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return m_string.hashCode();
 	}
 
 	/**

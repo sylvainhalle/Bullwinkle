@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class BullwinkleCli
 	public static final int ERR_RUNTIME = 6;
 	public static final int ERR_GRAMMAR = 7;
 	public static final int ERR_INPUT = 9;
-	
+
 	/*
 	 * Command line argument constants
 	 */
@@ -77,8 +78,14 @@ public class BullwinkleCli
 	 * Main loop
 	 * @param args The command-line arguments
 	 */
-	@SuppressWarnings({"squid:S106", "squid:S1148", "squid:S1166", "squid:S3776"})
+
 	public static void main(String[] args)
+	{
+		System.exit(doMain(args, System.in, System.out, System.err));
+	}
+
+	@SuppressWarnings({"squid:S106", "squid:S1148", "squid:S1166", "squid:S3776"})
+	public static int doMain(String[] args, InputStream stdin, PrintStream stdout, PrintStream stderr)
 	{
 		// Setup parameters
 		int verbosity = 1;
@@ -92,8 +99,8 @@ public class BullwinkleCli
 		if (c_line == null)
 		{
 			// oops, something went wrong
-			System.err.println("Error parsing command-line arguments");
-			System.exit(ERR_ARGUMENTS);
+			stderr.println("Error parsing command-line arguments");
+			return ERR_ARGUMENTS;
 		}
 		assert c_line != null;
 		if (c_line.hasOption(P_VERBOSITY))
@@ -102,31 +109,31 @@ public class BullwinkleCli
 		}
 		if (verbosity > 0)
 		{
-			showHeader();
+			showHeader(stderr);
 		}
 		if (c_line.hasOption(P_VERSION))
 		{
-			System.err.println("(C) 2014-2017 Sylvain Hallé et al., Université du Québec à Chicoutimi");
-			System.err.println("This program comes with ABSOLUTELY NO WARRANTY.");
-			System.err.println("This is a free software, and you are welcome to redistribute it");
-			System.err.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
-			System.exit(ERR_OK);
+			stderr.println("(C) 2014-2017 Sylvain Hallé et al., Université du Québec à Chicoutimi");
+			stderr.println("This program comes with ABSOLUTELY NO WARRANTY.");
+			stderr.println("This is a free software, and you are welcome to redistribute it");
+			stderr.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
+			return ERR_OK;
 		}
 		if (c_line.hasOption(P_HELP))
 		{
-			showUsage(cli_parser);
-			System.exit(ERR_OK);
+			showUsage(cli_parser, stderr);
+			return ERR_OK;
 		}
 		if (c_line.hasOption(P_FORMAT))
 		{
-			output_format = c_line.getOptionValue("f");
+			output_format = c_line.getOptionValue(P_FORMAT);
 		}
 		// Get grammar file
 		List<String> remaining_args = c_line.getOthers();
 		if (remaining_args.isEmpty())
 		{
-			System.err.println("ERROR: no grammar file specified");
-			System.exit(ERR_ARGUMENTS);
+			stderr.println("ERROR: no grammar file specified");
+			return ERR_ARGUMENTS;
 		}
 		grammar_filename = remaining_args.get(0);
 		// Get file to parse, if any
@@ -143,13 +150,13 @@ public class BullwinkleCli
 		}
 		catch (InvalidGrammarException e)
 		{
-			System.err.println("ERROR: invalid grammar");
-			System.exit(ERR_GRAMMAR);
+			stderr.println("ERROR: invalid grammar");
+			return ERR_GRAMMAR;
 		}
 		catch (IOException e)
 		{
-			System.err.println("ERROR reading grammar " + grammar_filename);
-			System.exit(ERR_IO);
+			stderr.println("ERROR reading grammar " + grammar_filename);
+			return ERR_IO;
 		}
 		assert parser != null;
 
@@ -158,7 +165,7 @@ public class BullwinkleCli
 		if (filename_to_parse == null)
 		{
 			// Read from stdin
-			scanner = new Scanner(System.in);
+			scanner = new Scanner(stdin);
 		}
 		else
 		{
@@ -169,8 +176,8 @@ public class BullwinkleCli
 			} 
 			catch (FileNotFoundException e)
 			{
-				System.err.println("ERROR reading input\n");
-				System.exit(ERR_IO);
+				stderr.println("ERROR reading input\n");
+				return ERR_IO;
 			}
 		}
 		StringBuilder input_file = new StringBuilder();
@@ -191,19 +198,19 @@ public class BullwinkleCli
 		}
 		catch (ca.uqac.lif.bullwinkle.BnfParser.ParseException e)
 		{
-			System.err.println("ERROR parsing input\n");
+			stderr.println("ERROR parsing input\n");
 			e.printStackTrace();
-			System.exit(ERR_PARSE);
+			return ERR_PARSE;
 		}
 		if (p_node == null)
 		{
-			System.err.println("ERROR parsing input\n");
-			System.exit(ERR_PARSE);
+			stderr.println("ERROR parsing input\n");
+			return ERR_PARSE;
 		}
 		assert p_node != null;
 
 		// Output parse node to desired format
-		PrintStream output = System.out;
+		PrintStream output = stdout;
 		OutputFormatVisitor out_vis = null;
 		if (output_format.compareToIgnoreCase("xml") == 0)
 		{
@@ -220,14 +227,10 @@ public class BullwinkleCli
 			// Output to indented plain text
 			out_vis = new IndentedTextVisitor();
 		}
-		else if (output_format.compareToIgnoreCase("json") == 0)
-		{
-			// Output to JSON
-		}
 		if (out_vis == null)
 		{
-			System.err.println("ERROR: unknown output format " + output_format);
-			System.exit(ERR_ARGUMENTS);
+			stderr.println("ERROR: unknown output format " + output_format);
+			return ERR_ARGUMENTS;
 		}
 		assert out_vis != null;
 		try 
@@ -238,10 +241,10 @@ public class BullwinkleCli
 		catch (VisitException e) 
 		{
 			// Terminate with error
-			System.exit(ERR_PARSE);
+			return ERR_PARSE;
 		}
 		// Terminate without error
-		System.exit(ERR_OK);
+		return ERR_OK;
 	}
 
 	/**
@@ -252,21 +255,21 @@ public class BullwinkleCli
 	{
 		CliParser cli_parser = new CliParser();
 		cli_parser.addArgument(new CliParser.Argument()
-		.withShortName("h")
-		.withLongName(P_HELP)
-		.withDescription("Display command line usage"));
+				.withShortName("h")
+				.withLongName(P_HELP)
+				.withDescription("Display command line usage"));
 		cli_parser.addArgument(new CliParser.Argument()
-		.withShortName("f")
-		.withLongName(P_FORMAT)
-		.withArgument("x")
-		.withDescription("Output parse tree in format x (dot, xml, txt or json). Default: xml"));
+				.withShortName("f")
+				.withLongName(P_FORMAT)
+				.withArgument("x")
+				.withDescription("Output parse tree in format x (dot, xml, txt). Default: xml"));
 		cli_parser.addArgument(new CliParser.Argument()
-		.withLongName(P_VERBOSITY)
-		.withArgument("x")
-		.withDescription("Verbose messages with level x"));
+				.withLongName(P_VERBOSITY)
+				.withArgument("x")
+				.withDescription("Verbose messages with level x"));
 		cli_parser.addArgument(new CliParser.Argument()
-		.withLongName(P_VERSION)
-		.withDescription("Show version number"));
+				.withLongName(P_VERSION)
+				.withDescription("Show version number"));
 		return cli_parser;
 	}
 
@@ -275,9 +278,9 @@ public class BullwinkleCli
 	 * @param cli_parser The command-line parser
 	 */
 	@SuppressWarnings("squid:S106")
-	private static void showUsage(CliParser cli_parser)
+	private static void showUsage(CliParser cli_parser, PrintStream ps)
 	{
-		cli_parser.printHelp("java -jar BullwinkleParser.jar [options] grammar [inputfile]", System.err);
+		cli_parser.printHelp("java -jar BullwinkleParser.jar [options] grammar [inputfile]", ps);
 	}
 
 	/**
@@ -292,10 +295,9 @@ public class BullwinkleCli
 		return cli_parser.parse(cli);
 	}
 
-	@SuppressWarnings("squid:S106")
-	private static void showHeader()
+	private static void showHeader(PrintStream ps)
 	{
-		System.err.println("Bullwinkle " + VERSION_STRING + ", a LL(k) parser");
+		ps.println("Bullwinkle " + VERSION_STRING + ", a LL(k) parser");
 	}
 
 	public static String getVersionString()
