@@ -1,6 +1,6 @@
 # ---------------------------------------------
 # Example of a simple BNF grammar for arithmetic expressions in
-# Polish notation (RPN)
+# Polish notation (PN)
 # ---------------------------------------------
 
 <exp> := <add> | <sub> | <mul> | <div> | <num>;
@@ -8,8 +8,4 @@
 <sub> := - <exp> <exp> ;
 <mul> := × <exp> <exp> ;
 <div> := ÷ <exp> <exp> ;
-
-# This last declaration defines the non-terminal symbol num as any
-# sequence of symbols matching the regular expression enclosed between
-# the ^ and $ characters.
 <num> := ^[0-9]+;

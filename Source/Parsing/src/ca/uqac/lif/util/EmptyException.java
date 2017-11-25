@@ -17,6 +17,10 @@
  */
 package ca.uqac.lif.util;
 
+/**
+ * Empty exception object.
+ * @author Sylvain Hallé
+ */
 public class EmptyException extends Exception
 {
 	/**
@@ -29,12 +33,20 @@ public class EmptyException extends Exception
 	 */
 	private static final long serialVersionUID = -8755602580215137730L;
 
+	/**
+	 * Creates a new empty exception
+	 * @param message The message to associate this exception with
+	 */
 	public EmptyException(String message)
 	{
 		super();
 		m_message = message;
 	}
 	
+	/**
+	 * Creates a new empty exception
+	 * @param t A throwable object that is the cause of this exception
+	 */
 	public EmptyException(Throwable t)
 	{
 		super(t);
@@ -46,5 +58,4 @@ public class EmptyException extends Exception
 	{
 		return m_message;
 	}
-
 }

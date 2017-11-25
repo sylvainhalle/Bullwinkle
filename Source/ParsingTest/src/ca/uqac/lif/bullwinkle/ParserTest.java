@@ -2,121 +2,121 @@
   Copyright 2014 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
-  
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-*/
+ */
 package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
-import ca.uqac.lif.util.PackageFileReader;
 
 public class ParserTest
 {
-  BnfParser m_parser;
-  
-  @Before
-  public void setUp() throws Exception
-  {
-    m_parser = new BnfParser();
-  }
+	BnfParser m_parser;
 
-  @Test
-  public void simpleInvalidGrammar()
-  {
-    boolean has_error = false;
-    BnfParser parser = new BnfParser();
-    try
-    {
-      parser.setGrammar("A");
-    }
-    catch (BnfParser.InvalidGrammarException e)
-    {
-      has_error = true;
-    }
-    if (!has_error)
-    {
-      fail("Invalid grammar 'A' should throw an exception when parsed.");
-    }
-  }
+	@Before
+	public void setUp() throws Exception
+	{
+		m_parser = new BnfParser();
+	}
 
-  @Test
-  public void simpleValidGrammar()
-  {
-    boolean has_error = false;
-    BnfParser parser = new BnfParser();
-    try
-    {
-      parser.setGrammar("<S> := a | b;");
-    }
-    catch (BnfParser.InvalidGrammarException e)
-    {
-      has_error = true;
-    }
-    if (has_error)
-    {
-      fail("Valid grammar has thrown an exception when parsed.");
-    }
-  }
+	@Test
+	public void simpleInvalidGrammar()
+	{
+		boolean has_error = false;
+		BnfParser parser = new BnfParser();
+		try
+		{
+			parser.setGrammar("A");
+		}
+		catch (BnfParser.InvalidGrammarException e)
+		{
+			has_error = true;
+		}
+		if (!has_error)
+		{
+			fail("Invalid grammar 'A' should throw an exception when parsed.");
+		}
+	}
 
-  @Test
-  public void simpleValidGrammarFromFile()
-  {
-    boolean has_error = false;
-    BnfParser parser = new BnfParser();
-    String grammar = PackageFileReader.readPackageFile(ParserTest.class, "data/Grammar-1.bnf");
-    try
-    {
-      parser.setGrammar(grammar);
-    } catch (InvalidGrammarException e)
-    {
-      has_error = true;
-      e.printStackTrace();
-    }
-    if (has_error)
-    {
-      fail("Valid grammar has thrown an exception when parsed.");
-    }
-  }
-  
-  @Test
-  public void getAlternativesTest()
-  {
-    boolean has_error = false;
-    BnfParser parser = new BnfParser();
-    try
-    {
-      parser.setGrammar("<S> := <a> | b;\n<a> := c;");
-    }
-    catch (BnfParser.InvalidGrammarException e)
-    {
-      has_error = true;
-    }
-    if (has_error)
-    {
-      fail("Valid grammar has thrown an exception when parsed.");
-    }
-    
-    List<String> alternatives = parser.getAlternatives("<S>");
-    
-    assertTrue(alternatives.get(0).compareTo("<a>") == 0);
-    assertTrue(alternatives.get(1).compareTo("b") == 0);
-  }
+	@Test
+	public void simpleValidGrammar()
+	{
+		boolean has_error = false;
+		BnfParser parser = new BnfParser();
+		try
+		{
+			parser.setGrammar("<S> := a | b;");
+		}
+		catch (BnfParser.InvalidGrammarException e)
+		{
+			has_error = true;
+		}
+		if (has_error)
+		{
+			fail("Valid grammar has thrown an exception when parsed.");
+		}
+	}
+
+	@Test
+	public void simpleValidGrammarFromFile()
+	{
+		boolean has_error = false;
+		BnfParser parser = new BnfParser();
+		Scanner grammar = new Scanner(ParserTest.class.getResourceAsStream("data/Grammar-1.bnf"));
+		try
+		{
+			parser.setGrammar(grammar);
+		} catch (InvalidGrammarException e)
+		{
+			has_error = true;
+			e.printStackTrace();
+		}
+		if (has_error)
+		{
+			fail("Valid grammar has thrown an exception when parsed.");
+		}
+	}
+
+	@Test
+	public void getAlternativesTest()
+	{
+		boolean has_error = false;
+		BnfParser parser = new BnfParser();
+		try
+		{
+			parser.setGrammar("<S> := <a> | b;\n<a> := c;");
+		}
+		catch (BnfParser.InvalidGrammarException e)
+		{
+			has_error = true;
+		}
+		if (has_error)
+		{
+			fail("Valid grammar has thrown an exception when parsed.");
+		}
+
+		List<String> alternatives = parser.getAlternatives("<S>");
+
+		assertTrue(alternatives.get(0).compareTo("<a>") == 0);
+		assertTrue(alternatives.get(1).compareTo("b") == 0);
+	}
 
 }

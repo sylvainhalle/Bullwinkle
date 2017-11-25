@@ -1,5 +1,5 @@
 /*
-  Copyright 2014 Sylvain Hallé
+  Copyright 2014-2017 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
@@ -18,6 +18,8 @@
 package ca.uqac.lif.bullwinkle;
 import static org.junit.Assert.*;
 
+import java.util.Scanner;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +27,6 @@ import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.ParseException;
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
 import ca.uqac.lif.bullwinkle.ParseNode;
-import ca.uqac.lif.util.PackageFileReader;
 
 public class GrammarTests
 {
@@ -43,7 +44,7 @@ public class GrammarTests
 		ParseNode node = parseIt("data/Grammar-0.bnf", "<S>", expression, false, false);
 		checkParseTreeSize(expression, 9, node.getSize());
 	}
-	
+
 	@Test
 	public void testAddCase0() throws ParseException, InvalidRuleException
 	{
@@ -54,7 +55,7 @@ public class GrammarTests
 		ParseNode node = parser.parse(expression);
 		assertNotNull(node);
 	}
-	
+
 	@Test
 	public void testCopy() throws ParseException, InvalidRuleException
 	{
@@ -377,7 +378,8 @@ public class GrammarTests
 		parser.setDebugMode(debug_mode);
 		try
 		{
-			String grammar = PackageFileReader.readPackageFile(GrammarTests.class, filename);
+			Scanner grammar = new Scanner(GrammarTests.class.getResourceAsStream(filename));
+			//String grammar = PackageFileReader.readPackageFile(GrammarTests.class, filename);
 			parser.setGrammar(grammar);
 		}
 		catch (BnfParser.InvalidGrammarException e)
