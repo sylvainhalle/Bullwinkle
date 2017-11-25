@@ -55,11 +55,14 @@ public final class StringUtil
     return concatString.toString();
   }
   
+  /**
+   * Replaces non-breaking spaces (C2 A0) into regular spaces (20)
+   * @param s The string
+   * @return The converted string
+   */
   public static String replaceNoBreakSpaces(String s)
   {
-	  // TODO: take into account strings that may contain non-breaking spaces
-	  // (0xC2 0xA0) instead of normal spaces (0x20)
-	  return s;
+	  return s.replaceAll("\u00c2\u00a0", "\u0020");
   }
 
   /**

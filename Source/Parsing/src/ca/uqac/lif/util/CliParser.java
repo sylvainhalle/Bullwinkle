@@ -57,6 +57,7 @@ public class CliParser
 	 * @return A map from parameter's <em>short</em> names to their values,
 	 *   or <code>null</code> if the parsing failed
 	 */
+	@SuppressWarnings({"squid:S3776"})
 	public ArgumentMap parse(String[] cli)
 	{
 		ArgumentMap parsed = new ArgumentMap();
@@ -94,7 +95,7 @@ public class CliParser
 				else
 				{
 					boolean r_val = handleEndOfArgument(current_argument, current_value, parsed);
-					if (r_val == false)
+					if (!r_val)
 					{
 						// Parsing error
 						return null;

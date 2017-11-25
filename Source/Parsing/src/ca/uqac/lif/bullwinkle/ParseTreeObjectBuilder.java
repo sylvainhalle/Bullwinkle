@@ -55,7 +55,7 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 * traversal of the parse tree.
 	 */
 	protected final Map<String,MethodAnnotation> m_methods;
-	
+
 	/**
 	 * Creates a new object builder
 	 */
@@ -70,7 +70,7 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 * Build an object from a parse tree
 	 * @param tree The parse tree
 	 * @return The object
- 	 * @throws BuildException Generic exception that can be thrown during the
+	 * @throws BuildException Generic exception that can be thrown during the
 	 *   build process
 	 */
 	public final synchronized T build(ParseNode tree) throws BuildException
@@ -143,84 +143,58 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	{
 		String token_name = node.getToken();
 		// Is it a non-terminal symbol?
-		if (token_name.startsWith("<"))
+		if (!token_name.startsWith("<"))
 		{
-			// Is there a stack method that handles this non-terminal?
+			m_stack.push(token_name);
+			return;
+		}
+		// Is there a stack method that handles this non-terminal?
+		try
+		{
 			if (m_methods.containsKey(token_name))
 			{
 				MethodAnnotation ma = m_methods.get(token_name);
-				if (ma.pop)
+				if (!ma.pop)
 				{
-					List<Object> argument_list = new LinkedList<Object>();
-					List<ParseNode> children = node.getChildren();
-					for (int i = children.size() - 1; i >= 0; i--)
+					ma.m.invoke(this, m_stack);
+					return;
+				}
+				List<Object> argument_list = new LinkedList<Object>();
+				List<ParseNode> children = node.getChildren();
+				for (int i = children.size() - 1; i >= 0; i--)
+				{
+					ParseNode child = children.get(i);
+					Object o = m_stack.pop();
+					if (!ma.clean || child.getToken().startsWith("<"))
 					{
-						ParseNode child = children.get(i);
-						Object o = m_stack.pop();
-						if (!ma.clean || child.getToken().startsWith("<"))
-						{
-							argument_list.add(0, o);
-						}
-					}
-					Object[] arguments = argument_list.toArray();
-					try
-					{
-						// Yes, call it
-						// We ignore warning S3878 here; the call to invoke
-						// *requires* the varargs to be put into an array.
-						Object o = ma.m.invoke(this, new Object[]{arguments});
-						if (o != null)
-						{
-							m_stack.push(o);
-						}
-					} 
-					catch (SecurityException e)
-					{
-						throw new VisitException(e);
-					}
-					catch (IllegalAccessException e)
-					{
-						throw new VisitException(e);
-					}
-					catch (IllegalArgumentException e) 
-					{
-						throw new VisitException(e);
-					}
-					catch (InvocationTargetException e) 
-					{
-						throw new VisitException(e);
+						argument_list.add(0, o);
 					}
 				}
-				else
+				Object[] arguments = argument_list.toArray();
+				// We ignore warning S3878 here; the call to invoke
+				// *requires* the varargs to be put into an array.
+				Object o = ma.m.invoke(this, new Object[]{arguments});
+				if (o != null)
 				{
-					try
-					{
-						// Yes, call it
-						ma.m.invoke(this, m_stack);
-					} 
-					catch (SecurityException e)
-					{
-						throw new VisitException(e);
-					}
-					catch (IllegalAccessException e)
-					{
-						throw new VisitException(e);
-					}
-					catch (IllegalArgumentException e) 
-					{
-						throw new VisitException(e);
-					}
-					catch (InvocationTargetException e) 
-					{
-						throw new VisitException(e);
-					}							
-				}
+					m_stack.push(o);
+				}	
 			}
-			// Otherwise, ignore
 		}
-		else
+		catch (SecurityException e)
 		{
-			m_stack.push(token_name);
+			throw new VisitException(e);
+		}
+		catch (IllegalAccessException e)
+		{
+			throw new VisitException(e);
+		}
+		catch (IllegalArgumentException e) 
+		{
+			throw new VisitException(e);
+		}
+		catch (InvocationTargetException e) 
+		{
+			throw new VisitException(e);
 		}
 	}
 
@@ -251,13 +225,13 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 			super(t);
 		}
 	}
-	
+
 	protected static class MethodAnnotation
 	{
 		Method m;
 		boolean pop = false;
 		boolean clean = false;
-		
+
 		public MethodAnnotation(Method m, boolean pop, boolean clean)
 		{
 			this.m = m;

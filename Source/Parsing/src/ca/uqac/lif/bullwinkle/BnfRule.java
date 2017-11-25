@@ -18,6 +18,7 @@
 package ca.uqac.lif.bullwinkle;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,8 +34,13 @@ import ca.uqac.lif.util.EmptyException;
 /**
  * Implementation of a single rule of a BNF grammar
  */
-public class BnfRule
+public class BnfRule implements Serializable
 {
+	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = 579372107761975753L;
+
 	/**
 	 * A list of token strings that for all the possible cases of that rule
 	 */

@@ -47,13 +47,9 @@ public class StringTerminalToken extends TerminalToken
 
 	@Override
 	public boolean matches(final Token tok)
-	{   
-		if (tok == null)
-		{
-			return false;
-		}
+	{
 		// Anything matches a string
-		return true;
+		return tok != null;
 	}
 
 	@Override
