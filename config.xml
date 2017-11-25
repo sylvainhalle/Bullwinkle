@@ -40,7 +40,6 @@
     <filename>bullwinkle.jar</filename>
     <withdoc>true</withdoc>
     <withsrc>false</withsrc>
-    <excludepattern>ca/uqac/lif/bullwinkle/examples/**/*.jar</excludepattern>
   </jar>
   
   <!-- Redefine directories -->

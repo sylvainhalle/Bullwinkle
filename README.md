@@ -1,5 +1,5 @@
-Bullwinkle: a runtime parser
-============================
+Bullwinkle: a runtime parser for BNF grammars
+=============================================
 
 [![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
 [![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/sylvainhalle:Bullwinkle/coverage.svg?style=flat-square)]()
@@ -12,15 +12,17 @@ ANTLR, Yacc or Bison take a grammar as input and produce code for a parser
 specific to that grammar, which must then be compiled to be used. On the
 contrary, Bullwinkle reads the definition of the grammar (expressed in
 [Backus-Naur Form](http://en.wikipedia.org/wiki/Backus-Naur_form) (BNF)) at
-runtime and can readily parse strings on the spot.
+*runtime* and can parse strings on the spot.
 
 Other unique features of Bullwinkle include:
 
 - Instances of the Bullwinkle parser can be safely serialized with
   [Azrael](https://github.com/sylvainhalle/Azrael).
-- Partial parsing, a special mode where input strings can
+- [Partial parsing](#partial), a special mode where input strings can
   contain non-terminal symbols from the grammar. A string can hence be
   partially verified for syntactical correctness.
+- [Object builders](#builder), a class of objects that makes it easy to
+  traverse a parse tree and build an output object recursively.
 
 Table of Contents                                                    {#toc}
 -----------------
@@ -30,6 +32,7 @@ Table of Contents                                                    {#toc}
 - [Defining a grammar](#grammar)
 - [Using the parse tree](#tree)
 - [Partial parsing](#partial)
+- [Using object builders](#builder)
 - [Command-line usage](#cli)
 - [About the author](#about)
 
@@ -81,12 +84,8 @@ First make sure you have the following installed:
 
 - The Java Development Kit (JDK) to compile. Bullwinkle was developed and
   tested on version 6 of the JDK, but it is probably safe to use any
-  later version. Moreover, it most probably compiles on the JDK 5, although
-  this was not tested.
+  later version.
 - [Ant](http://ant.apache.org) to automate the compilation and build process
-
-As of version 1.1.8, Bullwinkle no longer requires any other library (i.e.
-no JAR dependencies).
 
 Download the sources for Bullwinkle from
 [GitHub](http://github.com/sylvainhalle/Bullwinkle) or clone the repository
@@ -111,8 +110,9 @@ itself).
 Defining a grammar                                               {#grammar}
 ------------------
 
-The grammar must be [LL(k)](http://en.wikipedia.org/wiki/LL_parser).
-Roughly, this means that it must not contain a production rules of the form
+For Bullwinkle to work, the grammar must be
+[LL(k)](http://en.wikipedia.org/wiki/LL_parser). Roughly, this means that
+it must not contain a production rules of the form
 `<S> := <S> something`. Trying to parse such a rule by recursive descent
 causes an infinite recursion (which will throw a ParseException when the
 maximum recursion depth is reached).
@@ -198,6 +198,9 @@ string does not parse). This parse tree can then be explored in two ways:
    example of a visitor (class `GraphvizVisitor`), which produces a DOT file
    from the contents of the parse tree.
 
+If your goal is to create some object out of the parse tree, consider using
+the [object builder](#builder) class to simplify your work.
+
 Partial parsing                                                  {#partial}
 ---------------
 
@@ -215,7 +218,7 @@ is not a terminal symbol, but rather the non-terminal symbol &lt;B&gt;.
 
 One particular use of partial parsing is the step-by-step verification of
 partially formed strings. In the previous example, one might create
-a input string by first writing
+an input string by first writing
 
     <A> <B> c
 
@@ -229,6 +232,112 @@ Again, one can check that this string is still syntactically valid. Non-terminal
 
 To enable partial parsing, use the method `setPartialParsing()` of class
 `BnfParser`.
+
+Using object builders                                            {#builder}
+---------------------
+
+Many times, the goal of parsing an expression is to create some "object"
+out of the resulting parse tree. The `ParseTreeObjectBuilder` class in
+Bullwinkle simplifies the task of creating such objects.
+
+Suppose for example that you created
+objects to represent simple arithmetical expressions: there is one class
+for `Add`, another for `Sub`(traction), another for plain `Num`bers, etc.
+(See the `Examples` folder in the sources, where such classes are indeed
+shown in `ArithExp.java`.) You can create and nest such objects
+programmatically, for example to represent 10+(6-4):
+
+    ArithExp a = new Add(new Num(10), new Sub(new Num(6), new Num(4));
+
+Suppose you created a simple grammar to represent such expressions in
+"forward" Polish notation, such as this:
+
+    <exp> := <add> | <sub> | <num>;
+    <add> := + <exp> <exp>;
+    <sub> := - <exp> <exp>;
+    <num> := ^[0-9]+;
+
+Using such a grammar, the previous expression would be written as
+`+ 10 - 6 4`. You would like to be able to instantiate `ArithExp` objects
+from expressions following this syntax.
+
+The `ParseTreeObjectBuilder` makes such a task simple. It performs a
+*postfix* traversal of a parse tree and maintains a stack of arbitrary
+objects. When visiting a parse node that corresponds to a non-terminal
+token, such as &lt;foo&gt;, it looks for a method that handles this symbol.
+This is done by adding an annotation `@Builds` to the method, as follows:
+
+    @Builds(rule="<foo>")
+    public void myMethod(Stack<Object> stack) { ...
+
+The object builder calls this method, and passes it the current contents
+of the object stack. It is up to this method to pop and push objects
+from that stack, in order to recursively create the desired object at the
+end. For example, in the grammar above, the code to handle token &lt;add&gt;
+would look like:
+
+    @Builds(rule="<add>")
+    public void handleAdd(Stack<Object> stack) {
+      ArithExp e2 = (ArithExp) stack.pop();
+      ArithExp e1 = (ArithExp) stack.pop();
+      stack.pop(); // To remove the "+" symbol
+      stack.push(new Add(e1, e2));
+    }
+
+Since the builder traverses the tree in a postfix fashion, when a parse
+node for &lt;add&gt; is visited, the object stack should already contain
+the `ArithExp` objects created from its two operands. As a rule, each method
+should pop from the stack as many objects as there are tokens in the corresponding case in the grammar. For example, the rule for &lt;add&gt;
+has three tokens, and so the method handling &lt;add&gt; pops three objects.
+
+The full example for this parser can be found in `BuildExampleStack` in the
+`Examples` project.
+
+As one can see, it is possible to create object builders that read
+expressions in just a few lines of code. This can be even further simplified
+using the `pop` and `clean` parameters. Instead of popping objects manually,
+and pushing a new object back onto the stack, one can use the `pop` parameter
+to ask for the object builder to already pop the appropriate number of
+objects from the stack. The method for &lt;add&gt; would then become:
+
+    @Builds(rule="<add>", pop=true)
+    public ArithExp handleAdd(Object ... parts) {
+      return new Add((ArithExp) parts[1], (ArithExp) parts[2]);
+    }
+
+Notice how this time, the method's arguments is an array of objects; in that
+case, the array has three elements, corresponding to the three tokens of the
+&lt;add&gt; rule. The first is the "+" symbol, and the other two are the
+`ArithExp` objects created from the two sub-expressions. Similarly, instead of
+pushing an object to the stack, the method simply returns it; the object builder
+takes care of pushing it. By not accessing the contents of the stack directly,
+it is harder to make mistakes.
+
+As a further refinement, the `clean` option can remove from the arguments all
+the objects that match terminal symbols in the corresponding rule. Consider a
+grammar for infix arithmetical expressions, where parentheses are optional
+around single numbers. This grammar would look like:
+
+    <exp> := <add> ...
+    <add> := <num> + <num> | ( <exp> ) + <num> | <num> + ( <exp> ) ...
+
+This time, the rules for each operator must take into account whether any of
+their operands is a number or a compound expression. The code handling
+&lt;add&gt; would be more complex, as one would have to carefully pop an
+element, check if it is a parenthesis, and if so, take care of popping the
+matching parenthesis later on, etc. However, one can see that each case of
+the rule has exactly two non-terminal tokens, and that both are `ArithExp`.
+Using the `clean` option in conjunction with `pop`, the code for handling
+&lt;add&gt; becomes identical as before:
+
+    @Builds(rule="<add>", pop=true, clean=true)
+    public ArithExp handleAdd(Object ... parts) {
+      return new Add((ArithExp) parts[0], (ArithExp) parts[1]);
+    }
+
+The array indices become 0 and 1, since only the two `ArithExp` objects remain
+as the arguments. Again, a full example can be found in the `Examples` folder,
+inside `BuildExamplePop.java`.
 
 Command-line usage                                                   {#cli}
 ------------------

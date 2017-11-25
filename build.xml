@@ -87,9 +87,6 @@
   
   <!-- Generate a jar with the dependencies -->
   <property name="build.jar.withdeps" value="true"/>
-
-  <!-- Exclude some folders from the jar -->
-  <property name="build.jar.excludepattern" value=""/>
   
   <!-- Base name of the jar to produce (used by the "zip" target) -->
   <basename property="build.jar.basename" file="${build.jar.filename}" suffix=".jar"/>
@@ -237,7 +234,7 @@
       <tstamp>
          <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
       </tstamp>
-      <jar destfile="${build.jar.filename}" filesetmanifest="skip" excludes="${build.jar.excludepattern}">
+      <jar destfile="${build.jar.filename}" filesetmanifest="skip">
 	  <manifest>
 	      <attribute name="Main-Class" value="${build.mainclass}"/>
 	      <attribute name="Class-Path" value="."/>
