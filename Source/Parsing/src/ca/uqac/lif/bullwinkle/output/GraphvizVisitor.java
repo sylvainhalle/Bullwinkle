@@ -113,12 +113,7 @@ public class GraphvizVisitor implements OutputFormatVisitor
 		{
 			return null;
 		}
-		if (input.contains("\""))
-		{
-			System.out.println("f");
-		}
-		String out = input.replaceAll("\\\"", "&quot;");
-		return out;
+		return input.replaceAll("\\\"", "&quot;");
 	}
 
 }

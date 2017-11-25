@@ -1,5 +1,5 @@
 /*
-  Copyright 2014-2016 Sylvain Hallé
+  Copyright 2014-2017 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
@@ -17,6 +17,7 @@
  */
 package ca.uqac.lif.bullwinkle;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -26,8 +27,16 @@ import java.util.regex.Pattern;
  * Utility class for navigating a parse tree using XPath-like expressions.
  * @author Sylvain Hallé
  */
-public final class NodePath
+public final class NodePath implements Serializable
 {
+	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * The pattern used to parse paths
+	 */
 	protected static transient Pattern s_pattern = Pattern.compile("(.+)(\\[(\\d+)\\]){0,1}");
 	
 	private NodePath()

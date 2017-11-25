@@ -20,6 +20,11 @@ package ca.uqac.lif.bullwinkle;
 public class NonTerminalToken extends Token
 {
 	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = -6214246017840941018L;
+
+	/**
 	 * The left-hand side symbol used to mark a non-terminal token
 	 * in a grammar rule
 	 */
@@ -52,10 +57,4 @@ public class NonTerminalToken extends Token
 	{
 		return 0;
 	}
-
-	/*@Override
-  public String toString()
-  {
-    return s_leftSymbol + getName() + s_rightSymbol;
-  }*/
 }

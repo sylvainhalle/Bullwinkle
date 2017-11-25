@@ -17,7 +17,7 @@
  */
 
 import java.io.IOException;
-import java.util.Stack;
+import java.util.Deque;
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
@@ -54,7 +54,7 @@ public class BuildExampleStack
 	public static class MyBuilder extends ParseTreeObjectBuilder<ArithExp>
 	{
 		@Builds(rule = "<add>")
-		public void buildAdd(Stack<Object> stack)
+		public void buildAdd(Deque<Object> stack)
 		{
 			ArithExp e2 = (ArithExp) stack.pop();
 			ArithExp e1 = (ArithExp) stack.pop();
@@ -63,7 +63,7 @@ public class BuildExampleStack
 		}
 
 		@Builds(rule = "<sub>")
-		public void buildSub(Stack<Object> stack)
+		public void buildSub(Deque<Object> stack)
 		{
 			ArithExp e2 = (ArithExp) stack.pop();
 			ArithExp e1 = (ArithExp) stack.pop();
@@ -72,7 +72,7 @@ public class BuildExampleStack
 		}
 
 		@Builds(rule = "<num>")
-		public void buildNum(Stack<Object> stack)
+		public void buildNum(Deque<Object> stack)
 		{
 			String s = (String) stack.pop(); // symbol
 			stack.push(new ArithExp.Num(Integer.parseInt(s)));

@@ -17,8 +17,8 @@
  */
 package ca.uqac.lif.bullwinkle;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,8 +40,13 @@ import ca.uqac.lif.util.MutableString;
  * 
  * @author Sylvain Hallé
  */
-public class BnfParser
+public class BnfParser implements Serializable
 {
+	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The list of parsing rules
 	 */
@@ -68,7 +73,7 @@ public class BnfParser
 	 * This is an upper bound that prevents the parser from entering
 	 * an infinite recursion.
 	 */
-	public static transient int s_maxRecursionSteps = 50;
+	private transient int m_maxRecursionSteps = 50;
 
 	/**
 	 * Sets whether partial parsing is enabled
@@ -101,10 +106,9 @@ public class BnfParser
 	 * Creates a new parser by reading its grammar from the contents of
 	 * some input stream
 	 * @param is The input stream to read from
-	 * @throws IOException Thrown if the file cannot be read
 	 * @throws InvalidGrammarException Thrown if the grammar to read is invalid
 	 */
-	public BnfParser(InputStream is) throws IOException, InvalidGrammarException
+	public BnfParser(InputStream is) throws InvalidGrammarException
 	{
 		this();
 		Scanner s = new Scanner(is);
@@ -144,11 +148,11 @@ public class BnfParser
 	 * This setting is there to avoid infinite loops in the parsing
 	 * @param steps The maximum number of recursion steps. Must be positive.
 	 */
-	public static void setMaxRecursionSteps(int steps)
+	public void setMaxRecursionSteps(int steps)
 	{
 		if (steps > 0)
 		{
-			s_maxRecursionSteps = steps;
+			m_maxRecursionSteps = steps;
 		}
 	}
 
@@ -329,7 +333,7 @@ public class BnfParser
 	 * @param rule_name The rule you need the alternatives
 	 * @return a list of strings representing the alternatives
 	 */
-	public List<String> getAlternatives(String rule_name)
+	public /*@NotNull*/ List<String> getAlternatives(String rule_name)
 	{
 		for (BnfRule rule : m_rules)
 	    {
@@ -344,7 +348,7 @@ public class BnfParser
 	        return alternatives;
 	      }
 	    }
-	    return null;
+	    return new ArrayList<String>(0);
 	}
 
 	/**
@@ -451,7 +455,7 @@ public class BnfParser
 
 	private /*@Nullable*/ ParseNode parse(final BnfRule rule, MutableString input, int level) throws ParseException
 	{
-		if (level > s_maxRecursionSteps)
+		if (level > m_maxRecursionSteps)
 		{
 			throw new ParseException("Maximum number of recursion steps reached. If the input string is indeed valid, try increasing the limit.");
 		}
@@ -627,7 +631,7 @@ public class BnfParser
 			for (int i = 0; i < level; i++)
 				out.append("  ");
 			out.append(message);
-			m_debugOut.log(Level.INFO, out.toString());
+			m_debugOut.log(Level.INFO, "{0}", out.toString());
 		}
 	}
 

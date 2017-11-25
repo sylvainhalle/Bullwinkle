@@ -23,6 +23,14 @@ package ca.uqac.lif.bullwinkle;
  */
 public class TerminalToken extends Token
 {
+	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = -5734730721366371245L;
+
+	/**
+	 * Creates a new empty terminal token
+	 */
 	protected TerminalToken()
 	{
 		super();

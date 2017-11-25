@@ -26,7 +26,7 @@ public class EmptyException extends Exception
 	/**
 	 * The message carried by this exception
 	 */
-	protected String m_message;
+	protected final String m_message;
 
 	/**
 	 * Dummy UID

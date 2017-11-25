@@ -115,7 +115,7 @@ public class CliParser
 					if (current_argument != null && current_argument.m_valueName == null)
 					{
 						boolean r_val = handleEndOfArgument(current_argument, current_value, parsed);
-						if (r_val == false)
+						if (!r_val)
 						{
 							// Parsing error
 							return null;
@@ -127,7 +127,7 @@ public class CliParser
 				else
 				{
 					boolean r_val = handleEndOfArgument(current_argument, current_value, parsed);
-					if (r_val == false)
+					if (!r_val)
 					{
 						// Parsing error
 						return null;
@@ -138,7 +138,7 @@ public class CliParser
 			}
 		}
 		boolean r_val = handleEndOfArgument(current_argument, current_value, parsed);
-		if (r_val == false)
+		if (!r_val)
 		{
 			// Parsing error
 			return null;

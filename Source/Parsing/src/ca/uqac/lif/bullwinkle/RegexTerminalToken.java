@@ -29,6 +29,11 @@ import java.util.regex.Pattern;
 public class RegexTerminalToken extends TerminalToken
 {
 	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = -2430670680001437707L;
+	
+	/**
 	 * The pattern used to perform the matching
 	 */
 	private transient Pattern m_pattern;
@@ -104,6 +109,12 @@ public class RegexTerminalToken extends TerminalToken
 			}
 		}
 		return out;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return m_pattern.toString().hashCode();
 	}
 	
 	@Override

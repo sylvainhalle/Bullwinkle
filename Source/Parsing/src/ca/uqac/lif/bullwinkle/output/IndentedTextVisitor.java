@@ -60,7 +60,7 @@ public class IndentedTextVisitor implements OutputFormatVisitor
 	/**
 	 * The amount of spaces to apply to each successive indent level
 	 */
-	private static final transient String s_indent = " ";
+	private static final String s_indent = " ";
 
 	/**
 	 * Creates a new IndentedTextVisitor

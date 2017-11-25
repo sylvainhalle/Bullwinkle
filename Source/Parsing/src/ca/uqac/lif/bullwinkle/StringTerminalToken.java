@@ -24,6 +24,11 @@ package ca.uqac.lif.bullwinkle;
 public class StringTerminalToken extends TerminalToken
 {
 	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = -8815329986927875183L;
+
+	/**
 	 * Creates a new empty string terminal token
 	 */
 	protected StringTerminalToken()

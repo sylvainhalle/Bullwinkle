@@ -128,4 +128,10 @@ public class TokenString extends LinkedList<Token>
 		}
 		return true;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return size();
+	}
 }

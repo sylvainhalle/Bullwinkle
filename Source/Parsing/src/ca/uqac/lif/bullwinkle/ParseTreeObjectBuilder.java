@@ -19,11 +19,12 @@ package ca.uqac.lif.bullwinkle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import ca.uqac.lif.util.EmptyException;
 
@@ -40,20 +41,20 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 * by the various methods that are called when visiting a parse
 	 * tree.
 	 */
-	protected transient Stack<Object> m_stack;
+	protected Deque<Object> m_stack;
 
 	/**
 	 * The object to be built and returned at the end of the visit of
 	 * the parse tree.
 	 */
-	protected transient T m_builtObject = null;
+	protected T m_builtObject = null;
 
 	/**
 	 * A map that associates non-terminal symbols of the grammar with
 	 * specific methods to be called when visiting that symbol in the
 	 * traversal of the parse tree.
 	 */
-	protected final transient Map<String,MethodAnnotation> m_methods;
+	protected final Map<String,MethodAnnotation> m_methods;
 	
 	/**
 	 * Creates a new object builder
@@ -72,13 +73,13 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
  	 * @throws BuildException Generic exception that can be thrown during the
 	 *   build process
 	 */
-	public synchronized final T build(ParseNode tree) throws BuildException
+	public final synchronized T build(ParseNode tree) throws BuildException
 	{
 		if (tree == null)
 		{
 			throw new BuildException("The input tree is null");
 		}
-		m_stack = new Stack<Object>();
+		m_stack = new ArrayDeque<Object>();
 		try
 		{
 			preVisit();
@@ -108,7 +109,7 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 * @return The object that should be returned to the user
 	 */
 	@SuppressWarnings("unchecked")
-	protected synchronized T postVisit(Stack<Object> stack)
+	protected synchronized T postVisit(Deque<Object> stack)
 	{
 		if (stack.isEmpty())
 		{
@@ -137,6 +138,7 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3878"})
 	public synchronized void visit(ParseNode node) throws VisitException
 	{
 		String token_name = node.getToken();
@@ -164,6 +166,8 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 					try
 					{
 						// Yes, call it
+						// We ignore warning S3878 here; the call to invoke
+						// *requires* the varargs to be put into an array.
 						Object o = ma.m.invoke(this, new Object[]{arguments});
 						if (o != null)
 						{

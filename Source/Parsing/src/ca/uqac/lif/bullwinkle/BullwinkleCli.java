@@ -44,7 +44,7 @@ import ca.uqac.lif.util.CliParser.ArgumentMap;
  */
 public class BullwinkleCli
 {
-	/**
+	/*
 	 * Return codes
 	 */
 	public static final int ERR_OK = 0;
@@ -54,6 +54,14 @@ public class BullwinkleCli
 	public static final int ERR_RUNTIME = 6;
 	public static final int ERR_GRAMMAR = 7;
 	public static final int ERR_INPUT = 9;
+	
+	/*
+	 * Command line argument constants
+	 */
+	private static final String P_FORMAT = "format";
+	private static final String P_HELP = "help";
+	private static final String P_VERBOSITY = "verbosity";
+	private static final String P_VERSION = "version";
 
 	/**
 	 * Build string to identify versions
@@ -69,12 +77,14 @@ public class BullwinkleCli
 	 * Main loop
 	 * @param args The command-line arguments
 	 */
-	@SuppressWarnings({"squid:S106", "squid:S1166"})
+	@SuppressWarnings({"squid:S106", "squid:S1148", "squid:S1166", "squid:S3776"})
 	public static void main(String[] args)
 	{
 		// Setup parameters
 		int verbosity = 1;
-		String output_format = "xml", grammar_filename = null, filename_to_parse = null;
+		String output_format = "xml";
+		String grammar_filename = null;
+		String filename_to_parse = null;
 
 		// Parse command line arguments
 		CliParser cli_parser = setupOptions();
@@ -86,28 +96,28 @@ public class BullwinkleCli
 			System.exit(ERR_ARGUMENTS);
 		}
 		assert c_line != null;
-		if (c_line.hasOption("verbosity"))
+		if (c_line.hasOption(P_VERBOSITY))
 		{
-			verbosity = Integer.parseInt(c_line.getOptionValue("verbosity"));
+			verbosity = Integer.parseInt(c_line.getOptionValue(P_VERBOSITY));
 		}
 		if (verbosity > 0)
 		{
 			showHeader();
 		}
-		if (c_line.hasOption("version"))
+		if (c_line.hasOption(P_VERSION))
 		{
-			System.err.println("(C) 2014-2016 Sylvain Hallé et al., Université du Québec à Chicoutimi");
+			System.err.println("(C) 2014-2017 Sylvain Hallé et al., Université du Québec à Chicoutimi");
 			System.err.println("This program comes with ABSOLUTELY NO WARRANTY.");
 			System.err.println("This is a free software, and you are welcome to redistribute it");
 			System.err.println("under certain conditions. See the file LICENSE-2.0 for details.\n");
 			System.exit(ERR_OK);
 		}
-		if (c_line.hasOption("help"))
+		if (c_line.hasOption(P_HELP))
 		{
 			showUsage(cli_parser);
 			System.exit(ERR_OK);
 		}
-		if (c_line.hasOption("format"))
+		if (c_line.hasOption(P_FORMAT))
 		{
 			output_format = c_line.getOptionValue("f");
 		}
@@ -243,19 +253,19 @@ public class BullwinkleCli
 		CliParser cli_parser = new CliParser();
 		cli_parser.addArgument(new CliParser.Argument()
 		.withShortName("h")
-		.withLongName("help")
+		.withLongName(P_HELP)
 		.withDescription("Display command line usage"));
 		cli_parser.addArgument(new CliParser.Argument()
 		.withShortName("f")
-		.withLongName("format")
+		.withLongName(P_FORMAT)
 		.withArgument("x")
 		.withDescription("Output parse tree in format x (dot, xml, txt or json). Default: xml"));
 		cli_parser.addArgument(new CliParser.Argument()
-		.withLongName("verbosity")
+		.withLongName(P_VERBOSITY)
 		.withArgument("x")
 		.withDescription("Verbose messages with level x"));
 		cli_parser.addArgument(new CliParser.Argument()
-		.withLongName("version")
+		.withLongName(P_VERSION)
 		.withDescription("Show version number"));
 		return cli_parser;
 	}

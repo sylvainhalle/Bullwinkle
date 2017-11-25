@@ -24,6 +24,11 @@ package ca.uqac.lif.bullwinkle;
 public class EpsilonTerminalToken extends TerminalToken
 {
 	/**
+	 * Dummy UID
+	 */
+	private static final long serialVersionUID = -7191896043358186569L;
+	
+	/**
 	 * A single static instance of this object
 	 */
 	public static final transient EpsilonTerminalToken instance = new EpsilonTerminalToken();
@@ -36,11 +41,7 @@ public class EpsilonTerminalToken extends TerminalToken
 	@Override
 	public boolean matches(Token tok)
 	{
-		if (tok instanceof EpsilonTerminalToken)
-		{
-			return true;
-		}
-		return false;
+		return tok instanceof EpsilonTerminalToken;
 	}
 
 	@Override
