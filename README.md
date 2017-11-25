@@ -2,7 +2,7 @@ Bullwinkle: a runtime parser for BNF grammars
 =============================================
 
 [![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
-[![SonarQube Coverage](https://img.shields.io/sonar/http/sonarqube.com/sylvainhalle:Bullwinkle/coverage.svg?style=flat-square)]()
+[![SonarQube Coverage](https://sonarcloud.io/api/badges/measure?key=sylvainhalle%3Abullwinkle&metric=coverage)]()
 
 Bullwinkle is a parser for LL(k) languages that operates through recursive descent
 with backtracking.
