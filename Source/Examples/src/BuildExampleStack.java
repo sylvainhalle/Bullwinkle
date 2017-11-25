@@ -15,7 +15,6 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package ca.uqac.lif.bullwinkle.examples;
 
 import java.io.IOException;
 import java.util.Stack;
@@ -28,14 +27,27 @@ import ca.uqac.lif.bullwinkle.ParseNode;
 import ca.uqac.lif.bullwinkle.ParseTreeObjectBuilder;
 import ca.uqac.lif.bullwinkle.ParseTreeObjectBuilder.BuildException;
 
+/**
+ * In this example, we show how the <tt>@Builds</tt> annotation can be used
+ * to identify methods that handle specific non-terminal symbols in a
+ * grammar.
+ */
 public class BuildExampleStack 
 {
 	public static void main(String[] args) throws InvalidGrammarException, IOException, ParseException, BuildException
 	{
+		/* We first read a grammar and parse a simple expression */
 		BnfParser parser = new BnfParser(BuildExampleStack.class.getResourceAsStream("PN-Math.bnf"));
 		ParseNode tree = parser.parse("+ 10 - 3 4");
+		
+		/* We then create a builder, and ask it to create an ArithExp 
+		 * object from the expression */
 		MyBuilder builder = new MyBuilder();
 		ArithExp exp = builder.build(tree);
+		
+		/* Just to show that it worked, we ask the resulting object to print
+		 * itself. Notice how the way ArithExp objects print themselves is
+		 * different from the syntax that was used to create them. */
 		System.out.println(exp);
 	}
 

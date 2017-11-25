@@ -72,6 +72,10 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 */
 	public synchronized final T build(ParseNode tree) throws BuildException
 	{
+		if (tree == null)
+		{
+			throw new BuildException("The input tree is null");
+		}
 		m_stack = new Stack<Object>();
 		try
 		{

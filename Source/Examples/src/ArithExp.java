@@ -15,16 +15,19 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package ca.uqac.lif.bullwinkle.examples;
 
 /**
  * A simple class (and descendants) to represent arithmetical
- * expressions. These classes are used by {@link BuildExampleStack} to
- * illustrate the use of the {@link ParseTreeObjectBuilder}.
+ * expressions. These classes are used by {@link BuildExampleStack} and
+ * {@lik BuildExamplePop} to illustrate the use of the
+ * {@link ParseTreeObjectBuilder}.
  * @author Sylvain Hallé
  */
 public abstract class ArithExp
 {
+	/**
+	 * Object that represents an integer
+	 */
 	public static class Num extends ArithExp
 	{
 		int n;
@@ -41,6 +44,10 @@ public abstract class ArithExp
 		}
 	}
 
+	/**
+	 * Generic class that represents binary operators, with a left and a right
+	 * operand
+	 */
 	public static abstract class BinaryExp extends ArithExp
 	{
 		ArithExp left;
@@ -61,6 +68,9 @@ public abstract class ArithExp
 		}
 	}
 
+	/**
+	 * Addition
+	 */
 	public static class Add extends BinaryExp
 	{
 		public Add(ArithExp left, ArithExp right) 
@@ -69,11 +79,36 @@ public abstract class ArithExp
 		}
 	}
 
+	/**
+	 * Subtraction
+	 */
 	public static class Sub extends BinaryExp
 	{
 		public Sub(ArithExp left, ArithExp right) 
 		{
 			super(left, right, "-");
 		}
-	}		
+	}
+
+	/**
+	 * Multiplication
+	 */
+	public static class Mul extends BinaryExp
+	{
+		public Mul(ArithExp left, ArithExp right) 
+		{
+			super(left, right, "×");
+		}
+	}
+
+	/**
+	 * Division
+	 */
+	public static class Div extends BinaryExp
+	{
+		public Div(ArithExp left, ArithExp right) 
+		{
+			super(left, right, "÷");
+		}
+	}
 }

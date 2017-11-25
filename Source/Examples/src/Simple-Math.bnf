@@ -3,10 +3,10 @@
 # ---------------------------------------------
 
 <exp> := <add> | <sub> | <mul> | <div> | - <exp> | <num>;
-<add> := <num> + <num> | <num> + ( <exp> ) | ( <exp> ) + <num>  | ( <exp> + <exp> );
-<sub> := <num> - <num> | <num> - ( <exp> ) | ( <exp> ) - <num>  | ( <exp> - <exp> );
-<mul> := <num> × <num> | <num> × ( <exp> ) | ( <exp> ) × <num>  | ( <exp> × <exp> );
-<div> := <num> ÷ <num> | <num> ÷ ( <exp> ) | ( <exp> ) ÷ <num>  | ( <exp> ÷ <exp> );
+<add> := <num> + <num> | <num> + ( <exp> ) | ( <exp> ) + <num>  | ( <exp> ) + ( <exp> );
+<sub> := <num> - <num> | <num> - ( <exp> ) | ( <exp> ) - <num>  | ( <exp> ) - ( <exp> );
+<mul> := <num> × <num> | <num> × ( <exp> ) | ( <exp> ) × <num>  | ( <exp> ) × ( <exp> );
+<div> := <num> ÷ <num> | <num> ÷ ( <exp> ) | ( <exp> ) ÷ <num>  | ( <exp> ) ÷ ( <exp> );
 
 # This last declaration defines the non-terminal symbol num as any
 # sequence of symbols matching the regular expression enclosed between

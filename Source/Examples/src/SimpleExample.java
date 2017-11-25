@@ -15,23 +15,22 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package ca.uqac.lif.bullwinkle.examples;
+
 
 import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.ParseNode;
 import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
 
-public class ShowParseTree
+public class SimpleExample
 {
 	public static void main(String[] args)
 	{
-		String expression = "G (∀ x ∈ /path/to/pingus : (∀ y ∈ /x/position : ((x = \"0\") → (X (∃ z ∈ /y/abcd : ((z=x) ∨ (z=y)))))))";
 		try
 		{
-			BnfParser parser = new BnfParser(SimpleExample.class.getResourceAsStream("LTL-FO.bnf"));
-			ParseNode node = parser.parse(expression);
+			BnfParser parser = new BnfParser(SimpleExample.class.getResourceAsStream("Simple-Math.bnf"));
+			ParseNode node2 = parser.parse("(10 + (3 - 4))");
 			GraphvizVisitor visitor = new GraphvizVisitor();
-			node.prefixAccept(visitor);
+			node2.prefixAccept(visitor);
 			System.out.println(visitor.toOutputString());
 		}
 		catch (Exception e)
@@ -40,5 +39,4 @@ public class ShowParseTree
 			e.printStackTrace();
 		}
 	}
-
 }
