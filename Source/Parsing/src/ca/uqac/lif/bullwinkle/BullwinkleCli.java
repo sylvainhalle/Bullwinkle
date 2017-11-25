@@ -1,5 +1,5 @@
 /*
-  Copyright 2014-2016 Sylvain Hallé
+  Copyright 2014-2017 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
@@ -18,6 +18,7 @@
 package ca.uqac.lif.bullwinkle;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
+import ca.uqac.lif.bullwinkle.ParseNodeVisitor.VisitException;
 import ca.uqac.lif.bullwinkle.output.GraphvizVisitor;
 import ca.uqac.lif.bullwinkle.output.IndentedTextVisitor;
 import ca.uqac.lif.bullwinkle.output.OutputFormatVisitor;
@@ -32,9 +34,16 @@ import ca.uqac.lif.bullwinkle.output.XmlVisitor;
 import ca.uqac.lif.util.CliParser;
 import ca.uqac.lif.util.CliParser.ArgumentMap;
 
+/**
+ * Parse an expression from the command line. This class provides a
+ * <tt>main()</tt> method that can accept a grammar and an expression from
+ * the command line, and return the resulting parse tree to the standard
+ * output in a variety of formats.
+ * 
+ * @author Sylvain Hallé
+ */
 public class BullwinkleCli
 {
-
 	/**
 	 * Return codes
 	 */
@@ -120,7 +129,7 @@ public class BullwinkleCli
 		BnfParser parser = null;
 		try
 		{
-			parser = new BnfParser(new File(grammar_filename));
+			parser = new BnfParser(new FileInputStream(new File(grammar_filename)));
 		}
 		catch (InvalidGrammarException e)
 		{
@@ -211,9 +220,16 @@ public class BullwinkleCli
 			System.exit(ERR_ARGUMENTS);
 		}
 		assert out_vis != null;
-		p_node.prefixAccept(out_vis);
-		output.print(out_vis.toOutputString());
-
+		try 
+		{
+			p_node.prefixAccept(out_vis);
+			output.print(out_vis.toOutputString());
+		}
+		catch (VisitException e) 
+		{
+			// Terminate with error
+			System.exit(ERR_PARSE);
+		}
 		// Terminate without error
 		System.exit(ERR_OK);
 	}

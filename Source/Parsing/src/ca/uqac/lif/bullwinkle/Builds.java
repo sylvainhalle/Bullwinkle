@@ -15,50 +15,43 @@
   See the License for the specific language governing permissions and
   limitations under the License.
  */
-package ca.uqac.lif.bullwinkle;
 
 /**
- * Terminal token represented by a string.
+ * 
+ */
+package ca.uqac.lif.bullwinkle;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+
+/**
+ * Indicates that a method is attached to a non-terminal symbol in a grammar
  * @author Sylvain Hallé
  */
-public class StringTerminalToken extends TerminalToken
+@Target({ElementType.METHOD})
+@Documented
+public @interface Builds 
 {
 	/**
-	 * Creates a new empty string terminal token
+	 * The name of the non-terminal symbol the method is attached to
+	 * @return The name
 	 */
-	protected StringTerminalToken()
-	{
-		super();
-	}
-
+	String rule();
+	
 	/**
-	 * Creates a new string terminal token
-	 * @param label The string this token should match
+	 * Whether to expand the rule
+	 * @return
 	 */
-	public StringTerminalToken(String label)
-	{
-		super(label);
-	}
-
-	@Override
-	public boolean matches(final Token tok)
-	{   
-		if (tok == null)
-		{
-			return false;
-		}
-		// Anything matches a string
-		return true;
-	}
-
-	@Override
-	public int match(final String s)
-	{   
-		if (s == null)
-		{
-			return 0;
-		}
-		// Our parser 
-		return s.indexOf(" ");
-	}
+	boolean pop() default false;
+	
+	/**
+	 * Whether to prune the arguments from any terminal symbol
+	 * @return
+	 */
+	boolean clean() default false;
 }

@@ -26,7 +26,7 @@
   <name>Bullwinkle</name>
   
   <!-- The project's version number -->
-  <version>1.3.1</version>
+  <version>1.4</version>
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
@@ -40,6 +40,7 @@
     <filename>bullwinkle.jar</filename>
     <withdoc>true</withdoc>
     <withsrc>false</withsrc>
+    <excludepattern>ca/uqac/lif/bullwinkle/examples/**/*.jar</excludepattern>
   </jar>
   
   <!-- Redefine directories -->

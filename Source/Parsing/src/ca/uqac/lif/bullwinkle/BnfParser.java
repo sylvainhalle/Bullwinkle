@@ -1,5 +1,5 @@
 /*
-  Copyright 2014-2016 Sylvain Hallé
+  Copyright 2014-2017 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
@@ -17,9 +17,8 @@
  */
 package ca.uqac.lif.bullwinkle;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,10 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
 import ca.uqac.lif.util.EmptyException;
-import ca.uqac.lif.util.FileReadWrite;
 import ca.uqac.lif.util.MutableString;
 
 /**
@@ -60,7 +60,7 @@ public class BnfParser
 	/**
 	 * Where debug info should be printed
 	 */
-	private transient PrintStream m_debugOut = System.err; 
+	private transient Logger m_debugOut = Logger.getAnonymousLogger(); 
 
 	/**
 	 * Maximum number of recursion steps when parsing a string.
@@ -99,16 +99,16 @@ public class BnfParser
 
 	/**
 	 * Creates a new parser by reading its grammar from the contents of
-	 * some file
-	 * @param f The file to read from
+	 * some input stream
+	 * @param is The input stream to read from
 	 * @throws IOException Thrown if the file cannot be read
 	 * @throws InvalidGrammarException Thrown if the grammar to read is invalid
 	 */
-	public BnfParser(File f) throws IOException, InvalidGrammarException
+	public BnfParser(InputStream is) throws IOException, InvalidGrammarException
 	{
 		this();
-		String contents = FileReadWrite.readFile(f);
-		setGrammar(contents);
+		Scanner s = new Scanner(is);
+		setGrammar(s);
 	}
 
 	/**
@@ -166,9 +166,9 @@ public class BnfParser
 	 * Sets the parser into "debug mode". This will print information messages
 	 * about the status of the parsing in some print stream.
 	 * @param b Set to <code>true</code> to enable debug mode
-	 * @param out The print stream where debug information will be printed
+	 * @param out A logger to log the information
 	 */
-	public void setDebugMode(boolean b, PrintStream out)
+	public void setDebugMode(boolean b, Logger out)
 	{
 		m_debugMode = b;
 		m_debugOut = out;
@@ -239,6 +239,19 @@ public class BnfParser
 		List<BnfRule> rules = getRules(grammar);
 		addRules(rules);
 	}
+	
+	/**
+	 * Sets the parser's grammar from a scanner
+	 * @param scanner A scanner containing the grammar to be used
+	 * @throws InvalidGrammarException Thrown if the grammar string is
+	 *   invalid
+	 */
+	public void setGrammar(Scanner scanner) throws InvalidGrammarException
+	{
+		List<BnfRule> rules = getRules(scanner);
+		addRules(rules);
+	}
+
 
 	/**
 	 * Converts a string into a list of grammar rules
@@ -249,12 +262,25 @@ public class BnfParser
 	 */
 	public static List<BnfRule> getRules(String grammar) throws InvalidGrammarException
 	{
-		List<BnfRule> rules = new LinkedList<BnfRule>();
 		if (grammar == null)
 		{
 			throw new InvalidGrammarException("Null argument given");
 		}
-		Scanner scanner = new Scanner(grammar);
+		Scanner s = new Scanner(grammar);
+		return getRules(s);
+	}
+
+	/**
+	 * Converts a string source into a list of grammar rules
+	 * @param scanner A scanner open on a string containing the
+	 *  grammar to be used
+	 * @return A list of grammar rules
+	 * @throws InvalidGrammarException Thrown if the grammar string is
+	 *   invalid
+	 */
+	public static List<BnfRule> getRules(Scanner scanner) throws InvalidGrammarException
+	{
+		List<BnfRule> rules = new LinkedList<BnfRule>();
 		String current_rule = "";
 		while (scanner.hasNextLine())
 		{
@@ -600,7 +626,7 @@ public class BnfParser
 			for (int i = 0; i < level; i++)
 				out.append("  ");
 			out.append(message);
-			m_debugOut.println(out);
+			m_debugOut.log(Level.INFO, out.toString());
 		}
 	}
 

@@ -20,6 +20,8 @@ package ca.uqac.lif.bullwinkle;
 import java.util.LinkedList;
 import java.util.List;
 
+import ca.uqac.lif.bullwinkle.ParseNodeVisitor.VisitException;
+
 public class ParseNode
 {
   private LinkedList<ParseNode> m_children = null;
@@ -111,7 +113,7 @@ public class ParseNode
    * Postfix traversal of the parse tree by a visitor
    * @param visitor The visitor
    */
-  public void postfixAccept(ParseNodeVisitor visitor)
+  public void postfixAccept(ParseNodeVisitor visitor) throws VisitException
   {
     for (ParseNode n : m_children)
     {
@@ -125,7 +127,7 @@ public class ParseNode
    * Prefix traversal of the parse tree by a visitor
    * @param visitor The visitor
    */
-  public void prefixAccept(ParseNodeVisitor visitor)
+  public void prefixAccept(ParseNodeVisitor visitor) throws VisitException
   {
     visitor.visit(this);
     for (ParseNode n : m_children)
