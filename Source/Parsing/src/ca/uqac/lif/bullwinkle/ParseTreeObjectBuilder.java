@@ -165,13 +165,11 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	/**
 	 * Performs the actual handling of a parse node
 	 * @param node The parse node
-	 * @throws SecurityException May be thrown when attempting to invoke a method
 	 * @throws IllegalAccessException May be thrown when attempting to invoke a method
-	 * @throws IllegalArgumentException May be thrown when attempting to invoke a method
 	 * @throws InvocationTargetException May be thrown when attempting to invoke a method
 	 */
 	@SuppressWarnings({"squid:S3878"})
-	protected void handleNode(ParseNode node) throws SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	protected void handleNode(ParseNode node) throws IllegalAccessException, InvocationTargetException
 	{
 		String token_name = node.getToken();
 		// Is it a non-terminal symbol?
