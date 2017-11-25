@@ -281,7 +281,7 @@ public class BnfParser
 	public static List<BnfRule> getRules(Scanner scanner) throws InvalidGrammarException
 	{
 		List<BnfRule> rules = new LinkedList<BnfRule>();
-		String current_rule = "";
+		StringBuilder current_rule_builder = new StringBuilder();
 		while (scanner.hasNextLine())
 		{
 			String line = scanner.nextLine();
@@ -296,10 +296,11 @@ public class BnfParser
 			{
 				continue;
 			}
-			current_rule += " " + line;
-			if (current_rule.endsWith(";"))
+			current_rule_builder.append(" ").append(line);
+			if (line.endsWith(";"))
 			{
 				// We have a complete rule
+				String current_rule = current_rule_builder.toString();
 				try
 				{
 					// Remove semi-colon
@@ -312,13 +313,13 @@ public class BnfParser
 					scanner.close();
 					throw new InvalidGrammarException(e);
 				}
-				current_rule = "";
+				current_rule_builder.setLength(0);
 			}
 		}
 		scanner.close();
-		if (!current_rule.isEmpty())
+		if (!current_rule_builder.toString().isEmpty())
 		{
-			throw new InvalidGrammarException("Error parsing rule " + current_rule);
+			throw new InvalidGrammarException("Error parsing rule " + current_rule_builder.toString());
 		}
 		return rules;
 	}

@@ -105,4 +105,15 @@ public class RegexTerminalToken extends TerminalToken
 		}
 		return out;
 	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == null || !(o instanceof RegexTerminalToken))
+		{
+			return false;
+		}
+		RegexTerminalToken rt = (RegexTerminalToken) o;
+		return m_pattern.toString().compareTo(rt.m_pattern.toString()) == 0;
+	}
 }

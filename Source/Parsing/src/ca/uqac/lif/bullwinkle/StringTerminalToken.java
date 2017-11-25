@@ -58,7 +58,6 @@ public class StringTerminalToken extends TerminalToken
 		{
 			return 0;
 		}
-		// Our parser 
-		return s.indexOf(" ");
+		return s.indexOf(' ');
 	}
 }

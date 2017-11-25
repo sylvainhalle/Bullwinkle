@@ -17,7 +17,8 @@
  */
 package ca.uqac.lif.bullwinkle.output;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import ca.uqac.lif.bullwinkle.ParseNode;
 
@@ -30,12 +31,12 @@ public class XmlVisitor implements OutputFormatVisitor
 	/**
 	 * A stack keeping the parent nodes
 	 */
-	private final Stack<String> m_parents;
+	private final Deque<String> m_parents;
 
 	/**
 	 * A stack keeping the indents
 	 */
-	private final Stack<String> m_indents;
+	private final Deque<String> m_indents;
 
 	/**
 	 * A string builder where the output XML is progressively written
@@ -64,8 +65,8 @@ public class XmlVisitor implements OutputFormatVisitor
 	public XmlVisitor()
 	{
 		super();
-		m_parents = new Stack<String>();
-		m_indents = new Stack<String>();
+		m_parents = new ArrayDeque<String>();
+		m_indents = new ArrayDeque<String>();
 		m_output = new StringBuilder();
 		m_indents.push("");
 	}

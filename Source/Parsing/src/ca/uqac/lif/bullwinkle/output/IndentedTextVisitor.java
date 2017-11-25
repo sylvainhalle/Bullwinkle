@@ -17,7 +17,8 @@
  */
 package ca.uqac.lif.bullwinkle.output;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import ca.uqac.lif.bullwinkle.ParseNode;
 
@@ -49,7 +50,7 @@ public class IndentedTextVisitor implements OutputFormatVisitor
 	/**
 	 * A stack of string, keeping the indents to apply to each line of text
 	 */
-	private Stack<String> m_indents;
+	private Deque<String> m_indents;
 
 	/**
 	 * A string builder where the output is progressively built
@@ -67,7 +68,7 @@ public class IndentedTextVisitor implements OutputFormatVisitor
 	public IndentedTextVisitor()
 	{
 		super();
-		m_indents = new Stack<String>();
+		m_indents = new ArrayDeque<String>();
 		m_output = new StringBuilder();
 		m_indents.push("");
 	}

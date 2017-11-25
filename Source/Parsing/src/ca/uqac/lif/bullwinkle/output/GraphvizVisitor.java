@@ -17,7 +17,8 @@
  */
 package ca.uqac.lif.bullwinkle.output;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import ca.uqac.lif.bullwinkle.CaptureBlockParseNode;
 import ca.uqac.lif.bullwinkle.ParseNode;
@@ -34,7 +35,7 @@ public class GraphvizVisitor implements OutputFormatVisitor
 	/**
 	 * A stack keeping the parent node IDs
 	 */
-	private Stack<Integer> m_parents;
+	private Deque<Integer> m_parents;
 
 	/**
 	 * A counter keeping the last integer used for node IDs
@@ -52,7 +53,7 @@ public class GraphvizVisitor implements OutputFormatVisitor
 	public GraphvizVisitor()
 	{
 		super();
-		m_parents = new Stack<Integer>();
+		m_parents = new ArrayDeque<Integer>();
 		m_output = new StringBuilder();
 	}
 
