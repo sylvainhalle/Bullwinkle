@@ -45,13 +45,15 @@ public @interface Builds
 	
 	/**
 	 * Whether to expand the rule
-	 * @return
+	 * @return {@code true} if the rule is to be expanded, {@code false}
+	 * otherwise
 	 */
 	boolean pop() default false;
 	
 	/**
 	 * Whether to prune the arguments from any terminal symbol
-	 * @return
+	 * @return {@code true} if the arguments should be cleaned, {@code false}
+	 * otherwise
 	 */
 	boolean clean() default false;
 }

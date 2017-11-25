@@ -69,6 +69,8 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	 * Build an object from a parse tree
 	 * @param tree The parse tree
 	 * @return The object
+ 	 * @throws BuildException Generic exception that can be thrown during the
+	 *   build process
 	 */
 	public synchronized final T build(ParseNode tree) throws BuildException
 	{
@@ -116,8 +118,9 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	}
 
 	/**
-	 * 
-	 * @param stack_methods A map of methods
+	 * Retrieves all the methods that have a <tt>@Builda</tt>
+	 * annotation in the current class
+	 * @param methods A map of methods
 	 */
 	protected synchronized void fillMethods(Map<String,MethodAnnotation> methods)
 	{
