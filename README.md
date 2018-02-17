@@ -1,7 +1,8 @@
 Bullwinkle: a runtime parser for BNF grammars
 =============================================
 
-[![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)]()
+[![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)](https://travis-ci.org/sylvainhalle/Bullwinkle)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/15155.svg?style=flat-square)](https://scan.coverity.com/projects/sylvainhalle-bullwinkle)
 [![SonarQube Coverage](https://sonarcloud.io/api/badges/measure?key=sylvainhalle%3Abullwinkle&metric=coverage)](https://sonarcloud.io/dashboard?id=sylvainhalle%3Abullwinkle)
 
 Bullwinkle is a parser for LL(k) languages that operates through recursive descent
@@ -93,6 +94,8 @@ using Git:
 
     git clone git@github.com:sylvainhalle/Bullwinkle.git
 
+### Compiling
+
 Compile the sources by simply typing:
 
     ant
@@ -107,6 +110,29 @@ the JAR file. To show documentation in Eclipse, right-click on the jar,
 click "Properties", then fill the Javadoc location (which is the JAR
 itself).
 
+### Testing
+
+Bullwinkle can test itself by running:
+
+    ant test
+
+Unit tests are run with [jUnit](http://junit.org); a detailed report of
+these tests in HTML format is availble in the folder `tests/junit`, which
+is automatically created. Code coverage is also computed with
+[JaCoCo](http://www.eclemma.org/jacoco/); a detailed report is available
+in the folder `tests/coverage`.
+
+### Coverity Scan
+
+Bullwinkle uses [Coverity Scan](https://scan.coverity.com) for static analysis
+of its source code and defect detection. Instructions for using Coverity Scan
+locally are detailed [here](https://scan.coverity.com/download?tab=java). In
+a nutshell, if Coverity Scan is installed, type the following:
+
+    cov-build --dir cov-int ant build
+
+(Make sure to clean up the directory first by launching `ant clean`.)
+
 Defining a grammar                                               {#grammar}
 ------------------
 
@@ -114,7 +140,7 @@ For Bullwinkle to work, the grammar must be
 [LL(k)](http://en.wikipedia.org/wiki/LL_parser). Roughly, this means that
 it must not contain a production rules of the form
 `<S> := <S> something`. Trying to parse such a rule by recursive descent
-causes an infinite recursion (which will throw a ParseException when the
+causes an infinite recursion (which will throw a `ParseException` when the
 maximum recursion depth is reached).
 
 Defining a grammar can be done in two ways.

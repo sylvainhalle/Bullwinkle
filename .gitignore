@@ -14,6 +14,7 @@
 /lib/
 /deps/
 /tests/
+/cov-int/
 
 # Top-level jar, but not jars in subfolders (if any)
 *.jar
