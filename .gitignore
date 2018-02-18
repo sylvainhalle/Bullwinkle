@@ -55,3 +55,5 @@ Source/**/.cproject
 
 # PDT-specific
 Source/**/.buildpath
+
+*.zip

@@ -129,7 +129,7 @@ of its source code and defect detection. Instructions for using Coverity Scan
 locally are detailed [here](https://scan.coverity.com/download?tab=java). In
 a nutshell, if Coverity Scan is installed, type the following:
 
-    cov-build --dir cov-int ant build
+    cov-build --dir cov-int ant compile
 
 (Make sure to clean up the directory first by launching `ant clean`.)
 
