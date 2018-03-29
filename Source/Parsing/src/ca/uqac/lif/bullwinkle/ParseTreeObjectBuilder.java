@@ -1,5 +1,5 @@
 /*
-  Copyright 2014-2017 Sylvain Hallé
+  Copyright 2014-2018 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
@@ -20,6 +20,7 @@ package ca.uqac.lif.bullwinkle;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -119,22 +120,46 @@ public abstract class ParseTreeObjectBuilder<T> implements ParseNodeVisitor
 	}
 
 	/**
-	 * Retrieves all the methods that have a <tt>@Builda</tt>
+	 * Retrieves all the methods that have a <tt>@Builds</tt>
 	 * annotation in the current class
 	 * @param methods A map of methods
 	 */
 	protected synchronized void fillMethods(Map<String,MethodAnnotation> methods)
 	{
-		Method[] ms = getClass().getDeclaredMethods();
-		for (Method method : ms)
+		List<Class<?>> parents = getParents();
+		for (Class<?> cl : parents)
 		{
-			Builds an = method.getAnnotation(Builds.class);
-			if (an != null)
+			Method[] ms = cl.getDeclaredMethods();
+			for (Method method : ms)
 			{
-				String non_terminal = an.rule();
-				methods.put(non_terminal, new MethodAnnotation(method, an.pop(), an.clean()));
+				Builds an = method.getAnnotation(Builds.class);
+				if (an != null)
+				{
+					String non_terminal = an.rule();
+					methods.put(non_terminal, new MethodAnnotation(method, an.pop(), an.clean()));
+				}
 			}
 		}
+	}
+
+	/**
+	 * Gets the list of ancestors of the current class
+	 * @return A list of ancestors; the last element of the list is the
+	 * current class; each previous element is its ancestor.
+	 */
+	protected List<Class<?>> getParents()
+	{
+		List<Class<?>> parents = new ArrayList<Class<?>>();
+		Class<?> cur_class = getClass();
+		while (true)
+		{
+			parents.add(0, cur_class);
+			Class<?> parent = cur_class.getSuperclass();
+			if (parent == Object.class)
+				break;
+			cur_class = parent;
+		}
+		return parents;
 	}
 
 	@Override
