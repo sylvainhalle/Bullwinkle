@@ -31,7 +31,7 @@ public class RegexTerminalToken extends TerminalToken
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = -2430670680001437707L;
+	private static final transient long serialVersionUID = -2430670680001437707L;
 	
 	/**
 	 * The pattern used to perform the matching

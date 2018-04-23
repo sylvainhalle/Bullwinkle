@@ -31,7 +31,7 @@ public class EmptyException extends Exception
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = -8755602580215137730L;
+	private static final transient long serialVersionUID = -8755602580215137730L;
 
 	/**
 	 * Creates a new empty exception

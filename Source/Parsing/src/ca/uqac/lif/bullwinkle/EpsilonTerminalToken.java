@@ -26,7 +26,7 @@ public class EpsilonTerminalToken extends TerminalToken
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = -7191896043358186569L;
+	private static final transient long serialVersionUID = -7191896043358186569L;
 	
 	/**
 	 * A single static instance of this object

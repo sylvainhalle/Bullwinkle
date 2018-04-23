@@ -39,7 +39,7 @@ public class BnfRule implements Serializable
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = 579372107761975753L;
+	private static final transient long serialVersionUID = 579372107761975753L;
 
 	/**
 	 * A list of token strings that for all the possible cases of that rule
@@ -308,7 +308,7 @@ public class BnfRule implements Serializable
 		/**
 		 * Dummy UID
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final transient long serialVersionUID = 1L;
 
 		public InvalidRuleException(String message)
 		{

@@ -45,7 +45,7 @@ public class BnfParser implements Serializable
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final transient long serialVersionUID = 1L;
 
 	/**
 	 * The list of parsing rules
@@ -660,7 +660,7 @@ public class BnfParser implements Serializable
 		/**
 		 * Dummy UID
 		 */
-		private static final long serialVersionUID = 1L;
+		private static final transient long serialVersionUID = 1L;
 
 		public InvalidGrammarException(final String message)
 		{
@@ -678,7 +678,7 @@ public class BnfParser implements Serializable
 		/**
 		 * Dummy UID
 		 */
-		private static final long serialVersionUID = 2L;
+		private static final transient long serialVersionUID = 2L;
 
 		public ParseException(final String message)
 		{

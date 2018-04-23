@@ -32,7 +32,7 @@ public final class NodePath implements Serializable
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final transient long serialVersionUID = 1L;
 	
 	/**
 	 * The pattern used to parse paths

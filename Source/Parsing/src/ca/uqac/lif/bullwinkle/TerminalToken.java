@@ -26,7 +26,7 @@ public class TerminalToken extends Token
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = -5734730721366371245L;
+	private static final transient long serialVersionUID = -5734730721366371245L;
 
 	/**
 	 * Creates a new empty terminal token

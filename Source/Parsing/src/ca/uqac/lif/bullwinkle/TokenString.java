@@ -30,7 +30,7 @@ public class TokenString extends LinkedList<Token>
 	/**
 	 * Dummy UID
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final transient long serialVersionUID = 1L;
 
 	/**
 	 * Whether this case symbol should remain at the end of the
