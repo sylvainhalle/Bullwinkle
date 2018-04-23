@@ -23,7 +23,7 @@
   xmlns:jacoco="antlib:org.jacoco.ant">
   
   <!-- The build script's version number. Do not edit! -->
-  <property name="antrun.version" value="1.2.1"/>
+  <property name="antrun.version" value="1.2.2"/>
   
   <!-- Load project properties from XML file -->
   <xmlproperty file="config.xml"/>
@@ -165,7 +165,10 @@
       </classpath>
     </javac>
     <copy todir="${build.bindir}" includeemptydirs="false">
-      <fileset dir="${build.srcdir}" excludes="**/*.java"/>
+      <fileset dir="${build.srcdir}">
+        <exclude name="**/*.java"/>
+        <exclude name="**/doc-files/**"/>
+      </fileset>
     </copy>
   </target>
   
@@ -198,7 +201,7 @@
   <!-- Target: javadoc
        Generates the javadoc associated to the project
   -->
-  <target name="javadoc" depends="init" description="Generate the documentation">
+  <target name="javadoc" depends="init,doclet" description="Generate the documentation">
     <mkdir dir="${build.docdir}"/>
     <javadoc sourcepath="${build.srcdir}"
              destdir="${build.docdir}"
@@ -212,6 +215,7 @@
              docencoding="utf8"
              charset="utf8"
              windowtitle="${build.name} Documentation">
+      <doclet name="ch.raffael.mddoclet.MarkdownDoclet" path="lib/markdown-doclet-1.4-all.jar"></doclet>
       <doctitle><![CDATA[<h1>]]>${build.name}<![CDATA[ Documentation</h1>]]></doctitle>
       <bottom><![CDATA[<i>Copyright&nbsp;&#169; ]]>${build.author}<![CDATA[. All Rights Reserved.</i>]]></bottom>
       <link href="http://docs.oracle.com/javase/6/docs/api/"/>
@@ -242,7 +246,7 @@
 	      <attribute name="Built-Date" value="${TODAY}"/>
           <attribute name="Implementation-Version" value="${build.version}"/>
 	  </manifest>
-	  <fileset dir="${build.bindir}"/> 
+	  <fileset dir="${build.bindir}"/>
 	  <zipgroupfileset dir="${build.depdir}">
 	    <include name="**/*.jar" if="${build.jar.withdeps}"/>
 	  </zipgroupfileset>
@@ -270,6 +274,9 @@
         failureproperty="test.failed">
         <classpath>
           <pathelement location="${build.bindir}"/>
+          <fileset dir="${build.depdir}">
+            <include name="*.jar"/>
+          </fileset>
           <pathelement location="${build.test.bindir}"/>
           <pathelement path="${java.class.path}"/>
           <pathelement location="${build.libdir}/${junit.jarname}"/>
@@ -447,6 +454,18 @@
       </patternset>
       <mapper type="flatten"/>
     </unzip>
+  </target>
+  
+  <!-- Target: doclet
+       Download Markdown doclet if not present, and put it in the lib folder
+  -->
+  <property name="doclet.jarname" value="markdown-doclet-1.4-all.jar"/>
+  <condition property="doclet.absent" value="false" else="true">
+    <available file="${build.libdir}/${doclet.jarname}"/>
+  </condition>
+  <target name="doclet" if="${doclet.absent}" description="Install Markdown doclet if not present">
+    <mkdir dir="${build.libdir}"/>
+    <get src="https://oss.sonatype.org/content/repositories/releases/ch/raffael/markdown-doclet/markdown-doclet/1.4/markdown-doclet-1.4-all.jar" dest="${build.libdir}/markdown-doclet-1.4-all.jar"/>
   </target>
   
   <!-- Task: check-deps
