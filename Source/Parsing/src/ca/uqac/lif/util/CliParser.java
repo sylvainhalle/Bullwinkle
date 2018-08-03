@@ -1,5 +1,5 @@
 /*
-  Copyright 2015 Sylvain Hallé
+  Copyright 2015-2018 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
   
@@ -18,6 +18,7 @@
 package ca.uqac.lif.util;
 
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -352,7 +353,13 @@ public class CliParser
 		}
 	}
 	
-	public static class ArgumentMap
+	/**
+	 * A map from command line arguments to their values. In addition to
+	 * all methods from the {@link Map} interface, an argument map also
+	 * allows "unnamed" arguments; these arguments can be queried by the
+	 * method {@link #getOthers()}.
+	 */
+	public static class ArgumentMap implements Map<String,String>
 	{
 		/**
 		 * Map of named parameters and their values
@@ -414,7 +421,7 @@ public class CliParser
 		 * @param value Its value
 		 * @return The element just put
 		 */
-		String put(String name, String value)
+		public String put(String name, String value)
 		{
 			return m_arguments.put(name, value);
 		}
@@ -425,7 +432,7 @@ public class CliParser
 		 * @return <code>true</code> if the element was added,
 		 *   <code>false</code> otherwise
 		 */
-		boolean putOther(String name)
+		public boolean putOther(String name)
 		{
 			return m_others.add(name);
 		}
@@ -436,6 +443,77 @@ public class CliParser
 			StringBuilder out = new StringBuilder();
 			out.append(m_arguments).append(",").append(m_others);
 			return out.toString();
+		}
+
+		@Override
+		public int size() 
+		{
+			return m_arguments.size();
+		}
+
+		@Override
+		public boolean isEmpty()
+		{
+			return m_arguments.isEmpty();
+		}
+
+		@Override
+		public boolean containsKey(Object key) 
+		{
+			return m_arguments.containsKey(key);
+		}
+
+		@Override
+		public boolean containsValue(Object value) 
+		{
+			return m_arguments.containsValue(value);
+		}
+
+		@Override
+		public String get(Object key) 
+		{
+			return m_arguments.get(key);
+		}
+
+		@Override
+		public String remove(Object key) 
+		{
+			return m_arguments.remove(key);
+		}
+
+		@Override
+		public void putAll(Map<? extends String, ? extends String> m) 
+		{
+			m_arguments.putAll(m);
+			if (m instanceof ArgumentMap)
+			{
+				m_others.addAll(((ArgumentMap) m).getOthers());
+			}
+		}
+
+		@Override
+		public void clear() 
+		{
+			m_arguments.clear();
+			m_others.clear();
+		}
+
+		@Override
+		public Set<String> keySet() 
+		{
+			return m_arguments.keySet();
+		}
+
+		@Override
+		public Collection<String> values() 
+		{
+			return m_arguments.values();
+		}
+
+		@Override
+		public Set<Entry<String, String>> entrySet() 
+		{
+			return m_arguments.entrySet();
 		}
 	}
 }

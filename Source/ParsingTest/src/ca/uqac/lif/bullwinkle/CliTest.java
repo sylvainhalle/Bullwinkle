@@ -1,5 +1,5 @@
 /*
-  Copyright 2014-2017 Sylvain Hallé
+  Copyright 2014-2018 Sylvain Hallé
   Laboratoire d'informatique formelle
   Université du Québec à Chicoutimi, Canada
 
