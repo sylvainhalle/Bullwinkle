@@ -2,14 +2,15 @@ language: java
 dist: trusty
 install: ant download-deps
 notifications:
-  # Email notifications are disabled to not annoy anybody.
-  email: false 
-# Run SonarQube on code
+  email: false
 addons:
-  sonarqube:
+  sonarcloud:
+    organization: "sylvainhalle-github"
     token:
-      secure: c11f78b32f6c5a83c760c5b6d6ea388e166b07f7 # encrypted value of your token
+       secure: "Q6yWh47xqDmGnvaM/IqiPYjeQpEkAhtQdrxOood8ZgiZbS60TdHMjeYPK+9B4eZ0kjjvse0hM1HS8RaUrNQ6CjTs+XZWimSzNqUjPec+2hZbEcrTkobTtUgtqAmsvvpkJvhIgK4eqo8eLy6eEBR732SGrJcTIBo8MnMdVuZt51w="
 script:
-  # other script steps might be done before running the actual SonarQube analysis
-  - ant test
-  - sonar-scanner
+- ant test
+- sonar-scanner
+env:
+  global:
+    secure: JTnCWmfTjmAa+MA+D4A06yqbxThHBAJUaeArzEyVPRBYQFma9mxPFw4nLJ4pxsxeQoaGTSVzog2/Wo8MdLRlC9jpaA5+5acc8DrE8AC6bVTGm5mXlxCo8v6ioK5Y0CMR4Zy/4HK/Y+xFV3eilV+9ko76Hslb/B7j+ckaRavg1WY=
