@@ -172,10 +172,19 @@ public class BnfParser implements Serializable
 	 * @param b Set to <code>true</code> to enable debug mode
 	 * @param out A logger to log the information
 	 */
-	public void setDebugMode(boolean b, Logger out)
+	public void setDebugMode(boolean b, /*@ non_null @*/ Logger out)
 	{
 		m_debugMode = b;
 		m_debugOut = out;
+	}
+	
+	/**
+	 * Retrieves the start rule of the grammar associated to this parser.
+	 * @return The start rule
+	 */
+	/*@ pure @*/ public BnfRule getStartRule()
+	{
+		return m_startRule;
 	}
 
 	@Override
@@ -196,7 +205,7 @@ public class BnfParser implements Serializable
 	 * @param rule_name The name of the rule
 	 * @param case_string The case to add
 	 */
-	public void addCaseToRule(int index, String rule_name, String case_string)
+	public void addCaseToRule(int index, /*@ non_null @*/ String rule_name, /*@ non_null @*/ String case_string)
 	{
 		BnfRule rule = getRule(rule_name);
 		if (rule == null)
@@ -214,12 +223,17 @@ public class BnfParser implements Serializable
 	 * @param rule_name The name of the rule
 	 * @param case_string The case to add
 	 */
-	public void addCaseToRule(String rule_name, String case_string)
+	public void addCaseToRule(/*@ non_null @*/ String rule_name, /*@ non_null @*/ String case_string)
 	{
 		addCaseToRule(0, rule_name, case_string);
 	}
 
-	protected BnfRule getRule(String rule_name)
+	/**
+	 * Gets the rule instance with given name
+	 * @param rule_name The name of the rule
+	 * @return The rule, or <tt>null</tt> if no rule exists with given name
+	 */
+	/*@ non_null @*/ public BnfRule getRule(/*@ non_null @*/ String rule_name)
 	{
 		for (BnfRule rule : m_rules)
 		{
