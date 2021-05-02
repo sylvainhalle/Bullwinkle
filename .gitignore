@@ -56,4 +56,13 @@ Source/**/.cproject
 # PDT-specific
 Source/**/.buildpath
 
+# SonarQube
+.sonar/
+.scannerwork/
+
+# IDEA-specific
+.idea/
+*.iml
+out/
+
 *.zip
