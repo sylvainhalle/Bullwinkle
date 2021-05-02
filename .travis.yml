@@ -1,16 +1,16 @@
 language: java
-dist: trusty
-install: ant download-deps
+dist: bionic
 notifications:
   email: false
 addons:
   sonarcloud:
     organization: "sylvainhalle-github"
     token:
-       secure: "Q6yWh47xqDmGnvaM/IqiPYjeQpEkAhtQdrxOood8ZgiZbS60TdHMjeYPK+9B4eZ0kjjvse0hM1HS8RaUrNQ6CjTs+XZWimSzNqUjPec+2hZbEcrTkobTtUgtqAmsvvpkJvhIgK4eqo8eLy6eEBR732SGrJcTIBo8MnMdVuZt51w="
+      secure: HjtgPkvP/SYXeoq6OocIk95kbQqD2aRqughWwlwTkNQ45X6E4oovZP0/jRn7hk7h1ecSanXd4NEp7H00RPtRvKhzFxYk0FF20L3SwaH3UGesGJ7zcg8wxc3/E+QzLpfSoLvF78rHcxoPnw8wxEMUb+a0MWrBeOLCfyvWrUiEAWo=
+before_install:
+- sudo apt-get install ant-optional
 script:
+- ant download-deps
+- ant
 - ant test
 - sonar-scanner
-env:
-  global:
-    secure: JTnCWmfTjmAa+MA+D4A06yqbxThHBAJUaeArzEyVPRBYQFma9mxPFw4nLJ4pxsxeQoaGTSVzog2/Wo8MdLRlC9jpaA5+5acc8DrE8AC6bVTGm5mXlxCo8v6ioK5Y0CMR4Zy/4HK/Y+xFV3eilV+9ko76Hslb/B7j+ckaRavg1WY=
