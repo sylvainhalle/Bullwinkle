@@ -1,7 +1,7 @@
 Bullwinkle: a runtime parser for BNF grammars
 =============================================
 
-[![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)](https://travis-ci.org/sylvainhalle/Bullwinkle)
+[![Travis](https://img.shields.io/travis/sylvainhalle/Bullwinkle.svg?style=flat-square)](https://app.travis-ci.com/github/sylvainhalle/Bullwinkle)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/15155.svg?style=flat-square)](https://scan.coverity.com/projects/sylvainhalle-bullwinkle)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sylvainhalle_bullwinkle&metric=coverage)](https://sonarcloud.io/dashboard?id=sylvainhalle_bullwinkle)
 <img src="http://leduotang.ca/Bullwinkle.svg" height="20" alt="Downloads"/>
