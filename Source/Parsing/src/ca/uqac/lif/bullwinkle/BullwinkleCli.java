@@ -129,7 +129,7 @@ public class BullwinkleCli
 		}
 		if (c_line.hasOption(P_VERSION))
 		{
-			stderr.println("(C) 2014-2018 Sylvain Hallé et al., Université du Québec à Chicoutimi");
+			stderr.println("(C) 2014-2021 Sylvain Hallé et al., Université du Québec à Chicoutimi");
 			stderr.println("This program comes with ABSOLUTELY NO WARRANTY.");
 			stderr.println("This is a free software, and you are welcome to redistribute it");
 			stderr.println("under certain conditions. See the file LICENSE-2.0 for details.\n");

@@ -208,5 +208,28 @@ public class ParseNode
 		}
 		visitor.pop();
 	}
-
+	
+	/**
+	 * Creates a deep copy of the parse node and all its children.
+	 * @return A copy of the parse node
+	 */
+	public ParseNode duplicate()
+	{
+		ParseNode new_n = new ParseNode(m_token);
+		new_n.setValue(m_value);
+		for (ParseNode child : m_children)
+		{
+			new_n.addChild(child.duplicate());
+		}
+		return new_n;
+	}
+	
+	/**
+	 * Deletes a child node at a given position.
+	 * @param index The position of the child node to delete.
+	 */
+	public void deleteChild(int index)
+	{
+		m_children.remove(index);
+	}
 }
