@@ -26,28 +26,32 @@
   <name>Bullwinkle</name>
   
   <!-- The project's version number -->
-  <version>1.4.6</version>
+  <version>1.4.7</version>
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
   <author>Sylvain Hallé</author>
+
+  <!-- The target JDK for which we are compiling -->
+  <targetjdk>11</targetjdk>
+
+  <!-- Output jar --> 
+  <jar>
+    <filename>bullwinkle</filename>
+  </jar>
   
   <!-- The project's main class -->
   <mainclass>ca.uqac.lif.bullwinkle.BullwinkleCli</mainclass>
-  
-  <!-- Output jar -->
-  <jar>
-    <filename>bullwinkle.jar</filename>
-    <withdoc>false</withdoc>
-    <withsrc>false</withsrc>
-  </jar>
-  
+ 
   <!-- Redefine directories -->
   <srcdir>Source/Parsing/src</srcdir>
   <bindir>Source/Parsing/bin</bindir>
+  <docdir>doc</docdir>
+  <libdir>Source/Parsing/lib</libdir>
   <test>
     <srcdir>Source/ParsingTest/src</srcdir>
     <bindir>Source/ParsingTest/bin</bindir>
+    <libdir>Source/Parsing/lib</libdir>
   </test>
   
   <!--

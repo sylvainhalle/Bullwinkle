@@ -1,6 +1,6 @@
 /* MIT License
  *
- * Copyright 2014-2021 Sylvain Hallé
+ * Copyright 2014-2025 Sylvain Hallé
  *
  * Laboratoire d'informatique formelle
  * Université du Québec à Chicoutimi, Canada
@@ -44,7 +44,7 @@ import java.util.Set;
 
 /**
  * A simple command-line parser
- * @version 1.1
+ * @version 1.4.7
  * @author Sylvain Hallé
  *
  */
@@ -334,11 +334,9 @@ public class CliParser
 		@Override
 		public int hashCode()
 		{
-			if (m_shortName == null)
-			{
-				return 0;
-			}
-			return m_shortName.hashCode();
+			int h = m_longName == null ? 0 : m_longName.hashCode();
+			h += m_shortName == null ? 0 : m_shortName.hashCode();
+			return h;
 		}
 		
 		@Override
