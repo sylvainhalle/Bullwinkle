@@ -41,7 +41,6 @@ import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 import ca.uqac.lif.bullwinkle.BnfParser.ParseException;
 import ca.uqac.lif.bullwinkle.BnfRule.InvalidRuleException;
@@ -377,6 +376,25 @@ public class GrammarTests
 	{
 		String expression = "foo 0 d c";
 		parseIt("data/Grammar-13.bnf", "<S>", expression, false, true);
+	}
+	
+	@Test
+	public void checkTerminals()
+	{
+		String expression = "foo";
+		ParseNode node = parseIt("data/Grammar-16.bnf", "<S>", expression, false, true);
+		assertNotNull(node);
+		assertNotNull(node.getChildren());
+		assertEquals(1, node.getChildren().size());
+		ParseNode child = node.getChildren().get(0);
+		assertNotNull(child);
+		assertNotNull(child.getChildren());
+		assertEquals(1, child.getChildren().size());
+		ParseNode grandchild = child.getChildren().get(0);
+		assertNotNull(grandchild);
+		assertEquals("foo", grandchild.getToken());
+		assertNotNull(grandchild.getChildren());
+		assertEquals(0, grandchild.getChildren().size());
 	}
 	
 	@Test

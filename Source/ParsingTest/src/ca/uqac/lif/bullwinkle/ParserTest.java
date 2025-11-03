@@ -40,7 +40,6 @@ import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.uqac.lif.bullwinkle.BnfParser;
 import ca.uqac.lif.bullwinkle.BnfParser.InvalidGrammarException;
 
 public class ParserTest
@@ -134,5 +133,4 @@ public class ParserTest
 		assertTrue(alternatives.get(0).compareTo("<a>") == 0);
 		assertTrue(alternatives.get(1).compareTo("b") == 0);
 	}
-
 }

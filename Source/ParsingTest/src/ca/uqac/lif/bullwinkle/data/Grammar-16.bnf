@@ -1,0 +1,4 @@
+<S>           := <tablename> | <criterion> ;
+<tablename>   := ^[a-z]*;
+<criterion>   := ^[a-z]*;
+
