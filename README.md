@@ -188,7 +188,7 @@ replacing them with their UTF-8 hex code.
 
 - `|` can be replaced by `\u007c`
 - `<` can be replaced by `\u003c`
-- `<` can be replaced by `\u003e`
+- `>` can be replaced by `\u003e`
 - `;` can be replaced by `\u003b`
 - `:=` can be replaced by `\u003a\u003d`
 
@@ -295,7 +295,7 @@ token, such as &lt;foo&gt;, it looks for a method that handles this symbol.
 This is done by adding an annotation `@Builds` to the method, as follows:
 
     @Builds(rule="<foo>")
-    public void myMethod(Stack<Object> stack) { ...
+    public void myMethod(ArrayDeque<Object> stack) { ...
 
 The object builder calls this method, and passes it the current contents
 of the object stack. It is up to this method to pop and push objects
@@ -304,7 +304,7 @@ end. For example, in the grammar above, the code to handle token &lt;add&gt;
 would look like:
 
     @Builds(rule="<add>")
-    public void handleAdd(Stack<Object> stack) {
+    public void handleAdd(ArrayDeque<Object> stack) {
       ArithExp e2 = (ArithExp) stack.pop();
       ArithExp e1 = (ArithExp) stack.pop();
       stack.pop(); // To remove the "+" symbol
@@ -459,7 +459,7 @@ About the author                                                   {#about}
 ----------------
 
 Bullwinkle was written by [Sylvain Hallé](http://leduotang.ca/sylvain),
-Associate Professor at [Université du Québec à Chicoutimi](http://www.uqac.ca),
+Full Professor at [Université du Québec à Chicoutimi](http://www.uqac.ca),
 Canada. It arose from the need to experiment with
 various grammars without requiring compilation, as with classical parser
 generators.
